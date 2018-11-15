@@ -16,6 +16,7 @@
  */
 package maze;
 
+import java.awt.geom.Point2D;
 import java.util.*;
 
 /**
@@ -61,35 +62,156 @@ public class CellGrid {
 		southWall = new boolean[gridWidth][gridHeight];
 		westWall = new boolean[gridWidth][gridHeight];
 
+		visited = new boolean[gridWidth][gridHeight];
+
+		// fills the arrays with false
+		for (int i = 0; i < gridWidth; i++) {
+			Arrays.fill(northWall[i], false);
+			Arrays.fill(eastWall[i], false);
+			Arrays.fill(southWall[i], false);
+			Arrays.fill(westWall[i], false);
+			Arrays.fill(visited[i], false);
+
+		}
 	}
 
 	public static CellGrid newCellGrid(int gridWidth, int gridHeight) {
 		return new CellGrid(gridWidth, gridHeight);
 	}
 
+	/**
+	 * The ENUM for each cardinal direction: NORTH, EAST, SOUTH and WEST.
+	 * <p>
+	 * The Direction enums contain abstract methods that involve direction, such as
+	 * breaking a wall in a certain direction. Abstract methods in Direction are
+	 * overloaded to work with both x and y int locations and Point2D locations.
+	 * 
+	 * @author Alex Kalinins
+	 * @since v0.1
+	 * @since 2018-11-14
+	 *
+	 */
 	public enum Direction {
 		NORTH {
 			@Override
 			public boolean directionAvailable(int x, int y) {
 				if (y == 0)
 					return false;
-				return northWall[x][y + 1];
+				return visited[x][y - 1];
 			}
+
+			@Override
+			public void breakWall(int x, int y) {
+				northWall[x][y] = true;
+			}
+
+			@Override
+			public Point2D move(int x, int y) {
+				northWall[x][y] = true;
+				
+				// TODO fix ArrayIndexOutOfBoundsException (-1).
+				southWall[x][y - 1] = true;
+				
+				visited[x][y - 1] = true;
+				return this.go(x, y - 1);
+			}
+
+			@Override
+			public Direction antiDirection() {
+				return SOUTH;
+			}
+
+			@Override
+			public Point2D go(int x, int y) {
+				point.setLocation(x, (double) y - 1);
+				return point;
+			}
+
+			@Override
+			public Point2D makeExit(int randomNumber) {
+				northWall[randomNumber][0] = true;
+				point.setLocation(randomNumber, 0);
+				return point;
+			}
+
 		},
 		SOUTH {
 			@Override
 			public boolean directionAvailable(int x, int y) {
 				if (y == gridHeight - 1)
 					return false;
-				return southWall[x][y - 1];
+				return visited[x][y + 1];
 			}
+
+			@Override
+			public void breakWall(int x, int y) {
+				southWall[x][y] = true;
+			}
+
+			@Override
+			public Point2D move(int x, int y) {
+				southWall[x][y] = true;
+				northWall[x][y + 1] = true;
+				visited[x][y + 1] = true;
+				return this.go(x, y + 1);
+			}
+
+			@Override
+			public Direction antiDirection() {
+				return NORTH;
+			}
+
+			@Override
+			public Point2D go(int x, int y) {
+				point.setLocation(x, (double) y + 1);
+				return point;
+			}
+
+			@Override
+			public Point2D makeExit(int randomNumber) {
+				southWall[randomNumber][gridHeight - 1] = true;
+				point.setLocation(randomNumber, (double) gridHeight - 1);
+				return point;
+			}
+
 		},
 		EAST {
 			@Override
 			public boolean directionAvailable(int x, int y) {
 				if (x == 0)
 					return false;
-				return eastWall[x - 1][y];
+				return visited[x - 1][y];
+			}
+
+			@Override
+			public void breakWall(int x, int y) {
+				eastWall[x][y] = true;
+			}
+
+			@Override
+			public Point2D move(int x, int y) {
+				eastWall[x][y] = true;
+				westWall[x - 1][y] = true;
+				visited[x - 1][y] = true;
+				return this.go(x - 1, y);
+			}
+
+			@Override
+			public Direction antiDirection() {
+				return WEST;
+			}
+
+			@Override
+			public Point2D go(int x, int y) {
+				point.setLocation((double) x - 1, y);
+				return point;
+			}
+
+			@Override
+			public Point2D makeExit(int randomNumber) {
+				eastWall[0][randomNumber] = true;
+				point.setLocation(0, randomNumber);
+				return point;
 			}
 		},
 		WEST {
@@ -97,60 +219,138 @@ public class CellGrid {
 			public boolean directionAvailable(int x, int y) {
 				if (x == gridWidth - 1)
 					return false;
-				return westWall[x + 1][y];
+				return visited[x + 1][y];
 			}
+
+			@Override
+			public void breakWall(int x, int y) {
+				westWall[x][y] = true;
+
+			}
+
+			@Override
+			public Point2D move(int x, int y) {
+				westWall[x][y] = true;
+				eastWall[x + 1][y] = true;
+				visited[x + 1][y] = true;
+				return this.go(x + 1, y);
+			}
+
+			@Override
+			public Direction antiDirection() {
+				return EAST;
+			}
+
+			@Override
+			public Point2D go(int x, int y) {
+				point.setLocation((double) x + 1, y);
+				return point;
+			}
+
+			@Override
+			public Point2D makeExit(int randomNumber) {
+				westWall[gridWidth - 1][randomNumber] = true;
+				point.setLocation((double) gridWidth - 1, randomNumber);
+				return point;
+			}
+
 		};
 
+		private static Point2D point = new Point2D.Double();
+
+		/**
+		 * Uses the randomNumber in the argument to pick a cell on the wall of a
+		 * cardinal direction, break that wall and return the new exit point.
+		 * <p>
+		 * Used to make the entry and exit of the maze.
+		 * 
+		 * @param randomNumber random number to pick the exit point
+		 * @return Point2D of the location of the exit/entry.
+		 */
+		public abstract Point2D makeExit(int randomNumber);
+
+		/**
+		 * Checks if the cell in that direction is unvisited
+		 * 
+		 * @param x x-location of the cell
+		 * @param y y-location of the cell
+		 * @return true if cell unvisited
+		 */
 		public abstract boolean directionAvailable(int x, int y);
-	};
 
-	/**
-	 * Marks north wall of cell as broken
-	 * 
-	 * @param x x-location of the cell
-	 * @param y y-location of the cell
-	 */
-	public void goNorth(int x, int y) {
-		northWall[x][y] = true;
-		southWall[x][y - 1] = true;
-		visited[x][y - 1] = true;
-	}
+		public boolean directionAvailable(Point2D p) {
+			return this.directionAvailable((int) p.getX(), (int) p.getY());
+		}
 
-	/**
-	 * Marks south wall of cell as broken
-	 * 
-	 * @param x x-location of the cell
-	 * @param y y-location of the cell
-	 */
-	public void goSouth(int x, int y) {
-		southWall[x][y] = true;
-		northWall[x][y + 1] = true;
-		visited[x][y + 1] = true;
-	}
+		/**
+		 * Breaks a wall of a specified cell <b>only! </b>To break the wall of a
+		 * specified cell and the corresponding wall of an adjacent cell, use
+		 * Position.move
+		 * 
+		 * @param x x-location
+		 * @param y y-location
+		 */
+		public abstract void breakWall(int x, int y);
 
-	/**
-	 * Marks east wall of cell as broken
-	 * 
-	 * @param x x-location of the cell
-	 * @param y y-location of the cell
-	 */
-	public void goEast(int x, int y) {
-		eastWall[x][y] = true;
-		westWall[x - 1][y] = true;
-		visited[x - 1][y] = true;
-	}
+		/**
+		 * Overloaded breakWall() to work with Point2d
+		 * 
+		 * @param p Point2D
+		 * @see Direction#breakWall(int, int);
+		 */
+		public void breakWall(Point2D p) {
+			this.breakWall((int) p.getX(), (int) p.getY());
+		}
 
-	/**
-	 * Marks west wall of cell as broken
-	 * 
-	 * @param x x-location of the cell
-	 * @param y y-location of the cell
-	 */
-	public void goWest(int x, int y) {
-		westWall[x][y] = true;
-		eastWall[x + 1][y] = true;
-		visited[x + 1][y] = true;
-	}
+		/**
+		 * Breaks a wall of a specified wall <b>and</b> the corresponding wall of the
+		 * adjacent cell. Also marks the adjacent cell side as visited
+		 * 
+		 * @param x x-location of the current cell
+		 * @param y y-location of the current cell
+		 * @return Point2D of the current cell <b>after</b> move
+		 */
+		public abstract Point2D move(int x, int y);
+
+		/**
+		 * Overloaded move() to work with Point2D
+		 * 
+		 * @param p Point2D
+		 * @return Point2D of current cell after move
+		 * @see Direction#move(int, int)
+		 */
+		public Point2D move(Point2D p) {
+			return this.move((int) p.getX(), (int) p.getY());
+		}
+
+		/**
+		 * The opposite direction (180° to the current direction)
+		 * 
+		 * @return opposite direction
+		 */
+		public abstract Direction antiDirection();
+
+		/**
+		 * Point2D for a cell in a direction of a cell <b>without</>
+		 * breaking any walls or marking adjacent cell as visited.
+		 * 
+		 * @param x x-location
+		 * @param y y-location
+		 * @return Point2D of an adjacent cell
+		 */
+		public abstract Point2D go(int x, int y);
+
+		/**
+		 * Cell in the direction from a current cell
+		 * 
+		 * @param p Point2D of current cell
+		 * @return cell adjacent in the direction from p
+		 * @see Direction#go(int, int)
+		 */
+		public Point2D go(Point2D p) {
+			return this.go((int) p.getX(), (int) p.getY());
+		}
+	}; // end for ENUMs
 
 	/**
 	 * Marks a cell as visited
@@ -261,6 +461,18 @@ public class CellGrid {
 	 * Checks the number of possible directions the maze generator can go by
 	 * checking the visited[][] array of the adjacent cells.
 	 * 
+	 * @param p Point2D of the cell being checked
+	 * @return number of possible directions
+	 * @see CellGrid#checkRemainingPaths(int, int)
+	 */
+	public int checkRemainingPaths(Point2D p) {
+		return checkRemainingPaths((int) p.getX(), (int) p.getY());
+	}
+
+	/**
+	 * Checks the number of possible directions the maze generator can go by
+	 * checking the visited[][] array of the adjacent cells.
+	 * 
 	 * @param x x-location of the cell being checked
 	 * @param y y-location of the cell being checked
 	 * @return number of possible directions
@@ -276,6 +488,7 @@ public class CellGrid {
 				directions++;
 
 			return directions;
+			// no error here
 		}
 		if (x == 0 && y == gridHeight - 1) {
 			// current cell is bottom left corner
@@ -285,6 +498,7 @@ public class CellGrid {
 				directions++;
 
 			return directions;
+			// no error here
 		}
 		if (x == gridWidth - 1 && y == 0) {
 			// cell is top right corner
@@ -294,6 +508,7 @@ public class CellGrid {
 				directions++;
 
 			return directions;
+			// no error here
 
 		}
 		if (x == gridWidth - 1 && y == gridHeight - 1) {
@@ -304,13 +519,13 @@ public class CellGrid {
 				directions++;
 
 			return directions;
-
+			// no error here
 		}
 
 		if (x == 0) {
-			// top row
+			// left row
 			directions = 0;
-			if (!visited[x - 1][y])
+			if (!visited[x][y + 1])
 				directions++;
 			if (!visited[x][y - 1])
 				directions++;
@@ -318,11 +533,12 @@ public class CellGrid {
 				directions++;
 
 			return directions;
+			// no error here
 		}
 		if (y == 0) {
-			// left row
+			// top row
 			directions = 0;
-			if (!visited[x][y - 1])
+			if (!visited[x - 1][y])
 				directions++;
 			if (!visited[x][y + 1])
 				directions++;
@@ -330,18 +546,21 @@ public class CellGrid {
 				directions++;
 
 			return directions;
+			// no error here
 		}
 		if (y == gridHeight - 1) {
 			// bottom row
 			directions = 0;
 			if (!visited[x - 1][y])
 				directions++;
-			if (!visited[x][y + 1])
+			if (!visited[x][y - 1])
 				directions++;
 			if (!visited[x + 1][y])
 				directions++;
 
 			return directions;
+			// no error here
+
 		}
 		if (x == gridWidth - 1) {
 			// right row
@@ -354,6 +573,7 @@ public class CellGrid {
 				directions++;
 
 			return directions;
+			// no error here
 		}
 
 		// all the rest of the possibilities mean that a cell is adjacent to 4 others
