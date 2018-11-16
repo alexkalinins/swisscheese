@@ -160,13 +160,13 @@ public class Generator {
 	 * @return a random Direction
 	 */
 	private Direction randomDirection(int x, int y) {
-		int r = rand.nextInt(4);
-		if (intToDirection(r).directionAvailable(x, y)) {
-
-			// repeating until returned direction is available:
-			randomDirection(x, y); // stack overflow?
-		}
-		return intToDirection(r);
+		int r;
+		//idiotic loop runs forever
+		do {
+			r = rand.nextInt(4);
+		}while(!intToDirection(r).directionAvailable(x,y));
+		
+		return intToDirection(r);		
 	}
 
 	/**

@@ -27,9 +27,15 @@ package maze;
 public class TestMain {
 
 	public static void main(String[] args) {
+		int seconds = (int) System.nanoTime() / 1000000000; //testin time
+		
 		// usually there is an ArrayIndexOutOfBounds on line 113 in CellGrid
 		Integer[][] maze = Generator.generateMaze(20);
-
+		
+		seconds = (int)System.nanoTime() - seconds;
+		
+		System.out.println("time to generate: " + seconds);
+		
 		for (int i = 0; i < maze.length; i++) {
 			for (int j = 0; i < maze.length; i++) {
 				System.out.print(Integer.toString(maze[i][j]));
@@ -37,6 +43,7 @@ public class TestMain {
 
 			System.out.print("\n");
 		}
+
 	}
 
 }
