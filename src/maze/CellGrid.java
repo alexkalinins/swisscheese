@@ -97,7 +97,7 @@ public class CellGrid {
 			public boolean directionAvailable(int x, int y) {
 				if (y == 0)
 					return false;
-				return visited[x][y - 1];
+				return !visited[x][y - 1];
 			}
 
 			@Override
@@ -106,10 +106,9 @@ public class CellGrid {
 			}
 
 			@Override
-			public Point2D move(int x, int y) {
+			public Point2D move(final int x, final int y) {
 				northWall[x][y] = true;
 				
-				// TODO fix ArrayIndexOutOfBoundsException (-1).
 				southWall[x][y - 1] = true;
 				
 				visited[x][y - 1] = true;
@@ -140,7 +139,7 @@ public class CellGrid {
 			public boolean directionAvailable(int x, int y) {
 				if (y == gridHeight - 1)
 					return false;
-				return visited[x][y + 1];
+				return !visited[x][y + 1];
 			}
 
 			@Override
@@ -149,7 +148,7 @@ public class CellGrid {
 			}
 
 			@Override
-			public Point2D move(int x, int y) {
+			public Point2D move(final int x, final int y) {
 				southWall[x][y] = true;
 				northWall[x][y + 1] = true;
 				visited[x][y + 1] = true;
@@ -178,9 +177,9 @@ public class CellGrid {
 		EAST {
 			@Override
 			public boolean directionAvailable(int x, int y) {
-				if (x == 0)
+				if (x == gridWidth-1)
 					return false;
-				return visited[x - 1][y];
+				return !visited[x + 1][y];
 			}
 
 			@Override
@@ -189,11 +188,11 @@ public class CellGrid {
 			}
 
 			@Override
-			public Point2D move(int x, int y) {
+			public Point2D move(final int x, final int y) {
 				eastWall[x][y] = true;
-				westWall[x - 1][y] = true;
-				visited[x - 1][y] = true;
-				return this.go(x - 1, y);
+				westWall[x + 1][y] = true;
+				visited[x + 1][y] = true;
+				return this.go(x + 1, y);
 			}
 
 			@Override
@@ -203,7 +202,7 @@ public class CellGrid {
 
 			@Override
 			public Point2D go(int x, int y) {
-				point.setLocation((double) x - 1, y);
+				point.setLocation((double) x + 1, y);
 				return point;
 			}
 
@@ -217,9 +216,9 @@ public class CellGrid {
 		WEST {
 			@Override
 			public boolean directionAvailable(int x, int y) {
-				if (x == gridWidth - 1)
+				if (x == 0)
 					return false;
-				return visited[x + 1][y];
+				return !visited[x - 1][y];
 			}
 
 			@Override
@@ -229,11 +228,11 @@ public class CellGrid {
 			}
 
 			@Override
-			public Point2D move(int x, int y) {
+			public Point2D move(final int x, final int y) {
 				westWall[x][y] = true;
-				eastWall[x + 1][y] = true;
-				visited[x + 1][y] = true;
-				return this.go(x + 1, y);
+				eastWall[x - 1][y] = true;
+				visited[x - 1][y] = true;
+				return this.go(x - 1, y);
 			}
 
 			@Override
@@ -243,7 +242,7 @@ public class CellGrid {
 
 			@Override
 			public Point2D go(int x, int y) {
-				point.setLocation((double) x + 1, y);
+				point.setLocation((double) x - 1, y);
 				return point;
 			}
 
@@ -310,7 +309,7 @@ public class CellGrid {
 		 * @param y y-location of the current cell
 		 * @return Point2D of the current cell <b>after</b> move
 		 */
-		public abstract Point2D move(int x, int y);
+		public abstract Point2D move(final int x, final int y);
 
 		/**
 		 * Overloaded move() to work with Point2D
@@ -469,6 +468,7 @@ public class CellGrid {
 		return checkRemainingPaths((int) p.getX(), (int) p.getY());
 	}
 
+	//TODO fix the wonky method ArrayIndexOutOfBounds
 	/**
 	 * Checks the number of possible directions the maze generator can go by
 	 * checking the visited[][] array of the adjacent cells.
@@ -578,7 +578,7 @@ public class CellGrid {
 
 		// all the rest of the possibilities mean that a cell is adjacent to 4 others
 		directions = 0;
-		if (!visited[x][y + 1])
+		if (!visited[x][y + 1]) //somehow outofbounds here!
 			directions++;
 		if (!visited[x][y - 1])
 			directions++;

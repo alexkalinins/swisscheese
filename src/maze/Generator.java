@@ -79,7 +79,13 @@ public class Generator {
 	 * 
 	 * @param size size of the CellGrid (dimensions: size*size). <b>NOTE:</b> the
 	 *             size is only of the CellGrid, and NOT the final map. The size of
-	 *             the map will be (size*size+1).
+	 *     ction(int x, int y) {
+		int r;
+		//idiotic loop runs forever
+		do {
+			r = rand.nextInt(4);
+			System.out.println(Integer.toString(r));
+		}while(!intToDirection(r).directionAva        the map will be (size*size+1).
 	 * @return the newly generated maze map as a 2D Integer array.
 	 */
 	public static Integer[][] generateMaze(int size) {
@@ -103,12 +109,14 @@ public class Generator {
 		Direction thisDirection = null;
 
 		int counter = size * size;
+		int directions;
 
 		// makes a maze with only one entrance.
 		while (counter != 0) {
 			thisDirection = null;
-			if (grid.checkRemainingPaths(currentCell) > 0) {
-				if (grid.checkRemainingPaths(currentCell) == 1) {
+			directions = grid.checkRemainingPaths(currentCell);
+			if (directions > 0) {
+				if (directions == 1) {
 					// if only one direction avail, for loop finds the direction
 					for (int i = 0; i < 4; i++) {
 						if ((thisDirection = intToDirection(i)).directionAvailable(currentCell)) {
@@ -116,11 +124,12 @@ public class Generator {
 						}
 					}
 				} else {
-					thisDirection = randomDirection(currentCell);
+					thisDirection = randomDirection(currentCell); //stuck here
 				}
 				appendLog(thisDirection);
 				currentCell.setLocation(thisDirection.move(currentCell));
 				counter--;
+				System.out.println("counter: "+ counter);
 			} else {
 				backTrack();
 			}
@@ -153,7 +162,7 @@ public class Generator {
 	}
 
 	/**
-	 * Generates a random Direction using SecureRandom
+	 * Generates am approved random Direction using SecureRandom
 	 * 
 	 * @param x x-location of the current cell
 	 * @param x y-location of the current cell
@@ -161,10 +170,9 @@ public class Generator {
 	 */
 	private Direction randomDirection(int x, int y) {
 		int r;
-		//idiotic loop runs forever
 		do {
 			r = rand.nextInt(4);
-		}while(!intToDirection(r).directionAvailable(x,y));
+		}while(!(intToDirection(r).directionAvailable(x,y)));
 		
 		return intToDirection(r);		
 	}
