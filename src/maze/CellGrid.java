@@ -39,7 +39,7 @@ import java.util.*;
  * @since 2018-11-14
  *
  */
-public class CellGrid {
+public strictfp class CellGrid {
 	private static int gridWidth;
 	private static int gridHeight;
 	private static boolean[][] northWall;
