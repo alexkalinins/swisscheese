@@ -112,7 +112,7 @@ public class CellGrid {
 				southWall[x][y - 1] = true;
 				
 				visited[x][y - 1] = true;
-				return this.go(x, y - 1);
+				return this.go(x, y);
 			}
 
 			@Override
@@ -152,7 +152,7 @@ public class CellGrid {
 				southWall[x][y] = true;
 				northWall[x][y + 1] = true;
 				visited[x][y + 1] = true;
-				return this.go(x, y + 1);
+				return this.go(x, y);
 			}
 
 			@Override
@@ -192,7 +192,7 @@ public class CellGrid {
 				eastWall[x][y] = true;
 				westWall[x + 1][y] = true;
 				visited[x + 1][y] = true;
-				return this.go(x + 1, y);
+				return this.go(x, y);
 			}
 
 			@Override
@@ -232,7 +232,7 @@ public class CellGrid {
 				westWall[x][y] = true;
 				eastWall[x - 1][y] = true;
 				visited[x - 1][y] = true;
-				return this.go(x - 1, y);
+				return this.go(x, y);
 			}
 
 			@Override
@@ -467,8 +467,6 @@ public class CellGrid {
 	public int checkRemainingPaths(Point2D p) {
 		return checkRemainingPaths((int) p.getX(), (int) p.getY());
 	}
-
-	//TODO fix the wonky method ArrayIndexOutOfBounds
 	/**
 	 * Checks the number of possible directions the maze generator can go by
 	 * checking the visited[][] array of the adjacent cells.
@@ -488,7 +486,7 @@ public class CellGrid {
 				directions++;
 
 			return directions;
-			// no error here
+			 
 		}
 		if (x == 0 && y == gridHeight - 1) {
 			// current cell is bottom left corner
@@ -498,7 +496,7 @@ public class CellGrid {
 				directions++;
 
 			return directions;
-			// no error here
+			 
 		}
 		if (x == gridWidth - 1 && y == 0) {
 			// cell is top right corner
@@ -508,7 +506,7 @@ public class CellGrid {
 				directions++;
 
 			return directions;
-			// no error here
+			 
 
 		}
 		if (x == gridWidth - 1 && y == gridHeight - 1) {
@@ -519,7 +517,7 @@ public class CellGrid {
 				directions++;
 
 			return directions;
-			// no error here
+			 
 		}
 
 		if (x == 0) {
@@ -533,7 +531,7 @@ public class CellGrid {
 				directions++;
 
 			return directions;
-			// no error here
+			 
 		}
 		if (y == 0) {
 			// top row
@@ -546,7 +544,7 @@ public class CellGrid {
 				directions++;
 
 			return directions;
-			// no error here
+			 
 		}
 		if (y == gridHeight - 1) {
 			// bottom row
@@ -559,7 +557,7 @@ public class CellGrid {
 				directions++;
 
 			return directions;
-			// no error here
+			 
 
 		}
 		if (x == gridWidth - 1) {
@@ -573,12 +571,12 @@ public class CellGrid {
 				directions++;
 
 			return directions;
-			// no error here
+			 
 		}
 
 		// all the rest of the possibilities mean that a cell is adjacent to 4 others
 		directions = 0;
-		if (!visited[x][y + 1]) //somehow outofbounds here!
+		if (!visited[x][y + 1]) 
 			directions++;
 		if (!visited[x][y - 1])
 			directions++;

@@ -79,13 +79,6 @@ public class Generator {
 	 * 
 	 * @param size size of the CellGrid (dimensions: size*size). <b>NOTE:</b> the
 	 *             size is only of the CellGrid, and NOT the final map. The size of
-	 *     ction(int x, int y) {
-		int r;
-		//idiotic loop runs forever
-		do {
-			r = rand.nextInt(4);
-			System.out.println(Integer.toString(r));
-		}while(!intToDirection(r).directionAva        the map will be (size*size+1).
 	 * @return the newly generated maze map as a 2D Integer array.
 	 */
 	public static Integer[][] generateMaze(int size) {
@@ -124,18 +117,17 @@ public class Generator {
 						}
 					}
 				} else {
-					thisDirection = randomDirection(currentCell); //stuck here
+					thisDirection = randomDirection(currentCell); // stuck here
 				}
 				appendLog(thisDirection);
 				currentCell.setLocation(thisDirection.move(currentCell));
 				counter--;
-				System.out.println("counter: "+ counter);
 			} else {
 				backTrack();
 			}
 		}
 
-		exit = intToDirection(rand.nextInt(3) + 1).makeExit(rand.nextInt(size));
+		exit = intToDirection(rand.nextInt(3) + 1).makeExit(rand.nextInt(size-1));
 
 	}
 
@@ -172,9 +164,9 @@ public class Generator {
 		int r;
 		do {
 			r = rand.nextInt(4);
-		}while(!(intToDirection(r).directionAvailable(x,y)));
-		
-		return intToDirection(r);		
+		} while (!(intToDirection(r).directionAvailable(x, y)));
+
+		return intToDirection(r);
 	}
 
 	/**

@@ -16,6 +16,8 @@
  */
 package maze;
 
+import java.util.Arrays;
+
 /**
  * A test main class to print out the maze to test the functionality of
  * Generator and CellGrid
@@ -24,25 +26,21 @@ package maze;
  * @since v0.1
  * @since 2018-11-15
  */
-public class TestMain {
+public strictfp class TestMain {
 
 	public static void main(String[] args) {
-		int seconds = (int) System.nanoTime() / 1000000000; //testin time
-		
-		// usually there is an ArrayIndexOutOfBounds on line 113 in CellGrid
 		Integer[][] maze = Generator.generateMaze(20);
-		
-		seconds = (int)System.nanoTime() - seconds;
-		
-		System.out.println("time to generate: " + seconds);
-		
-		for (int i = 0; i < maze.length; i++) {
-			for (int j = 0; i < maze.length; i++) {
-				System.out.print(Integer.toString(maze[i][j]));
-			}
 
-			System.out.print("\n");
+		String block = "";
+
+		for (int i = 0; i < maze.length; i++) {
+			for (int j = 0; j < maze[i].length; j++) {
+				block = String.format("%s%c", block, ((maze[i][j] == 1) ? '\u2588' : ' '));
+			}
+			block = String.format("%s%n", block);
 		}
+		
+		System.out.println(block);
 
 	}
 
