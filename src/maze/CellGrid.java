@@ -108,9 +108,9 @@ public class CellGrid {
 			@Override
 			public Point2D move(final int x, final int y) {
 				northWall[x][y] = true;
-				
+
 				southWall[x][y - 1] = true;
-				
+
 				visited[x][y - 1] = true;
 				return this.go(x, y);
 			}
@@ -177,7 +177,7 @@ public class CellGrid {
 		EAST {
 			@Override
 			public boolean directionAvailable(int x, int y) {
-				if (x == gridWidth-1)
+				if (x == gridWidth - 1)
 					return false;
 				return !visited[x + 1][y];
 			}
@@ -208,8 +208,8 @@ public class CellGrid {
 
 			@Override
 			public Point2D makeExit(int randomNumber) {
-				eastWall[0][randomNumber] = true;
-				point.setLocation(0, randomNumber);
+				eastWall[gridWidth - 1][randomNumber] = true;
+				point.setLocation((double) gridWidth - 1, randomNumber);
 				return point;
 			}
 		},
@@ -248,8 +248,8 @@ public class CellGrid {
 
 			@Override
 			public Point2D makeExit(int randomNumber) {
-				westWall[gridWidth - 1][randomNumber] = true;
-				point.setLocation((double) gridWidth - 1, randomNumber);
+				westWall[0][randomNumber] = true;
+				point.setLocation(0, randomNumber);
 				return point;
 			}
 
@@ -330,8 +330,8 @@ public class CellGrid {
 		public abstract Direction antiDirection();
 
 		/**
-		 * Point2D for a cell in a direction of a cell <b>without</>
-		 * breaking any walls or marking adjacent cell as visited.
+		 * Point2D for a cell in a direction of a cell <b>without</> breaking any walls
+		 * or marking adjacent cell as visited.
 		 * 
 		 * @param x x-location
 		 * @param y y-location
@@ -404,10 +404,8 @@ public class CellGrid {
 
 			for (int i = 0; i < gridWidth; i++) {
 				/**
-				 * In the format:
-				 * <p>
-				 * 1 N
-				 * <p>
+				 * In the format: <br>
+				 * 1 N <br>
 				 * W 0
 				 */
 
@@ -444,6 +442,7 @@ public class CellGrid {
 			else
 				line1.add(1);
 		}
+		line1.add(1); //corner piece
 
 		map.add(line1);
 
@@ -467,6 +466,7 @@ public class CellGrid {
 	public int checkRemainingPaths(Point2D p) {
 		return checkRemainingPaths((int) p.getX(), (int) p.getY());
 	}
+
 	/**
 	 * Checks the number of possible directions the maze generator can go by
 	 * checking the visited[][] array of the adjacent cells.
@@ -486,7 +486,7 @@ public class CellGrid {
 				directions++;
 
 			return directions;
-			 
+
 		}
 		if (x == 0 && y == gridHeight - 1) {
 			// current cell is bottom left corner
@@ -496,7 +496,7 @@ public class CellGrid {
 				directions++;
 
 			return directions;
-			 
+
 		}
 		if (x == gridWidth - 1 && y == 0) {
 			// cell is top right corner
@@ -506,7 +506,6 @@ public class CellGrid {
 				directions++;
 
 			return directions;
-			 
 
 		}
 		if (x == gridWidth - 1 && y == gridHeight - 1) {
@@ -517,7 +516,7 @@ public class CellGrid {
 				directions++;
 
 			return directions;
-			 
+
 		}
 
 		if (x == 0) {
@@ -531,7 +530,7 @@ public class CellGrid {
 				directions++;
 
 			return directions;
-			 
+
 		}
 		if (y == 0) {
 			// top row
@@ -544,7 +543,7 @@ public class CellGrid {
 				directions++;
 
 			return directions;
-			 
+
 		}
 		if (y == gridHeight - 1) {
 			// bottom row
@@ -557,7 +556,6 @@ public class CellGrid {
 				directions++;
 
 			return directions;
-			 
 
 		}
 		if (x == gridWidth - 1) {
@@ -571,12 +569,12 @@ public class CellGrid {
 				directions++;
 
 			return directions;
-			 
+
 		}
 
 		// all the rest of the possibilities mean that a cell is adjacent to 4 others
 		directions = 0;
-		if (!visited[x][y + 1]) 
+		if (!visited[x][y + 1])
 			directions++;
 		if (!visited[x][y - 1])
 			directions++;

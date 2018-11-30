@@ -16,7 +16,6 @@
  */
 package maze;
 
-import java.util.Arrays;
 
 /**
  * A test main class to print out the maze to test the functionality of
