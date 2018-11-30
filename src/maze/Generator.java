@@ -48,7 +48,7 @@ import static maze.CellGrid.Direction;
  * @see <a href="https://en.wikipedia.org/wiki/Depth-first_search"> Randomized
  *      Depth-First Search</a>
  */
-public class Generator {
+public strictfp class Generator {
 	private final int size; // size of maze size*size
 	private List<Direction> log = new ArrayList<Direction>();
 	private CellGrid grid;
@@ -215,7 +215,7 @@ public class Generator {
 
 	/**
 	 * Getter of the entry point of the maze (where the algorithm started). Where
-	 * the player should start the gane
+	 * the player should start the game
 	 * 
 	 * @return entry point (Point2D)
 	 */
