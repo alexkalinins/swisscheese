@@ -28,7 +28,7 @@ package maze;
 public strictfp class TestMain {
 
 	public static void main(String[] args) {
-		Integer[][] maze = Generator.generateMaze(20);
+		Integer[][] maze = Generator.generateMaze(50);
 
 		String block = "";
 
