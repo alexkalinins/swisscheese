@@ -36,7 +36,7 @@ public class GoBackward implements KeyAction {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Walk Backward";
@@ -44,8 +44,13 @@ public class GoBackward implements KeyAction {
 
 	@Override
 	public synchronized void stopAction() {
+		;
+	}
+
+	@Override
+	public void singleAction() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

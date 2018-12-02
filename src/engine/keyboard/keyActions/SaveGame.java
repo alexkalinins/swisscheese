@@ -33,8 +33,7 @@ public class SaveGame implements KeyAction {
 
 	@Override
 	public synchronized void doAction() {
-		// TODO Auto-generated method stub
-
+		;
 	}
 
 	@Override
@@ -45,6 +44,12 @@ public class SaveGame implements KeyAction {
 	@Override
 	public synchronized void stopAction() {
 		;
+	}
+
+	@Override
+	public void singleAction() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

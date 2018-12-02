@@ -36,7 +36,7 @@ public class LookRight implements KeyAction {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Look right";
@@ -45,7 +45,12 @@ public class LookRight implements KeyAction {
 	@Override
 	public synchronized void stopAction() {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	@Override
+	public void singleAction() {
+		;
 	}
 
 }

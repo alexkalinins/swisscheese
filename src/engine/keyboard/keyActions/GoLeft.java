@@ -36,7 +36,7 @@ public class GoLeft implements KeyAction {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Walk Left";
@@ -45,7 +45,12 @@ public class GoLeft implements KeyAction {
 	@Override
 	public synchronized void stopAction() {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	@Override
+	public void singleAction() {
+		;
 	}
 
 }

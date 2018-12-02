@@ -29,7 +29,7 @@ import java.io.Serializable;
 public interface KeyAction extends Serializable{
 
 	/**
-	 * Does an action.
+	 * Does an action (only for continuous actions)
 	 */
 	public void doAction();
 
@@ -38,4 +38,9 @@ public interface KeyAction extends Serializable{
 	 * walking).
 	 */
 	public void stopAction();
+	
+	/**
+	 * Does a single action (does not include actions like camera movements)
+	 */
+	public void singleAction();
 }

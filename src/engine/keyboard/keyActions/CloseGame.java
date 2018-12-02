@@ -33,7 +33,7 @@ public class CloseGame implements KeyAction {
 
 	@Override
 	public synchronized void doAction() {
-		System.exit(0);
+		;
 	}
 	
 	@Override
@@ -44,6 +44,11 @@ public class CloseGame implements KeyAction {
 	@Override
 	public synchronized void stopAction() {
 		;	
+	}
+
+	@Override
+	public void singleAction() {
+		System.exit(0);		
 	}
 
 }

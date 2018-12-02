@@ -36,7 +36,7 @@ public class LookDown implements KeyAction {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Look Down";
@@ -45,7 +45,12 @@ public class LookDown implements KeyAction {
 	@Override
 	public synchronized void stopAction() {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	@Override
+	public void singleAction() {
+		;
 	}
 
 }
