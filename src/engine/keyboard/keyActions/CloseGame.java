@@ -36,4 +36,10 @@ public class CloseGame implements KeyAction {
 		return "Quits Game (NO SAVE!)";
 	}
 
+	@Override
+	public void stopAction() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

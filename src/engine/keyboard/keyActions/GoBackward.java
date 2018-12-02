@@ -37,4 +37,10 @@ public class GoBackward implements KeyAction {
 		return "Walk Backward";
 	}
 
+	@Override
+	public void stopAction() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

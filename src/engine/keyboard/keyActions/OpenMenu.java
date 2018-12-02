@@ -37,4 +37,10 @@ public class OpenMenu implements KeyAction {
 		return "Opens Menu";
 	}
 
+	@Override
+	public void stopAction() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

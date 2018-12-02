@@ -37,4 +37,10 @@ public class GoForward implements KeyAction {
 		return "Walk Foreward";
 	}
 
+	@Override
+	public void stopAction() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

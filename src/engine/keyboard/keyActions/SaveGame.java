@@ -37,4 +37,10 @@ public class SaveGame implements KeyAction {
 		return "Save Game";
 	}
 
+	@Override
+	public void stopAction() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

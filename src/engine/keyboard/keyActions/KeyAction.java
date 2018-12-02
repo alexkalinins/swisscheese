@@ -16,14 +16,26 @@
  */
 package engine.keyboard.keyActions;
 
+import java.io.Serializable;
+
 /**
- * Key Action Intefrace
+ * Key Action Interface
  * 
  * @author Alex Kalinins
  * @since 2018-12-1
  * @since v0.2
  * @version v0.1
  */
-public interface KeyAction {
+public interface KeyAction extends Serializable{
+
+	/**
+	 * Does an action.
+	 */
 	public void doAction();
+
+	/**
+	 * Stops doing an action. (only applicable to continuous actions such as
+	 * walking).
+	 */
+	public void stopAction();
 }

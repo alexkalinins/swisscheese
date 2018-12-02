@@ -17,14 +17,14 @@
 package engine.keyboard.keyActions;
 
 /**
- * Go Left Action (moves camera left).
+ * Pans camera down
  * 
  * @author Alex Kalinins
  * @since 2018-12-1
  * @since v0.2
  * @version v0.1
  */
-public class GoLeft implements KeyAction {
+public class LookDown implements KeyAction {
 
 	@Override
 	public void doAction() {
@@ -34,7 +34,7 @@ public class GoLeft implements KeyAction {
 	
 	@Override
 	public String toString() {
-		return "Walk Left";
+		return "Look Down";
 	}
 
 	@Override

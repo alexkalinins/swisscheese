@@ -37,4 +37,10 @@ public class GoRight implements KeyAction {
 		return "Walk Right";
 	}
 
+	@Override
+	public void stopAction() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
