@@ -18,6 +18,7 @@ package engine.keyboard;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Map;
 
 /**
  * Keyboard listener class for game's ui
@@ -29,22 +30,79 @@ import java.awt.event.KeyListener;
  */
 public class Keyboard implements KeyListener {
 
+	private static Map<Integer, Keys> keyMap;
+	
+	public Keyboard() {
+		loadKeyMap();
+	}
+	
+	private void loadKeyMap() {
+		keyMap.put(KeyEvent.VK_A, Keys.A);
+		keyMap.put(KeyEvent.VK_B, Keys.B);
+		keyMap.put(KeyEvent.VK_C, Keys.C);
+		keyMap.put(KeyEvent.VK_D, Keys.D);
+		keyMap.put(KeyEvent.VK_E, Keys.E);
+		keyMap.put(KeyEvent.VK_F, Keys.F);
+		keyMap.put(KeyEvent.VK_G, Keys.G);
+		keyMap.put(KeyEvent.VK_H, Keys.H);
+		keyMap.put(KeyEvent.VK_I, Keys.I);
+		keyMap.put(KeyEvent.VK_J, Keys.J);
+		keyMap.put(KeyEvent.VK_K, Keys.K);
+		keyMap.put(KeyEvent.VK_L, Keys.L);
+		keyMap.put(KeyEvent.VK_M, Keys.M);
+		keyMap.put(KeyEvent.VK_N, Keys.N);
+		keyMap.put(KeyEvent.VK_O, Keys.O);
+		keyMap.put(KeyEvent.VK_P, Keys.P);
+		keyMap.put(KeyEvent.VK_Q, Keys.Q);
+		keyMap.put(KeyEvent.VK_R, Keys.R);
+		keyMap.put(KeyEvent.VK_S, Keys.S);
+		keyMap.put(KeyEvent.VK_T, Keys.T);
+		keyMap.put(KeyEvent.VK_U, Keys.U);
+		keyMap.put(KeyEvent.VK_V, Keys.V);
+		keyMap.put(KeyEvent.VK_W, Keys.W);
+		keyMap.put(KeyEvent.VK_X, Keys.X);
+		keyMap.put(KeyEvent.VK_Y, Keys.Y);
+		keyMap.put(KeyEvent.VK_Z, Keys.Z);
+		
+		keyMap.put(KeyEvent.VK_1, Keys.N1);
+		keyMap.put(KeyEvent.VK_2, Keys.N2);
+		keyMap.put(KeyEvent.VK_3, Keys.N3);
+		keyMap.put(KeyEvent.VK_4, Keys.N4);
+		keyMap.put(KeyEvent.VK_5, Keys.N5);
+		keyMap.put(KeyEvent.VK_6, Keys.N6);
+		keyMap.put(KeyEvent.VK_7, Keys.N7);
+		keyMap.put(KeyEvent.VK_8, Keys.N8);
+		keyMap.put(KeyEvent.VK_9, Keys.N9);
+		keyMap.put(KeyEvent.VK_0, Keys.N0);
+		
+		keyMap.put(KeyEvent.VK_UP, Keys.UP);
+		keyMap.put(KeyEvent.VK_DOWN, Keys.DOWN);
+		keyMap.put(KeyEvent.VK_LEFT, Keys.LEFT);
+		keyMap.put(KeyEvent.VK_RIGHT, Keys.RIGHT);
+		
+		keyMap.put(KeyEvent.VK_ESCAPE, Keys.ESC);
+		keyMap.put(KeyEvent.VK_SHIFT, Keys.SHIFT);
+		keyMap.put(KeyEvent.VK_ENTER, Keys.ENTER);
+		keyMap.put(KeyEvent.VK_SPACE, Keys.SPACE);
+		keyMap.put(KeyEvent.VK_BACK_SPACE, Keys.BACK_SPACE);
+		
+		
+	}
+	
 	@Override
-	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+	public void keyPressed(KeyEvent key) {
+		keyMap.get(key.getKeyCode()).doAction();
 
 	}
 
 	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
+	public void keyReleased(KeyEvent key) {
+		keyMap.get(key.getKeyCode()).stopAction();
 	}
 
 	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
+	public void keyTyped(KeyEvent key) {
+		keyMap.get(key.getKeyCode()).singleAction();
 	}
 
 }
