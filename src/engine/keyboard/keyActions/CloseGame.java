@@ -26,8 +26,13 @@ package engine.keyboard.keyActions;
  */
 public class CloseGame implements KeyAction {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8998512904192715208L;
+
 	@Override
-	public void doAction() {
+	public synchronized void doAction() {
 		System.exit(0);
 	}
 	
@@ -37,9 +42,8 @@ public class CloseGame implements KeyAction {
 	}
 
 	@Override
-	public void stopAction() {
-		// TODO Auto-generated method stub
-		
+	public synchronized void stopAction() {
+		;	
 	}
 
 }

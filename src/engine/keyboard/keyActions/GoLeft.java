@@ -26,8 +26,13 @@ package engine.keyboard.keyActions;
  */
 public class GoLeft implements KeyAction {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6121875276225006881L;
+
 	@Override
-	public void doAction() {
+	public synchronized void doAction() {
 		// TODO Auto-generated method stub
 
 	}
@@ -38,7 +43,7 @@ public class GoLeft implements KeyAction {
 	}
 
 	@Override
-	public void stopAction() {
+	public synchronized void stopAction() {
 		// TODO Auto-generated method stub
 		
 	}

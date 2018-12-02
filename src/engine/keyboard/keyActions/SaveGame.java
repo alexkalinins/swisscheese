@@ -26,21 +26,25 @@ package engine.keyboard.keyActions;
  */
 public class SaveGame implements KeyAction {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6066662780157800971L;
+
 	@Override
-	public void doAction() {
+	public synchronized void doAction() {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Save Game";
 	}
 
 	@Override
-	public void stopAction() {
-		// TODO Auto-generated method stub
-		
+	public synchronized void stopAction() {
+		;
 	}
 
 }

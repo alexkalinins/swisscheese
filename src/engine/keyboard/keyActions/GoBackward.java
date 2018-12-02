@@ -26,8 +26,13 @@ package engine.keyboard.keyActions;
  */
 public class GoBackward implements KeyAction {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8882143351061371903L;
+
 	@Override
-	public void doAction() {
+	public synchronized void doAction() {
 		// TODO Auto-generated method stub
 
 	}
@@ -38,7 +43,7 @@ public class GoBackward implements KeyAction {
 	}
 
 	@Override
-	public void stopAction() {
+	public synchronized void stopAction() {
 		// TODO Auto-generated method stub
 		
 	}

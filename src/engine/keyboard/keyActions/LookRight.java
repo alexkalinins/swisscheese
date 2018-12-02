@@ -26,8 +26,13 @@ package engine.keyboard.keyActions;
  */
 public class LookRight implements KeyAction {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8836348263206589038L;
+
 	@Override
-	public void doAction() {
+	public synchronized void doAction() {
 		// TODO Auto-generated method stub
 
 	}
@@ -38,7 +43,7 @@ public class LookRight implements KeyAction {
 	}
 
 	@Override
-	public void stopAction() {
+	public synchronized void stopAction() {
 		// TODO Auto-generated method stub
 		
 	}
