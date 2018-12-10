@@ -20,46 +20,56 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 
-import engine.keyboard.*;
+import com.google.gson.Gson;
+
+import engine.keyboard.KeyActionPreference;
 import engine.keyboard.keyActions.*;
 
 /**
- * Creates a default setting file for KeyActionPreference
- * @author alex
+ * Creates a default setting file for KeyActionPreference. Uses GSON
+ * 
+ * @author Alex Kalinins
+ * @version v0.2
  *
  */
 public class DefaultFileCreator {
 	public static KeyActionPreference p;
-	
+	public static Gson gson;
+
 	public static void load() {
 		p = new KeyActionPreference();
-		p.setPreference(new GoForward(), new GoLeft(), new GoBackward(), new GoRight(),
-				new LookUp(), new LookDown(), new LookLeft(), new LookRight(),
-				new OpenMenu(), null, null, null, null, null,null, null, null,
-				null,null, null);
+		p.setPreference(new GoForward(), new GoLeft(), new GoBackward(), new GoRight(), new LookUp(), new LookDown(),
+				new LookLeft(), new LookRight(), new OpenMenu(), null, null, null, null, null, null, null, null, null,
+				null, null);
 	}
-	
+
 	public static void main(String[] args) {
+		gson = new Gson();
 		load();
 		writeToFile(p);
 	}
-	
+
 	/**
-	 * Serializes and writes preferences to file (/settings/user/keybind.config)
+	 * Serializes and writes preferences to file (/settings/user/keybind.config).
+	 * Now using GSON
 	 */
 	public static void writeToFile(KeyActionPreference p) {
 		File file = new File("settings/default/keybind.config");
 		if (file.exists()) {
 			file.delete();
 		}
-		try (FileOutputStream fileOut = new FileOutputStream(file);
-				ObjectOutputStream objOut = new ObjectOutputStream(fileOut)) {
-			objOut.writeObject(p);
-			
-		}catch(IOException e) {
+
+		String jsonString = gson.toJson(p);
+
+		try (PrintWriter out = new PrintWriter(file)) {
+			out.write(jsonString);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		System.out.println(jsonString);
 	}
-	
+
 }
