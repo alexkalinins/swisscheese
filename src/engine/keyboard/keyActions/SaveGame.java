@@ -25,12 +25,6 @@ package engine.keyboard.keyActions;
  * @version v0.1
  */
 public class SaveGame implements KeyAction {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6066662780157800971L;
-
 	@Override
 	public synchronized void doAction() {
 		;

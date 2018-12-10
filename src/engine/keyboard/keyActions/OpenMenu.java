@@ -26,10 +26,6 @@ package engine.keyboard.keyActions;
  */
 public class OpenMenu implements KeyAction {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3058003526226956402L;
 
 	@Override
 	public void doAction() {

@@ -16,8 +16,6 @@
  */
 package engine.keyboard.keyActions;
 
-import java.io.Serializable;
-
 /**
  * Key Action Interface
  * 
@@ -26,7 +24,7 @@ import java.io.Serializable;
  * @since v0.2
  * @version v0.1
  */
-public interface KeyAction extends Serializable{
+public interface KeyAction {
 
 	/**
 	 * Does an action (only for continuous actions)

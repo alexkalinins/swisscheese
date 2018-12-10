@@ -197,6 +197,7 @@ public class Keyboard implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent key) {
+		System.out.println("Found a key event");
 		try {
 			keyMap.get(key.getKeyCode()).doAction();
 		} catch (NoSuchElementException e) {
@@ -221,6 +222,13 @@ public class Keyboard implements KeyListener {
 			keyMap.get(key.getKeyCode()).singleAction();
 		} catch (NoSuchElementException e) {
 			System.out.println("User typed a non-bound key");
+		}
+	}
+	
+	public static void main (String[] args) {
+		Keyboard k = new Keyboard();
+		while(true) {
+			;
 		}
 	}
 

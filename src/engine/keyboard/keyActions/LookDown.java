@@ -26,10 +26,6 @@ package engine.keyboard.keyActions;
  */
 public class LookDown implements KeyAction {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7730815032567743265L;
 
 	@Override
 	public synchronized void doAction() {

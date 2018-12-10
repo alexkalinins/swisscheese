@@ -393,7 +393,7 @@ public strictfp class CellGrid {
 	 * 
 	 * @return CellGrid as a 2D Integer Array
 	 */
-	public Integer[][] gridTo2DArray() {
+	public synchronized Integer[][] gridTo2DArray() {
 		List<List<Integer>> map = new ArrayList<List<Integer>>();
 
 		List<Integer> line1 = new ArrayList<Integer>();

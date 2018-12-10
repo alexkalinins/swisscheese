@@ -27,12 +27,6 @@ import java.io.Serializable;
  * @version v0.1
  */
 public class TestAction implements KeyAction, Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4396322507134811588L;
-
 	@Override
 	public void doAction() {
 		System.out.println("You are holding a key");

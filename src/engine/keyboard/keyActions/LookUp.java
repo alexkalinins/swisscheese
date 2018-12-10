@@ -26,11 +26,6 @@ package engine.keyboard.keyActions;
  */
 public class LookUp implements KeyAction {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6196294221789967288L;
-
 	@Override
 	public synchronized void doAction() {
 		// TODO Auto-generated method stub

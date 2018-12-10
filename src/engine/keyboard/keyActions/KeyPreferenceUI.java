@@ -16,12 +16,14 @@
  */
 package engine.keyboard.keyActions;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.PrintStream;
+
+import com.google.gson.Gson;
 
 import engine.keyboard.KeyActionPreference;
 
@@ -32,32 +34,39 @@ import engine.keyboard.KeyActionPreference;
  * user preference file is missing (when the game is loaded for the first time),
  * the default preferences will be used. User preference file is deleted if the
  * user wishes to revert settings to default.
+ * <p>
+ * GSON library is used to serialize and deserialize KeyActionPreference, as it
+ * is safer than native Serialization.
  * 
  * @author Alex Kalinins
  * @since 2018-12-1
  * @since v0.2
- * @version v0.1
+ * @version v0.2
  */
 public class KeyPreferenceUI {
+	static Gson gson = new Gson();
 
 	/**
-	 * Reads and deserializes preferences from a file. If user file does not exist,
-	 * it reads default.
+	 * Reads and deserializes preferences from a file. Uses GSON to deserialize
 	 * <p>
 	 * The file being read is keybind.config
 	 */
 	public static void readFromFile() {
 		File settings = new File(
 				(checkForSaved()) ? "settings/user/keybind.config" : "settings/default/keybind.config");
-		try (FileInputStream fileIn = new FileInputStream(settings);
-				ObjectInputStream objIn = new ObjectInputStream(fileIn)) {
-			KeyActionPreference p = (KeyActionPreference) objIn.readObject();
-			p.bindPreferences();
+		StringBuilder b = new StringBuilder();
+		String line;
+		try (BufferedReader in = new BufferedReader(new FileReader(settings))) {
+			while ((line = in.readLine()) != null) {
+				b.append(line);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (ClassNotFoundException c) {
-			c.printStackTrace();
 		}
+
+		line = b.toString();
+		KeyActionPreference p = gson.fromJson(line, KeyActionPreference.class);
+		p.bindPreferences();
 	}
 
 	/**
@@ -68,11 +77,11 @@ public class KeyPreferenceUI {
 		if (file.exists()) {
 			file.delete();
 		}
-		try (FileOutputStream fileOut = new FileOutputStream(file);
-				ObjectOutputStream objOut = new ObjectOutputStream(fileOut)) {
-			objOut.writeObject(p);
+		
+		try (PrintStream out = new PrintStream(new FileOutputStream(file))) {
+			out.print(gson.toJson(p));
 			
-		}catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

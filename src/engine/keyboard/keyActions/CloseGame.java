@@ -25,12 +25,6 @@ package engine.keyboard.keyActions;
  * @version v0.1
  */
 public class CloseGame implements KeyAction {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8998512904192715208L;
-
 	@Override
 	public synchronized void doAction() {
 		;

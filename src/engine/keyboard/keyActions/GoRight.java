@@ -26,11 +26,6 @@ package engine.keyboard.keyActions;
  */
 public class GoRight implements KeyAction {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6593688964568599064L;
-
 	@Override
 	public synchronized void doAction() {
 		// TODO Auto-generated method stub

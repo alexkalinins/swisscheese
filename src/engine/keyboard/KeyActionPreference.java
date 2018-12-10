@@ -16,8 +16,6 @@
  */
 package engine.keyboard;
 
-import java.io.Serializable;
-
 import engine.keyboard.keyActions.KeyAction;
 
 /**
@@ -31,8 +29,7 @@ import engine.keyboard.keyActions.KeyAction;
  * @since v0.2
  * @version v0.1
  */
-public final class KeyActionPreference implements Serializable {
-	private static final long serialVersionUID = -4400475051312127025L;
+public final class KeyActionPreference {
 	private KeyAction wAction;
 	private KeyAction aAction;
 	private KeyAction sAction;
