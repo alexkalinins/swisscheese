@@ -17,9 +17,7 @@
 package devTools;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 
 import com.google.gson.Gson;
@@ -40,7 +38,7 @@ public class DefaultFileCreator {
 
 	public static void load() {
 		p = new KeyActionPreference();
-		p.setPreference(new GoForward(), new GoLeft(), new GoBackward(), new GoRight(), new LookUp(), new LookDown(),
+		p.setPreference(new GoForward(), new GoLeft(), new GoBackward(), new GoRight(), null, null,
 				new LookLeft(), new LookRight(), new OpenMenu(), null, null, null, null, null, null, null, null, null,
 				null, null);
 	}

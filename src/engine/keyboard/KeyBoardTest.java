@@ -1,11 +1,21 @@
 package engine.keyboard;
 
-public class KeyBoardTest {
-	public static void main(String[] args) {
+import java.awt.Color;
+
+import javax.swing.JFrame;
+
+public class KeyBoardTest extends JFrame{
+	KeyBoardTest(){
 		Keyboard keyboard = new Keyboard();
+		addKeyListener(keyboard);
+		setSize(400,400);
+		setBackground(Color.BLACK);
+		setVisible(true);
 		
-		while(1==1) {
-			;
-		}
+	}
+	
+	public static void main(String[] args) {
+		new KeyBoardTest();
+		
 	}
 }

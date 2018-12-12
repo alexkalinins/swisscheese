@@ -44,9 +44,4 @@ public class GoLeft implements KeyAction {
 
 	}
 
-	@Override
-	public void singleAction() {
-		;
-	}
-
 }

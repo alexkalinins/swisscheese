@@ -45,10 +45,4 @@ public class OpenMenu implements KeyAction {
 		;
 	}
 
-	@Override
-	public void singleAction() {
-		// TODO Auto-generated method stub
-
-	}
-
 }

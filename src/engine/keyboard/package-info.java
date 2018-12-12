@@ -20,6 +20,6 @@
  * @author Alex Kalinins
  * @since v0.2
  * @since 2018-12-1
- * @version v0.1
+ * @version v0.2
  */
 package engine.keyboard;

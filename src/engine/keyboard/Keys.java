@@ -61,13 +61,6 @@ public enum Keys {
 	public synchronized void stopAction() {
 		action.stopAction();
 	}
-	
-	/**
-	 * Does a single action (not applicable to continuous actions)
-	 */
-	public synchronized void singleAction() {
-		action.singleAction();
-	}
 
 	/**
 	 * KeyAction Getter

@@ -16,17 +16,15 @@
  */
 package engine.keyboard.keyActions;
 
-import java.io.Serializable;
-
 /**
- * Testing to see if it works
+ * Test action used for testing the keyboard
  * 
  * @author Alex Kalinins
  * @since 2018-12-1
  * @since v0.2
  * @version v0.1
  */
-public class TestAction implements KeyAction, Serializable {
+public class TestAction implements KeyAction {
 	@Override
 	public void doAction() {
 		System.out.println("You are holding a key");
@@ -36,11 +34,6 @@ public class TestAction implements KeyAction, Serializable {
 	public void stopAction() {
 		System.out.println("You released a key");
 
-	}
-
-	@Override
-	public void singleAction() {
-		System.out.println("You pressed a key once.");
 	}
 
 }

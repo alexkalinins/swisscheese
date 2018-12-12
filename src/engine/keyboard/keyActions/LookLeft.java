@@ -43,9 +43,4 @@ public class LookLeft implements KeyAction {
 
 	}
 
-	@Override
-	public void singleAction() {
-		;
-	}
-
 }

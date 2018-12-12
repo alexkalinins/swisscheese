@@ -43,9 +43,5 @@ public class GoRight implements KeyAction {
 
 	}
 
-	@Override
-	public void singleAction() {
-		;
-	}
 
 }

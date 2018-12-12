@@ -43,9 +43,5 @@ public class GoForward implements KeyAction {
 
 	}
 
-	@Override
-	public void singleAction() {
-		;
-	}
 
 }

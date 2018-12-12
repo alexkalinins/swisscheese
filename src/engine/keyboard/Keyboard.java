@@ -36,54 +36,6 @@ public class Keyboard implements KeyListener {
 
 	private static Map<Integer, Keys> keyMap;
 
-	private Keys A = Keys.A;
-	private Keys B = Keys.B;
-	private Keys C = Keys.C;
-	private Keys D = Keys.D;
-	private Keys E = Keys.E;
-	private Keys F = Keys.F;
-	private Keys G = Keys.G;
-	private Keys H = Keys.H;
-	private Keys I = Keys.I;
-	private Keys J = Keys.J;
-	private Keys K = Keys.K;
-	private Keys L = Keys.L;
-	private Keys M = Keys.M;
-	private Keys N = Keys.N;
-	private Keys O = Keys.O;
-	private Keys P = Keys.P;
-	private Keys Q = Keys.Q;
-	private Keys R = Keys.R;
-	private Keys S = Keys.S;
-	private Keys T = Keys.T;
-	private Keys U = Keys.U;
-	private Keys V = Keys.V;
-	private Keys W = Keys.W;
-	private Keys X = Keys.X;
-	private Keys Y = Keys.Y;
-	private Keys Z = Keys.Z;
-
-	private Keys N1 = Keys.N1;
-	private Keys N2 = Keys.N2;
-	private Keys N3 = Keys.N3;
-	private Keys N4 = Keys.N4;
-	private Keys N5 = Keys.N5;
-	private Keys N6 = Keys.N6;
-	private Keys N7 = Keys.N7;
-	private Keys N8 = Keys.N8;
-	private Keys N9 = Keys.N9;
-	private Keys N0 = Keys.N0;
-
-	private Keys UP = Keys.UP;
-	private Keys DOWN = Keys.DOWN;
-	private Keys LEFT = Keys.LEFT;
-	private Keys RIGHT = Keys.RIGHT;
-	private Keys ESC = Keys.ESC;
-	private Keys SHIFT = Keys.SHIFT;
-	private Keys ENTER = Keys.ENTER;
-	private Keys SPACE = Keys.SPACE;
-	private Keys BACK_SPACE = Keys.BACK_SPACE;
-
 	public Keyboard() {
 
 		loadKeyMap();
@@ -94,55 +46,6 @@ public class Keyboard implements KeyListener {
 		keyMap = new HashMap<Integer, Keys>();
 
 		Keys.A.setAction(new TestAction());
-
-//		keyMap.put(KeyEvent.VK_A, A);
-//		keyMap.put(KeyEvent.VK_B, B);
-//		keyMap.put(KeyEvent.VK_C, C);
-//		keyMap.put(KeyEvent.VK_D, D);
-//		keyMap.put(KeyEvent.VK_E, E);
-//		keyMap.put(KeyEvent.VK_F, F);
-//		keyMap.put(KeyEvent.VK_G, G);
-//		keyMap.put(KeyEvent.VK_H, H);
-//		keyMap.put(KeyEvent.VK_I, I);
-//		keyMap.put(KeyEvent.VK_J, J);
-//		keyMap.put(KeyEvent.VK_K, K);
-//		keyMap.put(KeyEvent.VK_L, L);
-//		keyMap.put(KeyEvent.VK_M, M);
-//		keyMap.put(KeyEvent.VK_N, N);
-//		keyMap.put(KeyEvent.VK_O, O);
-//		keyMap.put(KeyEvent.VK_P, P);
-//		keyMap.put(KeyEvent.VK_Q, Q);
-//		keyMap.put(KeyEvent.VK_R, R);
-//		keyMap.put(KeyEvent.VK_S, S);
-//		keyMap.put(KeyEvent.VK_T, T);
-//		keyMap.put(KeyEvent.VK_U, U);
-//		keyMap.put(KeyEvent.VK_V, V);
-//		keyMap.put(KeyEvent.VK_W, W);
-//		keyMap.put(KeyEvent.VK_X, X);
-//		keyMap.put(KeyEvent.VK_Y, Y);
-//		keyMap.put(KeyEvent.VK_Z, Z);
-//
-//		keyMap.put(KeyEvent.VK_1, N1);
-//		keyMap.put(KeyEvent.VK_2, N2);
-//		keyMap.put(KeyEvent.VK_3, N3);
-//		keyMap.put(KeyEvent.VK_4, N4);
-//		keyMap.put(KeyEvent.VK_5, N5);
-//		keyMap.put(KeyEvent.VK_6, N6);
-//		keyMap.put(KeyEvent.VK_7, N7);
-//		keyMap.put(KeyEvent.VK_8, N8);
-//		keyMap.put(KeyEvent.VK_9, N9);
-//		keyMap.put(KeyEvent.VK_0, N0);
-//
-//		keyMap.put(KeyEvent.VK_UP, UP);
-//		keyMap.put(KeyEvent.VK_DOWN, DOWN);
-//		keyMap.put(KeyEvent.VK_LEFT, LEFT);
-//		keyMap.put(KeyEvent.VK_RIGHT, RIGHT);
-//
-//		keyMap.put(KeyEvent.VK_ESCAPE, ESC);
-//		keyMap.put(KeyEvent.VK_SHIFT, SHIFT);
-//		keyMap.put(KeyEvent.VK_ENTER, ENTER);
-//		keyMap.put(KeyEvent.VK_SPACE, SPACE);
-//		keyMap.put(KeyEvent.VK_BACK_SPACE, BACK_SPACE);
 
 		keyMap.put(KeyEvent.VK_A, Keys.A);
 		keyMap.put(KeyEvent.VK_B, Keys.B);
@@ -197,12 +100,11 @@ public class Keyboard implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent key) {
-		System.out.println("Found a key event");
 		try {
 			keyMap.get(key.getKeyCode()).doAction();
-		} catch (NoSuchElementException e) {
+		} catch (NullPointerException e) {
 			// there may be no keys bound to the keycode.
-			System.out.println("User pressed a non-bound key");
+			System.out.println("User pressed a non-bound key: " + key.getKeyChar());
 		}
 
 	}
@@ -211,25 +113,14 @@ public class Keyboard implements KeyListener {
 	public void keyReleased(KeyEvent key) {
 		try {
 			keyMap.get(key.getKeyCode()).stopAction();
-		} catch (NoSuchElementException e) {
-			System.out.println("User released a non-bound key");
+		} catch (NullPointerException e) {
+			System.out.println("User released a non-bound key: "+key.getKeyChar());
 		}
 	}
 
 	@Override
 	public void keyTyped(KeyEvent key) {
-		try {
-			keyMap.get(key.getKeyCode()).singleAction();
-		} catch (NoSuchElementException e) {
-			System.out.println("User typed a non-bound key");
-		}
-	}
-	
-	public static void main (String[] args) {
-		Keyboard k = new Keyboard();
-		while(true) {
-			;
-		}
+		return;
 	}
 
 }

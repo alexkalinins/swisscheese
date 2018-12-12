@@ -37,8 +37,4 @@ public interface KeyAction {
 	 */
 	public void stopAction();
 	
-	/**
-	 * Does a single action (does not include actions like camera movements)
-	 */
-	public void singleAction();
 }
