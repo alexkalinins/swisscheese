@@ -26,7 +26,7 @@ import javax.swing.JFrame;
 
 import SwissCheese.engine.camera.Camera;
 import SwissCheese.engine.camera.Mover;
-import SwissCheese.engine.keyboard.KeyPreferenceUI;
+import SwissCheese.engine.keyboard.KeyPreferenceIO;
 import SwissCheese.engine.keyboard.Keyboard;
 import SwissCheese.map.Map;
 
@@ -60,7 +60,7 @@ public class Window extends JFrame {
 	private int height;
 	private int[] pixels;
 
-	public Window(int width, int height, Map map, int FOV) {
+	public Window(int width, int height, Map map, float FOV) {
 		this.width = width;
 		this.height = height;
 		
@@ -74,7 +74,7 @@ public class Window extends JFrame {
 		pixels = ((DataBufferInt)bufferImage.getRaster().getDataBuffer()).getData();
 		
 		keyboard = new Keyboard();
-		KeyPreferenceUI.readFromFile();
+		KeyPreferenceIO.readFromFile();
 		
 		setSize(width, height);
 		setResizable(false);
@@ -111,10 +111,12 @@ public class Window extends JFrame {
 		switchBuffer();
 	}
 
+	@Override
 	public synchronized final int getWidth() {
 		return width;
 	}
 
+	@Override
 	public synchronized final int getHeight() {
 		return height;
 	}

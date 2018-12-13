@@ -5,6 +5,11 @@ import java.awt.Color;
 import javax.swing.JFrame;
 
 public class KeyBoardTest extends JFrame{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4551755352000162403L;
+
 	KeyBoardTest(){
 		Keyboard keyboard = new Keyboard();
 		addKeyListener(keyboard);

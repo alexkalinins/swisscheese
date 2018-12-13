@@ -116,8 +116,8 @@ public class Renderer {
 			yMap = (int) view.getyPos();
 
 			deltaDistance = new GeomVector2D(
-					(float) Math.sqrt(1 + Math.pow((float) rayDir.getY(), 2) / Math.pow((float) rayDir.getX(), 2)),
-					(float) Math.sqrt(1 + Math.pow((float) rayDir.getX(), 2) / Math.pow((float) rayDir.getY(), 2)));
+					(float) Math.sqrt(1 + Math.pow(rayDir.getY(), 2) / Math.pow(rayDir.getX(), 2)),
+					(float) Math.sqrt(1 + Math.pow(rayDir.getX(), 2) / Math.pow(rayDir.getY(), 2)));
 
 			// checks in which direction steps go and distance (x)
 			if (rayDir.getX() < 0) {
@@ -170,7 +170,7 @@ public class Renderer {
 					: (view.getyPos() + ((xMap - view.getxPos() + (1 - xStep) / 2) / rayDir.getX()) * rayDir.getY()));
 			wallHit -= Math.floor(wallHit);
 
-			xTexture = (int) (wallHit * (wallTextures.get(textureType).getSize()));
+			xTexture = wallHit * (wallTextures.get(textureType).getSize());
 
 			if (!wallVertical && rayDir.getX() > 0)
 				xTexture = wallTextures.get(textureType).getSize() - textureType - 1;

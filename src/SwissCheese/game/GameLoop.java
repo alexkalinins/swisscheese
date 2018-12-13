@@ -16,15 +16,18 @@
  */
 package SwissCheese.game;
 
+import SwissCheese.engine.display.Window;
 import SwissCheese.map.Map;
 
 /**
- * Main class of the game
+ * Main class of the 3D portion of the game. This class is only responsible for
+ * running the game, and does not do other features like collecting user
+ * settings or starting the game.
  * 
  * @author Alex Kalinins
  * @since 2018-12-10
  * @since v0.2
- * @version v0.1 *
+ * @version v0.2
  */
 public final strictfp class GameLoop implements Runnable {
 	private Thread thread;
@@ -32,25 +35,39 @@ public final strictfp class GameLoop implements Runnable {
 	private final float FRAME_RATE; // how many frames in a second
 	private static float FRAME_DURATION; // length of a frame (in seconds)
 	private Map map;
+	private Window window;
 
-	public GameLoop(final float FRAME_RATE, int mapSize) {
+	public GameLoop(int width, int height, final float FRAME_RATE, float FOV, int mapSize) {
+		//calculate how long each frame is.
 		this.FRAME_RATE = FRAME_RATE;
 		FRAME_DURATION = 1f / FRAME_RATE;
+		
+		thread = new Thread(this);
+		
 		map = new Map(mapSize);
+		window = new Window(width, height, map, FOV);
+		thread = new Thread(this);
+		start();
 	}
-	
+
 	/**
 	 * starts the game thread
 	 */
 	private synchronized void start() {
-
+		running = true;
+		thread.start();
 	}
 
 	/**
 	 * stops the game safely
 	 */
-	private synchronized void stop() {
-
+	public synchronized void stop() {
+		running = false;
+		try {
+			thread.join();
+		}catch(InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -59,12 +76,11 @@ public final strictfp class GameLoop implements Runnable {
 	@Override
 	public void run() {
 		if (WindowTimer.isWindowUpdating()) {
-			//game loop goes here
-			
+			// game loop goes here
+			window.render();
 		}
 	}
-	
-	
+
 	/**
 	 * WindowTimer class for limiting the frame rate of the game to a specific frame
 	 * rate. This way, performance is bound to the frame rate and not the hardware
@@ -91,7 +107,7 @@ public final strictfp class GameLoop implements Runnable {
 		 * @return a double of seconds.
 		 */
 		static float getSeconds() {
-			return (float) System.nanoTime() / (float) 1000000000;
+			return System.nanoTime() / 1000000000f;
 		}
 
 		/**
@@ -117,9 +133,6 @@ public final strictfp class GameLoop implements Runnable {
 		}
 	}
 
-
-	
-	
 	public synchronized boolean isRunning() {
 		return running;
 	}
@@ -128,6 +141,4 @@ public final strictfp class GameLoop implements Runnable {
 		return FRAME_RATE;
 	}
 
-	
-	
 }

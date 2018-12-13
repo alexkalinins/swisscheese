@@ -25,6 +25,10 @@ import java.io.PrintStream;
 
 import com.google.gson.Gson;
 
+import SwissCheese.engine.io.InterfacetoJson;
+import SwissCheese.engine.io.JsonAdapterRegistrar;
+import SwissCheese.engine.keyboard.keyActions.KeyAction;
+
 /**
  * Reads and writes preferences to a file.
  * <p>
@@ -39,10 +43,19 @@ import com.google.gson.Gson;
  * @author Alex Kalinins
  * @since 2018-12-1
  * @since v0.2
- * @version v0.2
+ * @version v0.3
  */
-public class KeyPreferenceUI {
-	static Gson gson = new Gson();
+public class KeyPreferenceIO {
+	static Gson gson;
+
+	/**
+	 * Calls {@code JsonAdapterRegistrar} to register InterfacetoJson adapter to
+	 * adapt KeyAction interface
+	 */
+	private static void makeGson() {
+		gson = JsonAdapterRegistrar.makeGson(KeyAction.class, new InterfacetoJson<KeyAction>());
+
+	}
 
 	/**
 	 * Reads and deserializes preferences from a file. Uses GSON to deserialize
@@ -50,19 +63,20 @@ public class KeyPreferenceUI {
 	 * The file being read is keybind.config
 	 */
 	public static void readFromFile() {
+		makeGson();
 		File settings = new File(
 				(checkForSaved()) ? "settings/user/keybind.config" : "settings/default/keybind.config");
-		StringBuilder b = new StringBuilder();
+		StringBuilder sb = new StringBuilder();
 		String line;
 		try (BufferedReader in = new BufferedReader(new FileReader(settings))) {
 			while ((line = in.readLine()) != null) {
-				b.append(line);
+				sb.append(line);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		line = b.toString();
+		line = sb.toString();
 		KeyActionPreference p = gson.fromJson(line, KeyActionPreference.class);
 		p.bindPreferences();
 	}
@@ -71,14 +85,16 @@ public class KeyPreferenceUI {
 	 * Serializes and writes preferences to file (/settings/user/keybind.config)
 	 */
 	public static void writeToFile(KeyActionPreference p) {
+		makeGson();
+
 		File file = new File("settings/user/keybind.config");
 		if (file.exists()) {
 			file.delete();
 		}
-		
+
 		try (PrintStream out = new PrintStream(new FileOutputStream(file))) {
 			out.print(gson.toJson(p));
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

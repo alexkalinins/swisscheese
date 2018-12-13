@@ -16,15 +16,17 @@
  */
 package SwissCheese.engine.keyboard.keyActions;
 
+import SwissCheese.engine.io.Convertable;
+
 /**
  * Key Action Interface
  * 
  * @author Alex Kalinins
  * @since 2018-12-1
  * @since v0.2
- * @version v0.1
+ * @version v0.2
  */
-public interface KeyAction {
+public interface KeyAction extends Convertable{
 
 	/**
 	 * Does an action (only for continuous actions)

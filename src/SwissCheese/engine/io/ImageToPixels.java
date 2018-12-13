@@ -29,7 +29,6 @@ import javax.imageio.ImageIO;
  * @author Alex Kalinins
  */
 public final class ImageToPixels {
-	private File file;
 	private static int width;
 	private static int height;
 	private static int[] pixels;
@@ -40,7 +39,6 @@ public final class ImageToPixels {
 	 * @param file the file of the image being converted
 	 */
 	private ImageToPixels(File file) {
-		this.file = file;
 		pixels = convert(file);
 	}
 

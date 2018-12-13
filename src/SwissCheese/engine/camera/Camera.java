@@ -29,11 +29,11 @@ import SwissCheese.map.Map;
  * @version v0.2
  */
 public class Camera {
-	private final int FOV;
+	private final float FOV;
 	private Mover mover;
 	private View view;
 
-	public Camera(int width, int height, Map map, Point2D start, int FOV) {
+	public Camera(int width, int height, Map map, Point2D start, float FOV) {
 		this.FOV = FOV; //0 -> -1
 		view = new View((int)start.getX(), (int)start.getX(), 1, 0, 0, FOV);
 		mover = new Mover(view, map);
@@ -48,7 +48,7 @@ public class Camera {
 		return mover;
 	}
 
-	public synchronized final int getFOV() {
+	public synchronized final float getFOV() {
 		return FOV;
 	}
 	

@@ -82,6 +82,7 @@ public class Mover {
 		moveforward = true;
 
 		class Move extends Thread {
+			@Override
 			public void run() {
 				while (moveforward) {
 					if (map.getMap()[(int) (view.getxPos() + view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
@@ -111,6 +112,7 @@ public class Mover {
 		movebackward = true;
 
 		class Move extends Thread {
+			@Override
 			public void run() {
 				while (movebackward) {
 					if (map.getMap()[(int) (view.getxPos() - view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0)
@@ -139,6 +141,7 @@ public class Mover {
 		moveleft = true;
 
 		class Move extends Thread {
+			@Override
 			public void run() {
 				while (moveleft) {
 					if (map.getMap()[(int) (view.getxPos() + view.getyDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
@@ -168,6 +171,7 @@ public class Mover {
 		moveright = true;
 
 		class Move extends Thread {
+			@Override
 			public void run() {
 				while (moveright) {
 					if (map.getMap()[(int) (view.getyPos() + view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
@@ -198,6 +202,7 @@ public class Mover {
 		panleft = true;
 
 		class Pan extends Thread {
+			@Override
 			public void run() {
 				double oldxDir;
 				double oldxPlane;
@@ -233,6 +238,7 @@ public class Mover {
 		panright = true;
 
 		class Pan extends Thread {
+			@Override
 			public void run() {
 				double oldxDir;
 				double oldxPlane;

@@ -1,1 +1,14 @@
-maze
+SwissCheese
+SwissCheese.devTools
+SwissCheese.engine
+SwissCheese.engine.camera
+SwissCheese.engine.display
+SwissCheese.engine.io
+SwissCheese.engine.keyboard
+SwissCheese.engine.keyboard.keyActions
+SwissCheese.engine.texture
+SwissCheese.game
+SwissCheese.map
+SwissCheese.math
+SwissCheese.maze
+SwissCheese.settings

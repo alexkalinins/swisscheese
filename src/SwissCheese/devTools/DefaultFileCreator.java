@@ -22,6 +22,8 @@ import java.io.PrintWriter;
 
 import com.google.gson.Gson;
 
+import SwissCheese.engine.io.InterfacetoJson;
+import SwissCheese.engine.io.JsonAdapterRegistrar;
 import SwissCheese.engine.keyboard.KeyActionPreference;
 import SwissCheese.engine.keyboard.keyActions.*;
 
@@ -44,7 +46,7 @@ public class DefaultFileCreator {
 	}
 
 	public static void main(String[] args) {
-		gson = new Gson();
+		gson = JsonAdapterRegistrar.makeGson(KeyAction.class, new InterfacetoJson<KeyAction>());
 		load();
 		writeToFile(p);
 	}

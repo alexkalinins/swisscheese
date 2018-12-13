@@ -27,16 +27,19 @@ import SwissCheese.map.Map;
  * @version v0.1
  *
  */
-public class Game implements Runnable{
+public class Game{
 	private Map map;
 	private int width;
 	private int height;
+	private GameLoop g;
 	
 	/**
 	 * Game object constructor
 	 */
 	public Game() {
 		map = new Map(20);
+		g = new GameLoop(640, 480, 60f, -0.5f, map.getSize());
+		
 	}
 	
 	/**
@@ -70,9 +73,8 @@ public class Game implements Runnable{
 		return map;
 	}
 
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
+	public static void main(String[] args) {
+		Game g = new Game();
 		
 	}
 	
