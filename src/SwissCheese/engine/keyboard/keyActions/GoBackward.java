@@ -28,6 +28,11 @@ import SwissCheese.engine.display.Window;
  */
 public class GoBackward implements KeyAction {
 
+	public GoBackward() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public synchronized void doAction() {
 		Window.mover.moveBackward();

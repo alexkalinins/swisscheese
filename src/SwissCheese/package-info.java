@@ -14,31 +14,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package SwissCheese.engine.keyboard.keyActions;
-
 /**
- * Test action used for testing the keyboard
- * 
+ * This is the main package of the SwissCheese game. 
+ *
  * @author Alex Kalinins
- * @since 2018-12-1
  * @since v0.2
+ * @since 2018-12-1
  * @version v0.1
  */
-public class TestAction implements KeyAction {
-	public TestAction() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public void doAction() {
-		System.out.println("You are holding a key");
-	}
-
-	@Override
-	public void stopAction() {
-		System.out.println("You released a key");
-
-	}
-
-}
+package SwissCheese;

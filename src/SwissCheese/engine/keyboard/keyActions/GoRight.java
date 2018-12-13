@@ -28,6 +28,11 @@ import SwissCheese.engine.display.Window;
  */
 public class GoRight implements KeyAction {
 
+	public GoRight() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public synchronized void doAction() {
 		Window.mover.moveRight();
@@ -44,6 +49,5 @@ public class GoRight implements KeyAction {
 		Window.mover.stopRight();
 
 	}
-
 
 }

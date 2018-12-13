@@ -28,6 +28,11 @@ import SwissCheese.engine.display.Window;
  */
 public class LookLeft implements KeyAction {
 
+	public LookLeft() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public synchronized void doAction() {
 		Window.mover.panLeft();

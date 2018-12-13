@@ -28,6 +28,11 @@ import SwissCheese.engine.display.Window;
  */
 public class GoForward implements KeyAction {
 
+	public GoForward() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public synchronized void doAction() {
 		Window.mover.moveForward();
@@ -42,6 +47,5 @@ public class GoForward implements KeyAction {
 	public synchronized void stopAction() {
 		Window.mover.stopForward();
 	}
-
 
 }

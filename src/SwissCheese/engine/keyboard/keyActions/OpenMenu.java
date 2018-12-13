@@ -26,6 +26,10 @@ package SwissCheese.engine.keyboard.keyActions;
  */
 public class OpenMenu implements KeyAction {
 
+	public OpenMenu() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public void doAction() {

@@ -25,11 +25,16 @@ package SwissCheese.engine.keyboard.keyActions;
  * @version v0.1
  */
 public class CloseGame implements KeyAction {
+	public CloseGame() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public synchronized void doAction() {
 		System.exit(0);
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Quits Game (NO SAVE!)";
@@ -37,7 +42,7 @@ public class CloseGame implements KeyAction {
 
 	@Override
 	public synchronized void stopAction() {
-		return;	
+		return;
 	}
 
 }

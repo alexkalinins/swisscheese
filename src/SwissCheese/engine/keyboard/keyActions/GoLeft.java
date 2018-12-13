@@ -28,6 +28,10 @@ import SwissCheese.engine.display.Window;
  */
 public class GoLeft implements KeyAction {
 
+	public GoLeft() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public synchronized void doAction() {

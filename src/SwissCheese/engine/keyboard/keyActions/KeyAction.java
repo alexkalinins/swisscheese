@@ -36,5 +36,5 @@ public interface KeyAction {
 	 * walking).
 	 */
 	public void stopAction();
-	
+
 }

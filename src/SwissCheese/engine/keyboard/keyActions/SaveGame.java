@@ -25,6 +25,11 @@ package SwissCheese.engine.keyboard.keyActions;
  * @version v0.1
  */
 public class SaveGame implements KeyAction {
+	public SaveGame() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public synchronized void doAction() {
 		;
@@ -39,6 +44,5 @@ public class SaveGame implements KeyAction {
 	public synchronized void stopAction() {
 		;
 	}
-
 
 }

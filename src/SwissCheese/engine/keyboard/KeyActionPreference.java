@@ -51,6 +51,11 @@ public final class KeyActionPreference {
 	private KeyAction n9Action;
 	private KeyAction n0Action;
 
+	
+	public KeyActionPreference() {
+		
+	}
+	
 	public void setPreference(KeyAction wAction, KeyAction aAction, KeyAction sAction, KeyAction dAction,
 			KeyAction upAction, KeyAction downAction, KeyAction leftAction, KeyAction rightAction, KeyAction escAction,
 			KeyAction shiftAction, KeyAction n1Action, KeyAction n2Action, KeyAction n3Action, KeyAction n4Action,
