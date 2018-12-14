@@ -16,13 +16,13 @@
  */
 package SwissCheese.maze;
 
-import static SwissCheese.maze.CellGrid.Direction;
-
 import java.awt.geom.Point2D;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Random;
+
+import SwissCheese.maze.CellGrid.Direction;
 
 /**
  * The Generator class generates a maze using the CellGrid, through a variant of
@@ -50,7 +50,7 @@ import java.util.Random;
  */
 public strictfp class Generator {
 	private final int size; // size of maze size*size
-	private List<Direction> log = new ArrayList<Direction>();
+	private Deque<Direction> log = new ArrayDeque<Direction>(); 
 	private CellGrid grid;
 	private Random rand = new SecureRandom();
 	private Point2D startingCell = new Point2D.Double();
@@ -136,8 +136,7 @@ public strictfp class Generator {
 	 * touches an unvisited cell.
 	 */
 	private void backTrack() {
-		currentCell = log.get(log.size() - 1).antiDirection().go(currentCell);
-		log.remove(log.size() - 1);
+		currentCell = log.removeFirst().antiDirection().go(currentCell);
 		if (grid.checkRemainingPaths(currentCell) == 0) {
 			backTrack();
 		}
@@ -200,7 +199,7 @@ public strictfp class Generator {
 	 * @param d Direction to be appended to the log
 	 */
 	private void appendLog(Direction d) {
-		log.add(d);
+		log.addFirst(d);
 	}
 
 	/**
