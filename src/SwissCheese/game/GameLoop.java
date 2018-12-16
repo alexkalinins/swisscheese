@@ -16,6 +16,12 @@
  */
 package SwissCheese.game;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import SwissCheese.engine.camera.Mover;
 import SwissCheese.engine.display.Window;
 import SwissCheese.map.Map;
 
@@ -31,19 +37,21 @@ import SwissCheese.map.Map;
  */
 public final strictfp class GameLoop implements Runnable {
 	private Thread thread;
-	private boolean running;
+	private AtomicBoolean running;
 	private final float FRAME_RATE; // how many frames in a second
 	private static float FRAME_DURATION; // length of a frame (in seconds)
 	private Map map;
 	private Window window;
+	public static WindowListener listener;
 
 	public GameLoop(int width, int height, final float FRAME_RATE, float FOV, int mapSize) {
-		//calculate how long each frame is.
+		// calculate how long each frame is.
 		this.FRAME_RATE = FRAME_RATE;
 		FRAME_DURATION = 1f / FRAME_RATE;
-		
+
 		thread = new Thread(this);
-		
+		running = new AtomicBoolean();
+
 		map = new Map(mapSize);
 		window = new Window(width, height, map, FOV);
 		thread = new Thread(this);
@@ -54,7 +62,7 @@ public final strictfp class GameLoop implements Runnable {
 	 * starts the game thread
 	 */
 	private synchronized void start() {
-		running = true;
+		running.set(true);
 		thread.start();
 	}
 
@@ -62,10 +70,10 @@ public final strictfp class GameLoop implements Runnable {
 	 * stops the game safely
 	 */
 	public synchronized void stop() {
-		running = false;
+		running.set(false);
 		try {
 			thread.join();
-		}catch(InterruptedException e) {
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
@@ -75,10 +83,26 @@ public final strictfp class GameLoop implements Runnable {
 	 */
 	@Override
 	public void run() {
-		if (WindowTimer.isWindowUpdating()) {
-			// game loop goes here
-			window.render();
-		}
+		listener = new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				try {
+					Mover.stopAllThreads();
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+				stop();
+			}
+		};
+
+		do {
+			if (WindowTimer.isWindowUpdating()) {
+				// game loop goes here
+				System.out.println("Rendering");
+				window.render();
+			}
+			window.switchBuffer();
+		} while (running.get());
 	}
 
 	/**
@@ -133,7 +157,7 @@ public final strictfp class GameLoop implements Runnable {
 		}
 	}
 
-	public synchronized boolean isRunning() {
+	public synchronized AtomicBoolean isRunning() {
 		return running;
 	}
 

@@ -23,6 +23,7 @@ import SwissCheese.engine.camera.Camera;
 import SwissCheese.engine.camera.Mover;
 import SwissCheese.engine.camera.View;
 import SwissCheese.engine.texture.WallTexture;
+import SwissCheese.engine.texture.WallTextureList;
 import SwissCheese.map.Map;
 import SwissCheese.math.GeomVector2D;
 
@@ -50,10 +51,11 @@ public class Renderer {
 		this.camera = camera;
 		this.width = width;
 		this.height = height;
+		wallTextures = WallTextureList.getList();
 	}
 
 	/**
-	 * Renders what the player is seeing through Camera. Renders into an array of
+	 * Renders what the player is seeing through {@code Camera}. Renders into an array of
 	 * ints (pixels) through ray-casting.
 	 * <p>
 	 * This algorithm goes through each vertical strip of the pixels array and
@@ -63,8 +65,8 @@ public class Renderer {
 	 * texture, and applies them to each pixel in the new line. The new pixel array
 	 * is returned.
 	 * 
-	 * @param pixels
-	 * @return
+	 * @param {@code int} array of pixels (rgb value for each pixel.
+	 * @return updated pixels array.
 	 * @see <a href="https://lodev.org/cgtutor/raycasting.html">Ray-Casting</a>
 	 */
 	public int[] render(int[] pixels) {
@@ -153,7 +155,7 @@ public class Renderer {
 				hit = map.getMap()[xMap][yMap] > 0;
 			}
 
-			textureType = map.getMap()[xMap][yMap] - 1;
+			textureType = map.getMap()[xMap][yMap]-1;
 
 			wallDist = (wallVertical) ? Math.abs((yMap - view.getyPos() + (1 - yStep) / 2) / rayDir.getY())
 					: Math.abs((xMap - view.getxPos() + (1 - xStep) / 2) / rayDir.getX());
@@ -180,7 +182,7 @@ public class Renderer {
 			for (int i = wallStart; i < wallEnd; i++) {
 				yTexture = (((int) (i * 2 - height + lineHeight) << 6) / lineHeight) / 2;
 
-				color = wallTextures.get(textureType).getPixels()[xTexture
+				color = wallTextures.get(textureType).getImage().getPixels()[xTexture
 						+ (yTexture * wallTextures.get(textureType).getSize())];
 
 				//makes vertical walls darker

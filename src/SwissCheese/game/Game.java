@@ -38,7 +38,7 @@ public class Game{
 	 */
 	public Game() {
 		map = new Map(20);
-		g = new GameLoop(640, 480, 60f, -0.5f, map.getSize());
+		g = new GameLoop(640, 480, 60f, -0.6f, map.getSize());
 		
 	}
 	

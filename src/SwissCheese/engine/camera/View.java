@@ -20,13 +20,14 @@ import SwissCheese.math.GeomVector2D;
 
 /**
  * View object for storing players location on the map and the vectors of the
- * direction in which they are looking. 
+ * direction in which they are looking.
  * <p>
  * {@code View} values are backed by {@code GeomVector2D}
+ * 
  * @author Alex Kalinins
  * @since 2018-12-10
  * @since v0.2
- * @version v0.2
+ * @version v0.3
  *
  */
 public class View {
@@ -37,10 +38,10 @@ public class View {
 	/**
 	 * Constructor for View Object
 	 * 
-	 * @param xPos x-location of a player on the map
-	 * @param yPos y-location of a player on the map
-	 * @param xDir x component of vector for direction of the camera
-	 * @param yDir y component of vector for direction of the camera
+	 * @param xPos   x-location of a player on the map
+	 * @param yPos   y-location of a player on the map
+	 * @param xDir   x component of vector for direction of the camera
+	 * @param yDir   y component of vector for direction of the camera
 	 * @param xPlane x plane of vector
 	 * @param yPlane y plane of vector (a control of FOV)
 	 */
@@ -48,30 +49,31 @@ public class View {
 		updateView(xPos, yPos, xDir, yDir, xPlane, yPlane);
 	}
 
+	/**
+	 * Constructor using {@code GeomVector2D} objects
+	 * 
+	 * @param pos   position vector - players position on the map
+	 * @param dir   direction vector - the direction in which the player is looking
+	 * @param plane plane vector - the camera plane, everything the camera sees.
+	 */
 	public View(GeomVector2D pos, GeomVector2D dir, GeomVector2D plane) {
 		updateView(pos, dir, plane);
 	}
-	
+
 	/**
 	 * Updates View object. Used if multiple values need to be changed at once.
 	 * 
-	 * @param xPos x-location of a player on the map
-	 * @param yPos y-location of a player on the map
-	 * @param xDir x component of vector for direction of the camera
-	 * @param yDir y component of vector for direction of the camera
+	 * @param xPos   x-location of a player on the map
+	 * @param yPos   y-location of a player on the map
+	 * @param xDir   x component of vector for direction of the camera
+	 * @param yDir   y component of vector for direction of the camera
 	 * @param xPlane x plane of vector
 	 * @param yPlane y plane of vector
 	 */
 	public synchronized void updateView(float xPos, float yPos, float xDir, float yDir, float xPlane, float yPlane) {
-//		this.xPos = xPos;
-//		this.yPos = yPos;
-//		this.xDir = xDir;
-//		this.yDir = yDir;
-//		this.xPlane = xPlane;
-//		this.yPlane = yPlane;
 		updateView(new GeomVector2D(xPos, xPos), new GeomVector2D(xDir, yDir), new GeomVector2D(xPlane, yPlane));
 	}
-	
+
 	public synchronized void updateView(GeomVector2D pos, GeomVector2D dir, GeomVector2D plane) {
 		this.dir = dir;
 		this.plane = plane;
@@ -151,6 +153,4 @@ public class View {
 		this.plane = plane;
 	}
 
-	
-	
 }

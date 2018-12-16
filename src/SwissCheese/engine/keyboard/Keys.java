@@ -57,8 +57,9 @@ public enum Keys {
 	/**
 	 * Calls action to stop an action. Only applicable to continuous actions such as
 	 * walking.
+	 * @throws InterruptedException 
 	 */
-	public synchronized void stopAction() {
+	public synchronized void stopAction() throws InterruptedException {
 		action.stopAction();
 	}
 

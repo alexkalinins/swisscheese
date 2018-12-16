@@ -31,12 +31,12 @@ public class WallTexture extends AbstractTexture{
 	
 	public WallTexture(File file) {
 		super(file);
-		size = super.getWidth();
+		size = image.getWidth();
 	}
 	
 	public WallTexture(String fileLocation) {
 		super(fileLocation);
-		size = super.getWidth();
+		size = image.getWidth();
 	}
 	
 	public synchronized int getSize() {

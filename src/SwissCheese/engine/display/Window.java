@@ -26,8 +26,10 @@ import javax.swing.JFrame;
 
 import SwissCheese.engine.camera.Camera;
 import SwissCheese.engine.camera.Mover;
+import SwissCheese.engine.io.images.ImageFromArray;
 import SwissCheese.engine.keyboard.KeyPreferenceIO;
 import SwissCheese.engine.keyboard.Keyboard;
+import SwissCheese.game.GameLoop;
 import SwissCheese.map.Map;
 
 /**
@@ -63,52 +65,51 @@ public class Window extends JFrame {
 	public Window(int width, int height, Map map, float FOV) {
 		this.width = width;
 		this.height = height;
-		
+
 		camera = new Camera(width, height, map, map.getEntry(), FOV);
 		renderer = new Renderer(map, camera, width, height);
 		mover = camera.getMover();
-		
-		
+
 		bufferImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
-		pixels = ((DataBufferInt)bufferImage.getRaster().getDataBuffer()).getData();
-		
+		pixels = ((DataBufferInt) bufferImage.getRaster().getDataBuffer()).getData();
+
 		keyboard = new Keyboard();
 		KeyPreferenceIO.readFromFile();
-		
+
 		setSize(width, height);
 		setResizable(false);
-		setTitle("Swiss Cheese - v0.2a");
+		setTitle("Swiss Cheese - v0.3a");
 		addKeyListener(keyboard);
+		addWindowListener(GameLoop.listener);
 		setBackground(Color.BLACK);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 
 	/**
-	 * {@code switchBuffer()} switches the buffers of the BufferStrategy. This allows the next
-	 * frame to be rendered inside a buffer of the buffer strategy, and then it
-	 * switches.
+	 * {@code switchBuffer()} switches the buffers of the BufferStrategy. This
+	 * allows the next frame to be rendered inside a buffer of the buffer strategy,
+	 * and then it switches.
 	 */
-	private void switchBuffer() {
+	public synchronized void switchBuffer() {
 		buffer = getBufferStrategy();
 		if (buffer == null) {
-			/**
-			 * createBufferStrategy argument is for number of buffers. 3 looks smoothest.
-			 */
+			System.out.println("Creating a new buffer");
 			createBufferStrategy(3);
 			return;
 		}
 		graphics = buffer.getDrawGraphics();
 		graphics.drawImage(bufferImage, 0, 0, bufferImage.getWidth(), bufferImage.getHeight(), null);
+		graphics.dispose();
 		buffer.show();
 
 	}
 
-	public void render() {
+	public synchronized void render() {
 		pixels = renderer.render(pixels);
-		switchBuffer();
+		bufferImage = (BufferedImage)ImageFromArray.getImage(pixels, width, height);
 	}
 
 	@Override
@@ -120,7 +121,5 @@ public class Window extends JFrame {
 	public synchronized final int getHeight() {
 		return height;
 	}
-	
-	
 
 }

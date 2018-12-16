@@ -16,6 +16,8 @@
  */
 package SwissCheese.engine.camera;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import SwissCheese.map.Map;
 
 /**
@@ -41,23 +43,31 @@ import SwissCheese.map.Map;
  * @author Alex Kalinins
  * @since 2018-12-10
  * @since v0.2
- * @version v0.1
+ * @version v0.2
  *
  */
 public class Mover {
-	private boolean moveleft;
-	private boolean moveright;
-	private boolean moveforward;
-	private boolean movebackward;
+	private AtomicBoolean moveleft = new AtomicBoolean(false);
+	private AtomicBoolean moveright = new AtomicBoolean(false);
+	private AtomicBoolean moveforward = new AtomicBoolean(false);
+	private AtomicBoolean movebackward = new AtomicBoolean(false);
 
-	private boolean panleft;
-	private boolean panright;
+	private AtomicBoolean panleft = new AtomicBoolean(false);
+	private AtomicBoolean panright = new AtomicBoolean(false);
 
 	public final double MOVE_SPEED = .08;
 	public final double ROTATION_SPEED = .045;
 
 	private View view;
 	private Map map;
+	
+	private static Thread moveleftthread;
+	private static Thread moverightthread;
+	private static Thread moveforwardthread;
+	private static Thread movebackwardthread;
+	private static Thread panleftthread;
+	private static Thread panrightthread;
+	
 
 	/**
 	 * Constructor for Mover class
@@ -79,46 +89,65 @@ public class Mover {
 	 * until stopForward() void is called and the thread is interrupted.
 	 */
 	public synchronized void moveForward() {
-		moveforward = true;
+		moveforward.set(true);
 
 		class Move extends Thread {
 			@Override
 			public void run() {
-				while (moveforward) {
+				while (moveforward.get()) {
 					if (map.getMap()[(int) (view.getxPos() + view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
 						view.setxPos((int) (view.getxPos() + view.getxDir() * MOVE_SPEED));
 					}
 					if (map.getMap()[(int) view.getxPos()][(int) (view.getyPos() + view.getyDir() * MOVE_SPEED)] == 0)
 						view.setyPos((int) (view.getyPos() + view.getyDir() * MOVE_SPEED));
+					System.out.println("Moving forward");
+				}
+				try {
+					join();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}
 
-		Thread move = new Move();
-		move.start();
+		moveforwardthread = new Move();
+		moveforwardthread.start();
 	}
 
 	/**
 	 * Sets moveforward to false, interrupting the moveForward thread.
+	 * @throws InterruptedException 
 	 */
-	public synchronized void stopForward() {
-		moveforward = false;
+	public synchronized void stopForward() throws InterruptedException {
+		moveforward.set(false);
+		
+		moveforwardthread.join();
+		
 	}
 
 	/**
 	 * Creates and delegates a thread to calculate backward movement.
 	 */
 	public synchronized void moveBackward() {
-		movebackward = true;
+		movebackward.set(true);
 
 		class Move extends Thread {
 			@Override
 			public void run() {
-				while (movebackward) {
+				while (movebackward.get()) {
 					if (map.getMap()[(int) (view.getxPos() - view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0)
 						view.setxPos((int) (view.getxPos() - view.getxDir() * MOVE_SPEED));
 					if (map.getMap()[(int) view.getxPos()][(int) (view.getyPos() - view.getyDir() * MOVE_SPEED)] == 0)
 						view.setyPos((int) (view.getyPos() - view.getyDir() * MOVE_SPEED));
+					System.out.println("Moving back");
+
+				}
+				try {
+					join();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}
@@ -129,26 +158,35 @@ public class Mover {
 
 	/**
 	 * Sets movebackward to false, ending the backward movement.
+	 * @throws InterruptedException 
 	 */
-	public synchronized void stopBackward() {
-		movebackward = false;
+	public synchronized void stopBackward() throws InterruptedException {
+		movebackward.set(false);
+		movebackwardthread.join();
 	}
 
 	/**
 	 * Moves the camera to the left. Math is likely incorrect.
 	 */
 	public synchronized void moveLeft() {
-		moveleft = true;
+		moveleft.set(true);
 
 		class Move extends Thread {
 			@Override
 			public void run() {
-				while (moveleft) {
+				while (moveleft.get()) {
 					if (map.getMap()[(int) (view.getxPos() + view.getyDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
 						view.setxPos((int) (view.getxPos() + view.getyDir() * MOVE_SPEED));
 					}
 					if (map.getMap()[(int) view.getxPos()][(int) (view.getyPos() + view.getxDir() * MOVE_SPEED)] == 0)
 						view.setyPos((int) (view.getyPos() + view.getxDir() * MOVE_SPEED));
+					System.out.println("Moving left");
+				}
+				try {
+					join();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}
@@ -159,26 +197,35 @@ public class Mover {
 
 	/**
 	 * Stops the camera left movement
+	 * @throws InterruptedException 
 	 */
-	public synchronized void stopLeft() {
-		moveleft = false;
+	public synchronized void stopLeft() throws InterruptedException {
+		moveleft.set(false);
+		moveleftthread.join();
 	}
 
 	/**
 	 * Moves the camera to the right. Math is likely incorrect
 	 */
 	public synchronized void moveRight() {
-		moveright = true;
+		moveright.set(true);
 
 		class Move extends Thread {
 			@Override
 			public void run() {
-				while (moveright) {
+				while (moveright.get()) {
 					if (map.getMap()[(int) (view.getyPos() + view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
 						view.setyPos((int) (view.getyPos() + view.getxDir() * MOVE_SPEED));
 					}
 					if (map.getMap()[(int) (view.getxPos())][(int) (view.getxPos() + view.getyDir() * MOVE_SPEED)] == 0)
 						view.setxPos((int) (view.getxPos() + view.getyDir() * MOVE_SPEED));
+					System.out.println("Moving right");
+				}
+				try {
+					join();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}
@@ -190,16 +237,18 @@ public class Mover {
 
 	/**
 	 * Stops the camera from moving to the right
+	 * @throws InterruptedException 
 	 */
-	public synchronized void stopRight() {
-		moveright = false;
+	public synchronized void stopRight() throws InterruptedException {
+		moveright.set(false);
+		moverightthread.join();
 	}
 
 	/**
 	 * Pans camera to the left
 	 */
 	public synchronized void panLeft() {
-		panleft = true;
+		panleft.set(true);
 
 		class Pan extends Thread {
 			@Override
@@ -207,7 +256,7 @@ public class Mover {
 				double oldxDir;
 				double oldxPlane;
 
-				while (panleft) {
+				while (panleft.get()) {
 					oldxDir = view.getxDir();
 					view.setxDir((float) (view.getxDir() * Math.cos(ROTATION_SPEED)
 							- view.getyDir() * Math.sin(ROTATION_SPEED)));
@@ -219,23 +268,30 @@ public class Mover {
 					view.setyPlane((float) (oldxPlane * Math.sin(ROTATION_SPEED)
 							+ view.getyPlane() * Math.cos(ROTATION_SPEED)));
 				}
+				try {
+					join();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
-		
+
 		Thread pan = new Pan();
 		pan.run();
 	}
-	
+
 	/**
 	 * Stops left panning
+	 * @throws InterruptedException 
 	 */
-	public synchronized void stopPanLeft() {
-		panleft=false;
+	public synchronized void stopPanLeft() throws InterruptedException {
+		panleft.set(false);
+		panleftthread.join();
 	}
 
-	
 	public synchronized void panRight() {
-		panright = true;
+		panright.set(true);
 
 		class Pan extends Thread {
 			@Override
@@ -243,7 +299,7 @@ public class Mover {
 				double oldxDir;
 				double oldxPlane;
 
-				while (panright) {
+				while (panright.get()) {
 					oldxDir = view.getxDir();
 					view.setxDir((float) (view.getxDir() * Math.cos(-ROTATION_SPEED)
 							- view.getyDir() * Math.sin(-ROTATION_SPEED)));
@@ -255,38 +311,59 @@ public class Mover {
 					view.setyPlane((float) (oldxPlane * Math.sin(-ROTATION_SPEED)
 							+ view.getyPlane() * Math.cos(-ROTATION_SPEED)));
 				}
+				try {
+					join();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
-		
+
 		Thread pan = new Pan();
 		pan.run();
 	}
-	
-	public synchronized void stopPanRight() {
-		panright = false;
+
+	public synchronized void stopPanRight() throws InterruptedException {
+		panright.set(false);
+		panrightthread.join();
 	}
 	
-	public synchronized boolean isMoveleft() {
+	/**
+	 * Stops all threads.
+	 * 
+	 * @throws InterruptedException
+	 */
+	public static synchronized void stopAllThreads() throws InterruptedException {	
+		moveleftthread.join();
+		moverightthread.join();
+		moveforwardthread.join();
+		movebackwardthread.join();
+		panleftthread.join();
+		panrightthread.join();
+	}
+
+	public synchronized AtomicBoolean isMoveleft() {
 		return moveleft;
 	}
 
-	public synchronized boolean isMoveright() {
+	public synchronized AtomicBoolean isMoveright() {
 		return moveright;
 	}
 
-	public synchronized boolean isMoveforward() {
+	public synchronized AtomicBoolean isMoveforward() {
 		return moveforward;
 	}
 
-	public synchronized boolean isMovebackward() {
+	public synchronized AtomicBoolean isMovebackward() {
 		return movebackward;
 	}
 
-	public synchronized boolean isPanleft() {
+	public synchronized AtomicBoolean isPanleft() {
 		return panleft;
 	}
 
-	public synchronized boolean isPanright() {
+	public synchronized AtomicBoolean isPanright() {
 		return panright;
 	}
 

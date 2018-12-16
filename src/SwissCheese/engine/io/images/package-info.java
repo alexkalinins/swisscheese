@@ -14,35 +14,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package SwissCheese.engine.io;
-
-import java.lang.reflect.Type;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 /**
- * Registers a {@code Gson} adapter to allow certain types such as interfaces to
- * be serialized {@code Gson}
- * 
+ * Package for classes and objects relating to input and output of images used
+ * in Swiss Cheese game.
+ *
  * @author Alex Kalinins
- * @since 2018-12-13
- * @since v0.3
+ * @since v0.2
+ * @since 2018-12-15
  * @version v0.1
  */
-public class JsonAdapterRegistrar {
-
-	/**
-	 * Public static {@code GSON} factory for making a {@code Gson} with a
-	 * registered adapter.
-	 * 
-	 * @param type        Class being serialized
-	 * @param typeAdapter type adapter being registered
-	 * @return a new {@code GSON} registered adapter
-	 */
-	public static Gson makeGson(Type type, Object typeAdapter) {
-		GsonBuilder b = new GsonBuilder();
-		b.registerTypeAdapter(type, typeAdapter);
-		return b.create();
-	}
-}
+package SwissCheese.engine.io.images;

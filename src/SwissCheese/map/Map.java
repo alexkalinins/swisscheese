@@ -26,15 +26,15 @@ import SwissCheese.maze.Generator;
  * @author Alex Kalinins
  * @since 2018-12-10
  * @since v0.2
- * @version v0.1
+ * @version v0.2
  * @see SwissCheese.maze
  *
  */
-public class Map {
-	final Integer[][] map;
-	final Point2D entry;
-	final Point2D exit;
-	final int size; //this size is in walls, not cells
+public final class Map {
+	private Integer[][] map;
+	private Point2D entry;
+	private Point2D exit;
+	private final int size; //this size is in walls, not cells
 
 	/**
 	 * Constructor for Map
@@ -45,8 +45,6 @@ public class Map {
 	public Map(int size) {
 		map = GenerateMaze(size);
 		this.size = map.length;
-		entry = Generator.getEntry();
-		exit = Generator.getExit();	
 	}
 
 	/**
@@ -61,11 +59,28 @@ public class Map {
 	 */
 	private Integer[][] GenerateMaze(int size) {
 		Integer[][] map = Generator.generateMaze(size);
+		
+		entry = Generator.getEntry();
+		exit = Generator.getExit();	
+		
 		// TODO make code to randomize textures
+		
+//		for (int i =0; i<size;i++) {
+//			for(int j = 0; j<size; j++) {
+//				
+//			}
+//		}
+		
+		map[(int)entry.getX()][(int)entry.getY()] = 2;
+		map[(int)exit.getX()][(int)exit.getY()] = 2;
+
+		
 		return map;
 	}
+	
+	
 
-	public Integer[][] getMap() {
+	public synchronized Integer[][] getMap() {
 		return map;
 	}
 	
@@ -73,11 +88,11 @@ public class Map {
 		return size;
 	}
 
-	public synchronized final Point2D getEntry() {
+	public synchronized Point2D getEntry() {
 		return entry;
 	}
 
-	public synchronized final Point2D getExit() {
+	public synchronized Point2D getExit() {
 		return exit;
 	}
 	

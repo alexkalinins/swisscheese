@@ -35,7 +35,7 @@ public class Camera {
 
 	public Camera(int width, int height, Map map, Point2D start, float FOV) {
 		this.FOV = FOV; //0 -> -1
-		view = new View((int)start.getX(), (int)start.getX(), 1, 0, 0, FOV);
+		view = new View((float)start.getX(), (float)start.getX()+.5f, 1, 0, 0, FOV);
 		mover = new Mover(view, map);
 	}
 	

@@ -14,17 +14,40 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package SwissCheese.engine.io;
+package SwissCheese.engine.texture;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * A marker interface for {@code InterfacetoJson} adapter.
+ * This class loads images from a list of {@code File} objects into a list of
+ * {@code WallTexture} objects.
  * 
  * @author Alex Kalinins
- * @since 2018-12-13
+ * @since 2018-12-15
  * @since v0.3
  * @version v0.1
- *
  */
-public interface Convertable {
+public class WallTextureList {
+	private static List<File> fileList = new ArrayList<>();
+
+	private WallTextureList() {
+		fileList.add(new File("resources/textures/test.png"));
+		fileList.add(new File("resources/textures/test1.png"));
+	}
+
+	/**
+	 * Loads a list of textures
+	 * @return
+	 */
+	public static List<WallTexture> getList() {
+		new WallTextureList();
+		List<WallTexture> list = new ArrayList<>();
+		for (File file : fileList) {
+			list.add(new WallTexture(file));
+		}
+		return list;
+	}
 
 }

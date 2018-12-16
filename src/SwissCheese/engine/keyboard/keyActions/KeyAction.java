@@ -16,7 +16,7 @@
  */
 package SwissCheese.engine.keyboard.keyActions;
 
-import SwissCheese.engine.io.Convertable;
+import SwissCheese.engine.io.gson.Convertable;
 
 /**
  * Key Action Interface
@@ -36,7 +36,8 @@ public interface KeyAction extends Convertable{
 	/**
 	 * Stops doing an action. (only applicable to continuous actions such as
 	 * walking).
+	 * @throws InterruptedException 
 	 */
-	public void stopAction();
+	public void stopAction() throws InterruptedException;
 
 }

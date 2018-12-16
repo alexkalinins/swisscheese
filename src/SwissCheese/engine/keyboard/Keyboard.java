@@ -114,6 +114,9 @@ public class Keyboard implements KeyListener {
 			keyMap.get(key.getKeyCode()).stopAction();
 		} catch (NullPointerException e) {
 			System.out.println("User released a non-bound key: "+key.getKeyChar());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

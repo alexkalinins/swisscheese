@@ -44,7 +44,7 @@ public class LookRight implements KeyAction {
 	}
 
 	@Override
-	public synchronized void stopAction() {
+	public synchronized void stopAction() throws InterruptedException {
 		Window.mover.stopPanRight();
 	}
 

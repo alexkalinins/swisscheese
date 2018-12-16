@@ -18,7 +18,7 @@ package SwissCheese.engine.texture;
 
 import java.io.File;
 
-import SwissCheese.engine.io.ImageToPixels;
+import SwissCheese.engine.io.images.PixelImage;
 
 /**
  * Abstract Texture class for creating textures
@@ -30,19 +30,15 @@ import SwissCheese.engine.io.ImageToPixels;
  *
  */
 public abstract class AbstractTexture {
-	protected final int width;
-	protected final int height;
+	protected PixelImage image;
 	protected final int textureid;
 	protected final File file;
 	private static int currenttextureid = 0;
-	private final int[] pixels;
 
 	public AbstractTexture(File file) {
-		textureid = nextTextureId();
 		this.file = file;
-		pixels = ImageToPixels.getPixels(file);
-		width = ImageToPixels.getWidth();
-		height = ImageToPixels.getHeight();
+		textureid = nextTextureId();
+		image = new PixelImage(file);
 	}
 
 	public AbstractTexture(String fileLocation) {
@@ -50,24 +46,13 @@ public abstract class AbstractTexture {
 	}
 
 
-	private final static int nextTextureId() {
+	private static final int nextTextureId() {
 		return ++currenttextureid;
 	}
 
-	public synchronized int getWidth() {
-		return width;
+	public synchronized final PixelImage getImage() {
+		return image;
 	}
 
-	public synchronized File getFile() {
-		return file;
-	}
-
-	public synchronized int getHeight() {
-		return height;
-	}
-
-	public final synchronized int[] getPixels() {
-		return pixels;
-	}
 
 }

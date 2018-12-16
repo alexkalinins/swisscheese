@@ -22,8 +22,8 @@ import java.io.PrintWriter;
 
 import com.google.gson.Gson;
 
-import SwissCheese.engine.io.InterfacetoJson;
-import SwissCheese.engine.io.JsonAdapterRegistrar;
+import SwissCheese.engine.io.gson.InterfacetoJson;
+import SwissCheese.engine.io.gson.JsonAdapterRegistrar;
 import SwissCheese.engine.keyboard.KeyActionPreference;
 import SwissCheese.engine.keyboard.keyActions.*;
 
