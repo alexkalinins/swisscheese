@@ -43,7 +43,7 @@ import SwissCheese.map.Map;
  * @author Alex Kalinins
  * @since 2018-12-10
  * @since v0.2
- * @version v0.2
+ * @version v0.3
  *
  */
 public class Mover {
@@ -90,28 +90,7 @@ public class Mover {
 	 */
 	public synchronized void moveForward() {
 		moveforward.set(true);
-
-		class Move extends Thread {
-			@Override
-			public void run() {
-				while (moveforward.get()) {
-					if (map.getMap()[(int) (view.getxPos() + view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
-						view.setxPos((int) (view.getxPos() + view.getxDir() * MOVE_SPEED));
-					}
-					if (map.getMap()[(int) view.getxPos()][(int) (view.getyPos() + view.getyDir() * MOVE_SPEED)] == 0)
-						view.setyPos((int) (view.getyPos() + view.getyDir() * MOVE_SPEED));
-					System.out.println("Moving forward");
-				}
-				try {
-					join();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-
-		moveforwardthread = new Move();
+		moveforwardthread = new Thread(new MoveForward());
 		moveforwardthread.start();
 	}
 
@@ -125,34 +104,28 @@ public class Mover {
 		moveforwardthread.join();
 		
 	}
+	
+	class MoveForward implements Runnable {
+		@Override
+		public void run() {
+			while (moveforward.get()) {
+				if (map.getMap()[(int) (view.getxPos() + view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
+					view.setxPos((int) (view.getxPos() + view.getxDir() * MOVE_SPEED));
+				}
+				if (map.getMap()[(int) view.getxPos()][(int) (view.getyPos() + view.getyDir() * MOVE_SPEED)] == 0)
+					view.setyPos((int) (view.getyPos() + view.getyDir() * MOVE_SPEED));
+				System.out.println("Moving forward");
+			}
+		}
+	}
+	
 
 	/**
 	 * Creates and delegates a thread to calculate backward movement.
 	 */
 	public synchronized void moveBackward() {
 		movebackward.set(true);
-
-		class Move extends Thread {
-			@Override
-			public void run() {
-				while (movebackward.get()) {
-					if (map.getMap()[(int) (view.getxPos() - view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0)
-						view.setxPos((int) (view.getxPos() - view.getxDir() * MOVE_SPEED));
-					if (map.getMap()[(int) view.getxPos()][(int) (view.getyPos() - view.getyDir() * MOVE_SPEED)] == 0)
-						view.setyPos((int) (view.getyPos() - view.getyDir() * MOVE_SPEED));
-					System.out.println("Moving back");
-
-				}
-				try {
-					join();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-
-		Thread move = new Move();
+		Thread move = new Thread(new MoveBackward());
 		move.start();
 	}
 
@@ -164,34 +137,28 @@ public class Mover {
 		movebackward.set(false);
 		movebackwardthread.join();
 	}
+	
+
+	class MoveBackward implements Runnable {
+		@Override
+		public void run() {
+			while (movebackward.get()) {
+				if (map.getMap()[(int) (view.getxPos() - view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0)
+					view.setxPos((int) (view.getxPos() - view.getxDir() * MOVE_SPEED));
+				if (map.getMap()[(int) view.getxPos()][(int) (view.getyPos() - view.getyDir() * MOVE_SPEED)] == 0)
+					view.setyPos((int) (view.getyPos() - view.getyDir() * MOVE_SPEED));
+				System.out.println("Moving back");
+
+			}
+		}
+	}
 
 	/**
 	 * Moves the camera to the left. Math is likely incorrect.
 	 */
 	public synchronized void moveLeft() {
 		moveleft.set(true);
-
-		class Move extends Thread {
-			@Override
-			public void run() {
-				while (moveleft.get()) {
-					if (map.getMap()[(int) (view.getxPos() + view.getyDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
-						view.setxPos((int) (view.getxPos() + view.getyDir() * MOVE_SPEED));
-					}
-					if (map.getMap()[(int) view.getxPos()][(int) (view.getyPos() + view.getxDir() * MOVE_SPEED)] == 0)
-						view.setyPos((int) (view.getyPos() + view.getxDir() * MOVE_SPEED));
-					System.out.println("Moving left");
-				}
-				try {
-					join();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-
-		Thread move = new Move();
+		Thread move = new Thread(new MoveLeft());
 		move.start();
 	}
 
@@ -203,6 +170,21 @@ public class Mover {
 		moveleft.set(false);
 		moveleftthread.join();
 	}
+	
+
+	class MoveLeft implements Runnable {
+		@Override
+		public void run() {
+			while (moveleft.get()) {
+				if (map.getMap()[(int) (view.getxPos() + view.getyDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
+					view.setxPos((int) (view.getxPos() + view.getyDir() * MOVE_SPEED));
+				}
+				if (map.getMap()[(int) view.getxPos()][(int) (view.getyPos() + view.getxDir() * MOVE_SPEED)] == 0)
+					view.setyPos((int) (view.getyPos() + view.getxDir() * MOVE_SPEED));
+				System.out.println("Moving left");
+			}
+		}
+	}
 
 	/**
 	 * Moves the camera to the right. Math is likely incorrect
@@ -210,27 +192,7 @@ public class Mover {
 	public synchronized void moveRight() {
 		moveright.set(true);
 
-		class Move extends Thread {
-			@Override
-			public void run() {
-				while (moveright.get()) {
-					if (map.getMap()[(int) (view.getyPos() + view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
-						view.setyPos((int) (view.getyPos() + view.getxDir() * MOVE_SPEED));
-					}
-					if (map.getMap()[(int) (view.getxPos())][(int) (view.getxPos() + view.getyDir() * MOVE_SPEED)] == 0)
-						view.setxPos((int) (view.getxPos() + view.getyDir() * MOVE_SPEED));
-					System.out.println("Moving right");
-				}
-				try {
-					join();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-
-		Thread move = new Move();
+		Thread move = new Thread(new MoveRight());
 		move.start();
 
 	}
@@ -243,6 +205,21 @@ public class Mover {
 		moveright.set(false);
 		moverightthread.join();
 	}
+	
+
+	class MoveRight implements Runnable {
+		@Override
+		public void run() {
+			while (moveright.get()) {
+				if (map.getMap()[(int) (view.getyPos() + view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
+					view.setyPos((int) (view.getyPos() + view.getxDir() * MOVE_SPEED));
+				}
+				if (map.getMap()[(int) (view.getxPos())][(int) (view.getxPos() + view.getyDir() * MOVE_SPEED)] == 0)
+					view.setxPos((int) (view.getxPos() + view.getyDir() * MOVE_SPEED));
+				System.out.println("Moving right");
+			}
+		}
+	}
 
 	/**
 	 * Pans camera to the left
@@ -250,35 +227,8 @@ public class Mover {
 	public synchronized void panLeft() {
 		panleft.set(true);
 
-		class Pan extends Thread {
-			@Override
-			public void run() {
-				double oldxDir;
-				double oldxPlane;
-
-				while (panleft.get()) {
-					oldxDir = view.getxDir();
-					view.setxDir((float) (view.getxDir() * Math.cos(ROTATION_SPEED)
-							- view.getyDir() * Math.sin(ROTATION_SPEED)));
-					view.setyDir(
-							(float) (oldxDir * Math.sin(ROTATION_SPEED) + view.getyDir() * Math.cos(ROTATION_SPEED)));
-					oldxPlane = view.getxPlane();
-					view.setxPlane((float) (view.getxPlane() * Math.cos(ROTATION_SPEED)
-							- view.getyPlane() * Math.sin(ROTATION_SPEED)));
-					view.setyPlane((float) (oldxPlane * Math.sin(ROTATION_SPEED)
-							+ view.getyPlane() * Math.cos(ROTATION_SPEED)));
-				}
-				try {
-					join();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-
-		Thread pan = new Pan();
-		pan.run();
+		Thread pan = new Thread(new PanLeft());
+		pan.start();
 	}
 
 	/**
@@ -289,45 +239,62 @@ public class Mover {
 		panleft.set(false);
 		panleftthread.join();
 	}
+	
+
+	class PanLeft implements Runnable{
+		@Override
+		public void run() {
+			double oldxDir;
+			double oldxPlane;
+
+			while (panleft.get()) {
+				oldxDir = view.getxDir();
+				view.setxDir((float) (view.getxDir() * Math.cos(ROTATION_SPEED)
+						- view.getyDir() * Math.sin(ROTATION_SPEED)));
+				view.setyDir(
+						(float) (oldxDir * Math.sin(ROTATION_SPEED) + view.getyDir() * Math.cos(ROTATION_SPEED)));
+				oldxPlane = view.getxPlane();
+				view.setxPlane((float) (view.getxPlane() * Math.cos(ROTATION_SPEED)
+						- view.getyPlane() * Math.sin(ROTATION_SPEED)));
+				view.setyPlane((float) (oldxPlane * Math.sin(ROTATION_SPEED)
+						+ view.getyPlane() * Math.cos(ROTATION_SPEED)));
+			}
+		}
+	}
 
 	public synchronized void panRight() {
 		panright.set(true);
-
-		class Pan extends Thread {
-			@Override
-			public void run() {
-				double oldxDir;
-				double oldxPlane;
-
-				while (panright.get()) {
-					oldxDir = view.getxDir();
-					view.setxDir((float) (view.getxDir() * Math.cos(-ROTATION_SPEED)
-							- view.getyDir() * Math.sin(-ROTATION_SPEED)));
-					view.setyDir(
-							(float) (oldxDir * Math.sin(-ROTATION_SPEED) + view.getyDir() * Math.cos(-ROTATION_SPEED)));
-					oldxPlane = view.getxPlane();
-					view.setxPlane((float) (view.getxPlane() * Math.cos(-ROTATION_SPEED)
-							- view.getyPlane() * Math.sin(-ROTATION_SPEED)));
-					view.setyPlane((float) (oldxPlane * Math.sin(-ROTATION_SPEED)
-							+ view.getyPlane() * Math.cos(-ROTATION_SPEED)));
-				}
-				try {
-					join();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-
-		Thread pan = new Pan();
-		pan.run();
+		Thread pan = new Thread(new PanRight());
+		pan.start();
 	}
 
 	public synchronized void stopPanRight() throws InterruptedException {
 		panright.set(false);
 		panrightthread.join();
 	}
+	
+
+	class PanRight implements Runnable {
+		@Override
+		public void run() {
+			double oldxDir;
+			double oldxPlane;
+
+			while (panright.get()) {
+				oldxDir = view.getxDir();
+				view.setxDir((float) (view.getxDir() * Math.cos(-ROTATION_SPEED)
+						- view.getyDir() * Math.sin(-ROTATION_SPEED)));
+				view.setyDir(
+						(float) (oldxDir * Math.sin(-ROTATION_SPEED) + view.getyDir() * Math.cos(-ROTATION_SPEED)));
+				oldxPlane = view.getxPlane();
+				view.setxPlane((float) (view.getxPlane() * Math.cos(-ROTATION_SPEED)
+						- view.getyPlane() * Math.sin(-ROTATION_SPEED)));
+				view.setyPlane((float) (oldxPlane * Math.sin(-ROTATION_SPEED)
+						+ view.getyPlane() * Math.cos(-ROTATION_SPEED)));
+			}
+		}
+	}
+	
 	
 	/**
 	 * Stops all threads.

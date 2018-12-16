@@ -43,6 +43,7 @@ public class DefaultFileCreator {
 		p.setPreference(new GoForward(), new GoLeft(), new GoBackward(), new GoRight(), null, null,
 				new LookLeft(), new LookRight(), new OpenMenu(), null, null, null, null, null, null, null, null, null,
 				null, null);
+		p.setPreference(new GoForward(), new GoLeft(), new GoBackward(), new GoRight(), null, null, new LookLeft(), new LookRight(), new CloseGame(), null, null, null, null, null, null, null, null, null, null, null);
 	}
 
 	public static void main(String[] args) {

@@ -16,12 +16,8 @@
  */
 package SwissCheese.game;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import SwissCheese.engine.camera.Mover;
 import SwissCheese.engine.display.Window;
 import SwissCheese.map.Map;
 
@@ -36,13 +32,12 @@ import SwissCheese.map.Map;
  * @version v0.2
  */
 public final strictfp class GameLoop implements Runnable {
-	private Thread thread;
-	private AtomicBoolean running;
+	private static Thread thread;
+	private static AtomicBoolean running;
 	private final float FRAME_RATE; // how many frames in a second
 	private static float FRAME_DURATION; // length of a frame (in seconds)
 	private Map map;
 	private Window window;
-	public static WindowListener listener;
 
 	public GameLoop(int width, int height, final float FRAME_RATE, float FOV, int mapSize) {
 		// calculate how long each frame is.
@@ -69,7 +64,7 @@ public final strictfp class GameLoop implements Runnable {
 	/**
 	 * stops the game safely
 	 */
-	public synchronized void stop() {
+	public static synchronized void stop() {
 		running.set(false);
 		try {
 			thread.join();
@@ -83,25 +78,18 @@ public final strictfp class GameLoop implements Runnable {
 	 */
 	@Override
 	public void run() {
-		listener = new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				try {
-					Mover.stopAllThreads();
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
-				}
-				stop();
-			}
-		};
 
 		do {
-			if (WindowTimer.isWindowUpdating()) {
-				// game loop goes here
-				System.out.println("Rendering");
-				window.render();
+			try {
+				if (WindowTimer.isWindowUpdating()) {
+					// game loop goes here
+					System.out.println("Rendering");
+					window.render();
+				}
+				window.switchBuffer();
+			} catch (NullPointerException e) {
+				// happens when the game closes but not fully (BufferStrategy)
 			}
-			window.switchBuffer();
 		} while (running.get());
 	}
 
@@ -156,6 +144,18 @@ public final strictfp class GameLoop implements Runnable {
 			return false;
 		}
 	}
+
+//	public synchronized void closeEverything(WindowEvent e) {
+//		System.out.println("window closed by user");
+//		try {
+//
+//			Mover.stopAllThreads();
+//		} catch (InterruptedException e1) {
+//			e1.printStackTrace();
+//		}
+//		stop();
+//		System.exit(0);
+//	}
 
 	public synchronized AtomicBoolean isRunning() {
 		return running;

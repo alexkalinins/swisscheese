@@ -18,6 +18,8 @@ package SwissCheese.engine.display;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -29,7 +31,6 @@ import SwissCheese.engine.camera.Mover;
 import SwissCheese.engine.io.images.ImageFromArray;
 import SwissCheese.engine.keyboard.KeyPreferenceIO;
 import SwissCheese.engine.keyboard.Keyboard;
-import SwissCheese.game.GameLoop;
 import SwissCheese.map.Map;
 
 /**
@@ -81,7 +82,12 @@ public class Window extends JFrame {
 		setResizable(false);
 		setTitle("Swiss Cheese - v0.3a");
 		addKeyListener(keyboard);
-		addWindowListener(GameLoop.listener);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				WindowCloser.closeEverything(e);
+			}
+		});
 		setBackground(Color.BLACK);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
