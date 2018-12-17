@@ -18,6 +18,7 @@ package SwissCheese.engine.camera;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import SwissCheese.game.GameLoop.WindowTimer;
 import SwissCheese.map.Map;
 
 /**
@@ -108,8 +109,8 @@ public class Mover {
 
 	class MoveForward implements Runnable {
 		@Override
-		public void run() {
-			while (moveforward.get()) {
+		public synchronized void run() {
+			while (moveforward.get() && WindowTimer.isUpdating().get()) {
 				if (map.getMap()[(int) (view.getxPos() + view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
 					view.setxPos((int) (view.getxPos() + view.getxDir() * MOVE_SPEED));
 				}
@@ -143,8 +144,8 @@ public class Mover {
 
 	class MoveBackward implements Runnable {
 		@Override
-		public void run() {
-			while (movebackward.get()) {
+		public synchronized void run() {
+			while (movebackward.get()&& WindowTimer.isUpdating().get()) {
 				if (map.getMap()[(int) (view.getxPos() - view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0)
 					view.setxPos((int) (view.getxPos() - view.getxDir() * MOVE_SPEED));
 				if (map.getMap()[(int) view.getxPos()][(int) (view.getyPos() - view.getyDir() * MOVE_SPEED)] == 0)
@@ -178,8 +179,8 @@ public class Mover {
 
 	class MoveLeft implements Runnable {
 		@Override
-		public void run() {
-			while (moveleft.get()) {
+		public synchronized void run() {
+			while (moveleft.get()&& WindowTimer.isUpdating().get()) {
 				if (map.getMap()[(int) (view.getxPos() + view.getyDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
 					view.setxPos((int) (view.getxPos() + view.getyDir() * MOVE_SPEED));
 				}
@@ -215,8 +216,8 @@ public class Mover {
 
 	class MoveRight implements Runnable {
 		@Override
-		public void run() {
-			while (moveright.get()) {
+		public synchronized void run() {
+			while (moveright.get()&& WindowTimer.isUpdating().get()) {
 				if (map.getMap()[(int) (view.getyPos() + view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
 					view.setyPos((int) (view.getyPos() + view.getxDir() * MOVE_SPEED));
 				}
@@ -251,11 +252,11 @@ public class Mover {
 
 	class PanLeft implements Runnable {
 		@Override
-		public void run() {
+		public synchronized void run() {
 			double oldxDir;
 			double oldxPlane;
 
-			while (panleft.get()) {
+			while (panleft.get()&& WindowTimer.isUpdating().get()) {
 				oldxDir = view.getxDir();
 				view.setxDir((float) (view.getxDir() * Math.cos(ROTATION_SPEED)
 						- view.getyDir() * Math.sin(ROTATION_SPEED)));
@@ -286,11 +287,11 @@ public class Mover {
 
 	class PanRight implements Runnable {
 		@Override
-		public void run() {
+		public synchronized void run() {
 			double oldxDir;
 			double oldxPlane;
 
-			while (panright.get()) {
+			while (panright.get()&& WindowTimer.isUpdating().get()) {
 				oldxDir = view.getxDir();
 				view.setxDir((float) (view.getxDir() * Math.cos(-ROTATION_SPEED)
 						- view.getyDir() * Math.sin(-ROTATION_SPEED)));
@@ -306,40 +307,35 @@ public class Mover {
 	}
 
 	/**
-	 * Stops all threads.
-	 * 
-	 * @throws InterruptedException
+	 * Stops all moving threads.
 	 */
 	public static synchronized void stopAllThreads() {
 		try {
 			moveleftthread.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		} catch (InterruptedException | NullPointerException e) {
+
 		}
 		try {
 			moverightthread.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		} catch (InterruptedException | NullPointerException e) {
+
 		}
 		try {
 			moveforwardthread.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		} catch (InterruptedException | NullPointerException e) {
+
 		}
 		try {
 			movebackwardthread.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		} catch (InterruptedException | NullPointerException e) {
 		}
 		try {
 			panleftthread.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		} catch (InterruptedException | NullPointerException e) {
 		}
 		try {
 			panrightthread.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		} catch (InterruptedException | NullPointerException e) {
 		}
 	}
 

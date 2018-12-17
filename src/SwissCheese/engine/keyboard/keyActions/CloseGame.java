@@ -16,6 +16,8 @@
  */
 package SwissCheese.engine.keyboard.keyActions;
 
+import SwissCheese.engine.display.WindowCloser;
+
 /**
  * Quits Game (WITHOUT SAVING)
  * 
@@ -32,7 +34,7 @@ public class CloseGame implements KeyAction {
 
 	@Override
 	public synchronized void doAction() {
-		System.exit(0);
+		WindowCloser.closeEverything();
 	}
 
 	@Override

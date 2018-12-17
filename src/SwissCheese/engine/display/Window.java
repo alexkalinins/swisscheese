@@ -85,7 +85,7 @@ public class Window extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				WindowCloser.closeEverything(e);
+				WindowCloser.closeEverything();
 			}
 		});
 		setBackground(Color.BLACK);

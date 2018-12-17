@@ -22,20 +22,24 @@ import SwissCheese.engine.camera.Mover;
 import SwissCheese.game.GameLoop;
 
 /**
- * @author alex
- *
+ * Class for WindowCloser window listener. Properly closes the game when the
+ * user closes the window.
+ * 
+ * @author Alex Kalinins
+ * @since 2018-12-15
+ * @since v0.3
+ * @version v0.1
  */
 public class WindowCloser {
-	
-	public synchronized static void closeEverything(WindowEvent e) {
-		System.out.println("window closed by user");
-		try {
 
-			Mover.stopAllThreads();
-			GameLoop.stop();
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
+	/**
+	 * Stops the game
+	 * @param e WindowEvent
+	 */
+	public synchronized static void closeEverything() {
+		System.out.println("window closed by user");
+		Mover.stopAllThreads();
+		GameLoop.stop();
 		System.exit(0);
 	}
 }

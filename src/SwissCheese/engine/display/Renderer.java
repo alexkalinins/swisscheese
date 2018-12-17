@@ -182,6 +182,7 @@ public class Renderer {
 			for (int i = wallStart; i < wallEnd; i++) {
 				yTexture = (((int) (i * 2 - height + lineHeight) << 6) / lineHeight) / 2;
 
+				//Array index out of bounds, somethign wrong with math or thread safety
 				color = wallTextures.get(textureType).getImage().getPixels()[xTexture
 						+ (yTexture * wallTextures.get(textureType).getSize())];
 

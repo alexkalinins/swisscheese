@@ -43,6 +43,7 @@ public final strictfp class GameLoop implements Runnable {
 		// calculate how long each frame is.
 		this.FRAME_RATE = FRAME_RATE;
 		FRAME_DURATION = 1f / FRAME_RATE;
+		
 
 		thread = new Thread(this);
 		running = new AtomicBoolean();
@@ -81,7 +82,7 @@ public final strictfp class GameLoop implements Runnable {
 
 		do {
 			try {
-				if (WindowTimer.isWindowUpdating()) {
+				if (WindowTimer.isUpdating().get()) {
 					// game loop goes here
 					System.out.println("Rendering");
 					window.render();
@@ -106,12 +107,13 @@ public final strictfp class GameLoop implements Runnable {
 	 * @version v1.0
 	 *
 	 */
-	static class WindowTimer {
+	public static class WindowTimer {
 
-		static float seconds;
-		static float processedSeconds = 0;
-		static float deltaSeconds;
-		static float futureSeconds;
+		private static float seconds;
+		private static float processedSeconds = 0;
+		private static float deltaSeconds;
+		private static float futureSeconds;
+		private static AtomicBoolean updating = new AtomicBoolean(false);
 
 		/**
 		 * Gets time from System.nanoTime as seconds
@@ -128,7 +130,7 @@ public final strictfp class GameLoop implements Runnable {
 		 * 
 		 * @return true if the window is updating.
 		 */
-		static boolean isWindowUpdating() {
+		private static boolean isWindowUpdating() {
 			futureSeconds = getSeconds(); // ahead by one frame
 			deltaSeconds = futureSeconds - seconds; // difference in time
 			processedSeconds += deltaSeconds;
@@ -142,6 +144,11 @@ public final strictfp class GameLoop implements Runnable {
 				return true;
 			}
 			return false;
+		}
+		
+		public static AtomicBoolean isUpdating() {
+			updating.set(isWindowUpdating());
+			return updating;
 		}
 	}
 
