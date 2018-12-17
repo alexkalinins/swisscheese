@@ -60,14 +60,13 @@ public class Mover {
 
 	private View view;
 	private Map map;
-	
+
 	private static Thread moveleftthread;
 	private static Thread moverightthread;
 	private static Thread moveforwardthread;
 	private static Thread movebackwardthread;
 	private static Thread panleftthread;
 	private static Thread panrightthread;
-	
 
 	/**
 	 * Constructor for Mover class
@@ -96,15 +95,17 @@ public class Mover {
 
 	/**
 	 * Sets moveforward to false, interrupting the moveForward thread.
-	 * @throws InterruptedException 
 	 */
-	public synchronized void stopForward() throws InterruptedException {
+	public synchronized void stopForward() {
 		moveforward.set(false);
-		
-		moveforwardthread.join();
-		
+		try {
+			moveforwardthread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
 	}
-	
+
 	class MoveForward implements Runnable {
 		@Override
 		public void run() {
@@ -118,7 +119,6 @@ public class Mover {
 			}
 		}
 	}
-	
 
 	/**
 	 * Creates and delegates a thread to calculate backward movement.
@@ -131,13 +131,15 @@ public class Mover {
 
 	/**
 	 * Sets movebackward to false, ending the backward movement.
-	 * @throws InterruptedException 
 	 */
-	public synchronized void stopBackward() throws InterruptedException {
+	public synchronized void stopBackward() {
 		movebackward.set(false);
-		movebackwardthread.join();
+		try {
+			movebackwardthread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
-	
 
 	class MoveBackward implements Runnable {
 		@Override
@@ -164,13 +166,15 @@ public class Mover {
 
 	/**
 	 * Stops the camera left movement
-	 * @throws InterruptedException 
 	 */
-	public synchronized void stopLeft() throws InterruptedException {
+	public synchronized void stopLeft() {
 		moveleft.set(false);
-		moveleftthread.join();
+		try {
+			moveleftthread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
-	
 
 	class MoveLeft implements Runnable {
 		@Override
@@ -198,14 +202,16 @@ public class Mover {
 	}
 
 	/**
-	 * Stops the camera from moving to the right
-	 * @throws InterruptedException 
+	 * Stops the camera from moving to the right.
 	 */
-	public synchronized void stopRight() throws InterruptedException {
+	public synchronized void stopRight() {
 		moveright.set(false);
-		moverightthread.join();
+		try {
+			moverightthread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
-	
 
 	class MoveRight implements Runnable {
 		@Override
@@ -222,7 +228,7 @@ public class Mover {
 	}
 
 	/**
-	 * Pans camera to the left
+	 * Pans camera to the left.
 	 */
 	public synchronized void panLeft() {
 		panleft.set(true);
@@ -232,16 +238,18 @@ public class Mover {
 	}
 
 	/**
-	 * Stops left panning
-	 * @throws InterruptedException 
+	 * Stops left panning.
 	 */
-	public synchronized void stopPanLeft() throws InterruptedException {
+	public synchronized void stopPanLeft() {
 		panleft.set(false);
-		panleftthread.join();
+		try {
+			panleftthread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
-	
 
-	class PanLeft implements Runnable{
+	class PanLeft implements Runnable {
 		@Override
 		public void run() {
 			double oldxDir;
@@ -251,13 +259,12 @@ public class Mover {
 				oldxDir = view.getxDir();
 				view.setxDir((float) (view.getxDir() * Math.cos(ROTATION_SPEED)
 						- view.getyDir() * Math.sin(ROTATION_SPEED)));
-				view.setyDir(
-						(float) (oldxDir * Math.sin(ROTATION_SPEED) + view.getyDir() * Math.cos(ROTATION_SPEED)));
+				view.setyDir((float) (oldxDir * Math.sin(ROTATION_SPEED) + view.getyDir() * Math.cos(ROTATION_SPEED)));
 				oldxPlane = view.getxPlane();
 				view.setxPlane((float) (view.getxPlane() * Math.cos(ROTATION_SPEED)
 						- view.getyPlane() * Math.sin(ROTATION_SPEED)));
-				view.setyPlane((float) (oldxPlane * Math.sin(ROTATION_SPEED)
-						+ view.getyPlane() * Math.cos(ROTATION_SPEED)));
+				view.setyPlane(
+						(float) (oldxPlane * Math.sin(ROTATION_SPEED) + view.getyPlane() * Math.cos(ROTATION_SPEED)));
 			}
 		}
 	}
@@ -268,11 +275,14 @@ public class Mover {
 		pan.start();
 	}
 
-	public synchronized void stopPanRight() throws InterruptedException {
+	public synchronized void stopPanRight() {
 		panright.set(false);
-		panrightthread.join();
+		try {
+			panrightthread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
-	
 
 	class PanRight implements Runnable {
 		@Override
@@ -289,25 +299,48 @@ public class Mover {
 				oldxPlane = view.getxPlane();
 				view.setxPlane((float) (view.getxPlane() * Math.cos(-ROTATION_SPEED)
 						- view.getyPlane() * Math.sin(-ROTATION_SPEED)));
-				view.setyPlane((float) (oldxPlane * Math.sin(-ROTATION_SPEED)
-						+ view.getyPlane() * Math.cos(-ROTATION_SPEED)));
+				view.setyPlane(
+						(float) (oldxPlane * Math.sin(-ROTATION_SPEED) + view.getyPlane() * Math.cos(-ROTATION_SPEED)));
 			}
 		}
 	}
-	
-	
+
 	/**
 	 * Stops all threads.
 	 * 
 	 * @throws InterruptedException
 	 */
-	public static synchronized void stopAllThreads() throws InterruptedException {	
-		moveleftthread.join();
-		moverightthread.join();
-		moveforwardthread.join();
-		movebackwardthread.join();
-		panleftthread.join();
-		panrightthread.join();
+	public static synchronized void stopAllThreads() {
+		try {
+			moveleftthread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		try {
+			moverightthread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		try {
+			moveforwardthread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		try {
+			movebackwardthread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		try {
+			panleftthread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		try {
+			panrightthread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public synchronized AtomicBoolean isMoveleft() {

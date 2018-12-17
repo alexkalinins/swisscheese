@@ -44,7 +44,7 @@ public class GoForward implements KeyAction {
 	}
 
 	@Override
-	public synchronized void stopAction() throws InterruptedException {
+	public synchronized void stopAction() {
 		Window.mover.stopForward();
 	}
 

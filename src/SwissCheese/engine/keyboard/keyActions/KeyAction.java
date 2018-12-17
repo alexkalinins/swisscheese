@@ -29,15 +29,14 @@ import SwissCheese.engine.io.gson.Convertable;
 public interface KeyAction extends Convertable{
 
 	/**
-	 * Does an action (only for continuous actions)
+	 * Does an action (only for continuous actions).
 	 */
 	public void doAction();
 
 	/**
 	 * Stops doing an action. (only applicable to continuous actions such as
-	 * walking).
-	 * @throws InterruptedException 
+	 * walking). 
 	 */
-	public void stopAction() throws InterruptedException;
+	public void stopAction();
 
 }
