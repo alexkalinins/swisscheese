@@ -18,6 +18,7 @@ package SwissCheese.engine.camera;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import SwissCheese.annotations.NotThreadSafe;
 import SwissCheese.game.GameLoop.WindowTimer;
 import SwissCheese.map.Map;
 
@@ -47,6 +48,7 @@ import SwissCheese.map.Map;
  * @version v0.3
  *
  */
+@NotThreadSafe
 public class Mover {
 	private AtomicBoolean moveleft = new AtomicBoolean(false);
 	private AtomicBoolean moveright = new AtomicBoolean(false);

@@ -4,6 +4,11 @@ import java.awt.Color;
 
 import javax.swing.JFrame;
 
+/**
+ * Test class for testing the functionality of the Keyboard listener.
+ * 
+ * @author Alex Kalinins
+ */
 public class KeyBoardTest extends JFrame{
 	/**
 	 * 

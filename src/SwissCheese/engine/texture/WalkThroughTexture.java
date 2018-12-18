@@ -18,6 +18,8 @@ package SwissCheese.engine.texture;
 
 import java.io.File;
 
+import SwissCheese.annotations.Immutable;
+
 /**
  * {@code WalkThroughTexture} is a texture object through which a player can
  * walk. This texture is intended to be used on exit walls. When a person walks
@@ -28,6 +30,7 @@ import java.io.File;
  * @since v0.3
  * @version v0.1
  */
+@Immutable
 public class WalkThroughTexture extends WallTexture {
 	public WalkThroughTexture(File file) {
 		super(file);

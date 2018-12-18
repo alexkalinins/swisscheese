@@ -19,44 +19,49 @@ package SwissCheese.engine.keyboard;
 import SwissCheese.engine.keyboard.keyActions.KeyAction;
 
 /**
- * Class for setting and binding the key binding preferences to the game.
- * Implements serializable in order save preferences to file. Action preference
+ * Class for setting and binding the key binding preferences to the game. Action preference
  * must be added to parameters every single time a new key or action is added to
  * the game.
+ * <p>
+ * This object is serialized and deserialized by the {@code GSON} library.
  * 
  * @author Alex Kalinins
  * @since 2018-12-1
  * @since v0.2
- * @version v0.2
+ * @version v0.3
  */
 public final class KeyActionPreference {
-	private KeyAction wAction;
-	private KeyAction aAction;
-	private KeyAction sAction;
-	private KeyAction dAction;
-	private KeyAction upAction;
-	private KeyAction downAction;
-	private KeyAction leftAction;
-	private KeyAction rightAction;
-	private KeyAction escAction;
-	private KeyAction shiftAction;
-	private KeyAction n1Action;
-	private KeyAction n2Action;
-	private KeyAction n3Action;
-	private KeyAction n4Action;
-	private KeyAction n5Action;
-	private KeyAction n6Action;
-	private KeyAction n7Action;
-	private KeyAction n8Action;
-	private KeyAction n9Action;
-	private KeyAction n0Action;
+	private final KeyAction wAction;
+	private final KeyAction aAction;
+	private final KeyAction sAction;
+	private final KeyAction dAction;
+	private final KeyAction upAction;
+	private final KeyAction downAction;
+	private final KeyAction leftAction;
+	private final KeyAction rightAction;
+	private final KeyAction escAction;
+	private final KeyAction shiftAction;
+	private final KeyAction n1Action;
+	private final KeyAction n2Action;
+	private final KeyAction n3Action;
+	private final KeyAction n4Action;
+	private final KeyAction n5Action;
+	private final KeyAction n6Action;
+	private final KeyAction n7Action;
+	private final KeyAction n8Action;
+	private final KeyAction n9Action;
+	private final KeyAction n0Action;
 
-	
+	/**
+	 * No arguments constructor necessary for GSON serialization.
+	 */
 	public KeyActionPreference() {
-		
+		this(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+				null, null);
 	}
-	
-	public void setPreference(KeyAction wAction, KeyAction aAction, KeyAction sAction, KeyAction dAction,
+
+	//Constructor: no javadoc, KeyActions might change
+	public KeyActionPreference(KeyAction wAction, KeyAction aAction, KeyAction sAction, KeyAction dAction,
 			KeyAction upAction, KeyAction downAction, KeyAction leftAction, KeyAction rightAction, KeyAction escAction,
 			KeyAction shiftAction, KeyAction n1Action, KeyAction n2Action, KeyAction n3Action, KeyAction n4Action,
 			KeyAction n5Action, KeyAction n6Action, KeyAction n7Action, KeyAction n8Action, KeyAction n9Action,
@@ -83,6 +88,9 @@ public final class KeyActionPreference {
 		this.n0Action = n0Action;
 	}
 
+	/**
+	 * Sets the action of each {@code Keys} enums to the specified {@code KeyAction}.
+	 */
 	public void bindPreferences() {
 		Keys.W.setAction(wAction);
 		Keys.A.setAction(aAction);

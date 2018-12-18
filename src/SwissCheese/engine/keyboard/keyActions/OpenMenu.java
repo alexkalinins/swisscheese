@@ -27,13 +27,11 @@ package SwissCheese.engine.keyboard.keyActions;
 public class OpenMenu implements KeyAction {
 
 	public OpenMenu() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void doAction() {
-		;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -46,7 +44,7 @@ public class OpenMenu implements KeyAction {
 	 */
 	@Override
 	public void stopAction() {
-		;
+		throw new UnsupportedOperationException();
 	}
 
 }

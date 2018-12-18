@@ -16,6 +16,7 @@
  */
 package SwissCheese.game;
 
+import SwissCheese.annotations.NotThreadSafe;
 import SwissCheese.map.Map;
 
 /**
@@ -27,6 +28,7 @@ import SwissCheese.map.Map;
  * @version v0.1
  *
  */
+@NotThreadSafe
 public class Game{
 	private Map map;
 	private int width;

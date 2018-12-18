@@ -16,8 +16,7 @@
  */
 package SwissCheese.engine.display;
 
-import java.awt.event.WindowEvent;
-
+import SwissCheese.annotations.Immutable;
 import SwissCheese.engine.camera.Mover;
 import SwissCheese.game.GameLoop;
 
@@ -30,11 +29,11 @@ import SwissCheese.game.GameLoop;
  * @since v0.3
  * @version v0.1
  */
+@Immutable
 public class WindowCloser {
 
 	/**
 	 * Stops the game
-	 * @param e WindowEvent
 	 */
 	public synchronized static void closeEverything() {
 		System.out.println("window closed by user");

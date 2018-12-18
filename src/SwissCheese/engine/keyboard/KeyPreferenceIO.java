@@ -25,6 +25,7 @@ import java.io.PrintStream;
 
 import com.google.gson.Gson;
 
+import SwissCheese.annotations.Immutable;
 import SwissCheese.engine.io.gson.InterfacetoJson;
 import SwissCheese.engine.io.gson.JsonAdapterRegistrar;
 import SwissCheese.engine.keyboard.keyActions.KeyAction;
@@ -43,18 +44,17 @@ import SwissCheese.engine.keyboard.keyActions.KeyAction;
  * @author Alex Kalinins
  * @since 2018-12-1
  * @since v0.2
- * @version v0.3
+ * @version v0.4
  */
+@Immutable
 public class KeyPreferenceIO {
-	static Gson gson;
 
 	/**
 	 * Calls {@code JsonAdapterRegistrar} to register InterfacetoJson adapter to
 	 * adapt KeyAction interface
 	 */
-	private static void makeGson() {
-		gson = JsonAdapterRegistrar.makeGson(KeyAction.class, new InterfacetoJson<KeyAction>());
-
+	private static Gson makeGson() {
+		return JsonAdapterRegistrar.makeGson(KeyAction.class, new InterfacetoJson<KeyAction>());
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class KeyPreferenceIO {
 	 * The file being read is keybind.config
 	 */
 	public static void readFromFile() {
-		makeGson();
+		Gson gson = makeGson();
 		File settings = new File(
 				(checkForSaved()) ? "settings/user/keybind.config" : "settings/default/keybind.config");
 		StringBuilder sb = new StringBuilder();
@@ -85,8 +85,7 @@ public class KeyPreferenceIO {
 	 * Serializes and writes preferences to file (/settings/user/keybind.config)
 	 */
 	public static void writeToFile(KeyActionPreference p) {
-		makeGson();
-
+		Gson gson = makeGson();
 		File file = new File("settings/user/keybind.config");
 		if (file.exists()) {
 			file.delete();
@@ -94,7 +93,6 @@ public class KeyPreferenceIO {
 
 		try (PrintStream out = new PrintStream(new FileOutputStream(file))) {
 			out.print(gson.toJson(p));
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -106,7 +104,7 @@ public class KeyPreferenceIO {
 	 * @return true if a preference file is present.
 	 */
 	private static boolean checkForSaved() {
-		File check = new File("settings/user/keybind.config");
-		return check.exists();
+		return new File("settings/user/keybind.config").exists();
+
 	}
 }

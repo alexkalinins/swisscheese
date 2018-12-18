@@ -34,16 +34,15 @@ import SwissCheese.engine.keyboard.keyActions.*;
  * @version v0.2
  *
  */
-public class DefaultFileCreator {
+class DefaultFileCreator {
 	public static KeyActionPreference p;
 	public static Gson gson;
 
 	public static void load() {
 		p = new KeyActionPreference();
-		p.setPreference(new GoForward(), new GoLeft(), new GoBackward(), new GoRight(), null, null,
-				new LookLeft(), new LookRight(), new OpenMenu(), null, null, null, null, null, null, null, null, null,
+		p = new KeyActionPreference(new GoForward(), new GoLeft(), new GoBackward(), new GoRight(), null, null,
+				new LookLeft(), new LookRight(), new CloseGame(), null, null, null, null, null, null, null, null, null,
 				null, null);
-		p.setPreference(new GoForward(), new GoLeft(), new GoBackward(), new GoRight(), null, null, new LookLeft(), new LookRight(), new CloseGame(), null, null, null, null, null, null, null, null, null, null, null);
 	}
 
 	public static void main(String[] args) {

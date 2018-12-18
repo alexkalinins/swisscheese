@@ -16,6 +16,7 @@
  */
 package SwissCheese.engine.camera;
 
+import SwissCheese.annotations.ThreadSafe;
 import SwissCheese.math.GeomVector2D;
 
 /**
@@ -30,10 +31,11 @@ import SwissCheese.math.GeomVector2D;
  * @version v0.3
  *
  */
+@ThreadSafe
 public class View {
-	private GeomVector2D pos;
-	private GeomVector2D dir;
-	private GeomVector2D plane;
+	private GeomVector2D<Float> pos;
+	private GeomVector2D<Float> dir;
+	private GeomVector2D<Float> plane;
 
 	/**
 	 * Constructor for View Object
@@ -56,7 +58,7 @@ public class View {
 	 * @param dir   direction vector - the direction in which the player is looking
 	 * @param plane plane vector - the camera plane, everything the camera sees.
 	 */
-	public View(GeomVector2D pos, GeomVector2D dir, GeomVector2D plane) {
+	public View(GeomVector2D<Float> pos, GeomVector2D<Float> dir, GeomVector2D<Float> plane) {
 		updateView(pos, dir, plane);
 	}
 
@@ -71,10 +73,10 @@ public class View {
 	 * @param yPlane y plane of vector
 	 */
 	public synchronized void updateView(float xPos, float yPos, float xDir, float yDir, float xPlane, float yPlane) {
-		updateView(new GeomVector2D(xPos, xPos), new GeomVector2D(xDir, yDir), new GeomVector2D(xPlane, yPlane));
+		updateView(new GeomVector2D<Float>(xPos, xPos), new GeomVector2D<Float>(xDir, yDir), new GeomVector2D<Float>(xPlane, yPlane));
 	}
 
-	public synchronized void updateView(GeomVector2D pos, GeomVector2D dir, GeomVector2D plane) {
+	public synchronized void updateView(GeomVector2D<Float> pos, GeomVector2D<Float> dir, GeomVector2D<Float> plane) {
 		this.dir = dir;
 		this.plane = plane;
 		this.pos = pos;
@@ -85,7 +87,7 @@ public class View {
 	}
 
 	public synchronized void setxPos(float xPos) {
-		setPos(new GeomVector2D(xPos, pos.getY()));
+		setPos(new GeomVector2D<Float>(xPos, pos.getY()));
 	}
 
 	public synchronized float getyPos() {
@@ -93,7 +95,7 @@ public class View {
 	}
 
 	public synchronized void setyPos(float yPos) {
-		setPos(new GeomVector2D(pos.getY(), yPos));
+		setPos(new GeomVector2D<Float>(pos.getY(), yPos));
 	}
 
 	public synchronized float getxDir() {
@@ -101,7 +103,7 @@ public class View {
 	}
 
 	public synchronized void setxDir(float xDir) {
-		setDir(new GeomVector2D(xDir, dir.getY()));
+		setDir(new GeomVector2D<Float>(xDir, dir.getY()));
 	}
 
 	public synchronized float getyDir() {
@@ -109,7 +111,7 @@ public class View {
 	}
 
 	public synchronized void setyDir(float yDir) {
-		setDir(new GeomVector2D(dir.getX(), yDir));
+		setDir(new GeomVector2D<Float>(dir.getX(), yDir));
 	}
 
 	public synchronized float getxPlane() {
@@ -117,7 +119,7 @@ public class View {
 	}
 
 	public synchronized void setxPlane(float xPlane) {
-		setPlane(new GeomVector2D(xPlane, dir.getY()));
+		setPlane(new GeomVector2D<Float>(xPlane, dir.getY()));
 	}
 
 	public synchronized float getyPlane() {
@@ -125,31 +127,31 @@ public class View {
 	}
 
 	public synchronized void setyPlane(float yPlane) {
-		setDir(new GeomVector2D(dir.getX(), yPlane));
+		setDir(new GeomVector2D<Float>(dir.getX(), yPlane));
 
 	}
 
-	public synchronized GeomVector2D getPos() {
+	public synchronized GeomVector2D<Float> getPos() {
 		return pos;
 	}
 
-	public synchronized void setPos(GeomVector2D pos) {
+	public synchronized void setPos(GeomVector2D<Float> pos) {
 		this.pos = pos;
 	}
 
-	public synchronized GeomVector2D getDir() {
+	public synchronized GeomVector2D<Float> getDir() {
 		return dir;
 	}
 
-	public synchronized void setDir(GeomVector2D dir) {
+	public synchronized void setDir(GeomVector2D<Float> dir) {
 		this.dir = dir;
 	}
 
-	public synchronized GeomVector2D getPlane() {
+	public synchronized GeomVector2D<Float> getPlane() {
 		return plane;
 	}
 
-	public synchronized void setPlane(GeomVector2D plane) {
+	public synchronized void setPlane(GeomVector2D<Float> plane) {
 		this.plane = plane;
 	}
 

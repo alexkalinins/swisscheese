@@ -21,6 +21,8 @@ import java.security.SecureRandom;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Random;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import SwissCheese.maze.CellGrid.Direction;
 
@@ -58,6 +60,7 @@ public strictfp class Generator {
 	private static Point2D exit = new Point2D.Double();
 	private static Point2D entry = new Point2D.Double();
 	private static Integer[][] maze;
+	public static Lock lock = new ReentrantLock();
 
 	/**
 	 * Private constructor for Generator
@@ -82,7 +85,9 @@ public strictfp class Generator {
 	 * @return the newly generated maze map as a 2D Integer array.
 	 */
 	public static Integer[][] generateMaze(int size) {
+		lock.lock();
 		new Generator(size);
+		lock.unlock();
 		return Generator.maze;
 	}
 

@@ -18,6 +18,7 @@ package SwissCheese.engine.texture;
 
 import java.io.File;
 
+import SwissCheese.annotations.Immutable;
 import SwissCheese.engine.io.images.PixelImage;
 
 /**
@@ -26,11 +27,11 @@ import SwissCheese.engine.io.images.PixelImage;
  * @author Alex Kalinins
  * @since 2018-12-10
  * @since v0.2
- * @version v0.1
- *
+ * @version v0.2
  */
+@Immutable
 public abstract class AbstractTexture {
-	protected PixelImage image;
+	protected final PixelImage image;
 	protected final int textureid;
 	protected final File file;
 	private static int currenttextureid = 0;
@@ -46,11 +47,11 @@ public abstract class AbstractTexture {
 	}
 
 
-	private static final int nextTextureId() {
+	private static final synchronized int nextTextureId() {
 		return ++currenttextureid;
 	}
 
-	public synchronized final PixelImage getImage() {
+	public final PixelImage getImage() {
 		return image;
 	}
 

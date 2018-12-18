@@ -21,6 +21,8 @@ import java.lang.reflect.Type;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import SwissCheese.annotations.Immutable;
+
 /**
  * Registers a {@code Gson} adapter to allow certain types such as interfaces to
  * be serialized {@code Gson}
@@ -30,6 +32,7 @@ import com.google.gson.GsonBuilder;
  * @since v0.3
  * @version v0.1
  */
+@Immutable
 public class JsonAdapterRegistrar {
 
 	/**

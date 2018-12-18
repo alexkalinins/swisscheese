@@ -16,7 +16,8 @@
  */
 package SwissCheese.engine.keyboard;
 
-import SwissCheese.engine.keyboard.keyActions.*;
+import SwissCheese.annotations.ThreadSafe;
+import SwissCheese.engine.keyboard.keyActions.KeyAction;
 
 /**
  * ENUMS for the Keyboard. All the usable keys for the game. While the list is
@@ -59,7 +60,7 @@ public enum Keys {
 	 * walking.
 	 * @throws InterruptedException 
 	 */
-	public synchronized void stopAction() throws InterruptedException {
+	public synchronized void stopAction(){
 		action.stopAction();
 	}
 

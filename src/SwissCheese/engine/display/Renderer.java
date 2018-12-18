@@ -18,7 +18,10 @@ package SwissCheese.engine.display;
 
 import java.awt.Color;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
+import SwissCheese.annotations.NotThreadSafe;
 import SwissCheese.engine.camera.Camera;
 import SwissCheese.engine.camera.Mover;
 import SwissCheese.engine.camera.View;
@@ -35,6 +38,7 @@ import SwissCheese.math.GeomVector2D;
  * @since v0.2
  * @version v0.1
  */
+@NotThreadSafe
 public class Renderer {
 	private final float width;
 	private final float height;
@@ -42,6 +46,8 @@ public class Renderer {
 	private Map map;
 	private View view;
 	private Camera camera;
+	public static Lock fillLoc = new ReentrantLock();
+	// public static Lock update = new ReentrantLock();
 
 	private final Color FLOOR = Color.DARK_GRAY; // the color of the floor
 	private final Color SKY = Color.cyan; // the color of the sky
@@ -51,12 +57,12 @@ public class Renderer {
 		this.camera = camera;
 		this.width = width;
 		this.height = height;
-		wallTextures = WallTextureList.getList();
+		wallTextures = new WallTextureList().getList();
 	}
 
 	/**
-	 * Renders what the player is seeing through {@code Camera}. Renders into an array of
-	 * ints (pixels) through ray-casting.
+	 * Renders what the player is seeing through {@code Camera}. Renders into an
+	 * array of ints (pixels) through ray-casting.
 	 * <p>
 	 * This algorithm goes through each vertical strip of the pixels array and
 	 * calculates the distance between the location of the player and the wall. The
@@ -69,20 +75,22 @@ public class Renderer {
 	 * @return updated pixels array.
 	 * @see <a href="https://lodev.org/cgtutor/raycasting.html">Ray-Casting</a>
 	 */
-	public int[] render(int[] pixels) {
+	public synchronized int[] render(int[] pixels) {
+		fillLoc.lock();
 		view = camera.getView();
+		fillLoc.unlock();
 
 		float xStrip; // x coordinate of scanning strip on camera plane
 
-		GeomVector2D rayDir; //rayDirection vector
+		GeomVector2D<Float> rayDir; // rayDirection vector
 
 		int xMap; // x location on the map
 		int yMap; // y location on the map
 
 		float xSideDistance; // distance between current position and next side (x)
 		float ySideDistance; // distance between current position and next side (y)
-		
-		GeomVector2D deltaDistance;
+
+		GeomVector2D<Float> deltaDistance;
 
 		float wallDist; // distance between player and wall
 
@@ -104,6 +112,7 @@ public class Renderer {
 
 		pixels = fillBackground(pixels);
 
+		fillLoc.lock();
 		// vertical slices:
 		for (int x = 0; x < (int) width; x++) {
 			hit = false;
@@ -117,7 +126,7 @@ public class Renderer {
 			xMap = (int) view.getxPos();
 			yMap = (int) view.getyPos();
 
-			deltaDistance = new GeomVector2D(
+			deltaDistance = new GeomVector2D<Float>(
 					(float) Math.sqrt(1 + Math.pow(rayDir.getY(), 2) / Math.pow(rayDir.getX(), 2)),
 					(float) Math.sqrt(1 + Math.pow(rayDir.getX(), 2) / Math.pow(rayDir.getY(), 2)));
 
@@ -155,7 +164,7 @@ public class Renderer {
 				hit = map.getMap()[xMap][yMap] > 0;
 			}
 
-			textureType = map.getMap()[xMap][yMap]-1;
+			textureType = map.getMap()[xMap][yMap] - 1;
 
 			wallDist = (wallVertical) ? Math.abs((yMap - view.getyPos() + (1 - yStep) / 2) / rayDir.getY())
 					: Math.abs((xMap - view.getxPos() + (1 - xStep) / 2) / rayDir.getX());
@@ -178,16 +187,20 @@ public class Renderer {
 				xTexture = wallTextures.get(textureType).getSize() - textureType - 1;
 			if (wallVertical && rayDir.getY() < 0)
 				xTexture = wallTextures.get(textureType).getSize() - textureType - 1;
-
 			for (int i = wallStart; i < wallEnd; i++) {
 				yTexture = (((int) (i * 2 - height + lineHeight) << 6) / lineHeight) / 2;
 
-				//Array index out of bounds, somethign wrong with math or thread safety
-				color = wallTextures.get(textureType).getImage().getPixels()[xTexture
-						+ (yTexture * wallTextures.get(textureType).getSize())];
+				// Array index out of bounds, somethign wrong with math or thread safety
 
-				//makes vertical walls darker
-				//TODO rename to wallHorizontal
+				try {
+					color = wallTextures.get(textureType).getImage().getPixels()[xTexture
+							+ (yTexture * wallTextures.get(textureType).getSize())];
+				} catch (ArrayIndexOutOfBoundsException e) {
+					e.printStackTrace();
+					color = 0;
+				}
+				// makes vertical walls darker
+				// TODO rename to wallHorizontal
 				if (!wallVertical) {
 					color >>= 1;
 					color &= 8500000;
@@ -196,12 +209,12 @@ public class Renderer {
 				pixels[(int) (x + i * (width))] = color;
 			}
 		}
-
+		fillLoc.unlock();
 		return pixels;
 	}
 
-	private int[] fillBackground(int[] pixels) {
-
+	private synchronized int[] fillBackground(int[] pixels) {
+		fillLoc.lock();
 		for (int i = 0; i < pixels.length / 2; i++) {
 			pixels[i] = SKY.getRGB();
 		}
@@ -210,10 +223,10 @@ public class Renderer {
 		for (int i = pixels.length / 2; i < pixels.length; i++) {
 			pixels[i] = FLOOR.getRGB();
 		}
-
+		fillLoc.unlock();
 		return pixels;
 	}
-	
+
 	public Mover getMover() {
 		return camera.getMover();
 	}

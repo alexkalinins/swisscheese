@@ -16,6 +16,7 @@
  */
 package SwissCheese.engine.keyboard.keyActions;
 
+import SwissCheese.annotations.Immutable;
 import SwissCheese.engine.display.WindowCloser;
 
 /**
@@ -26,10 +27,9 @@ import SwissCheese.engine.display.WindowCloser;
  * @since v0.2
  * @version v0.1
  */
+@Immutable
 public class CloseGame implements KeyAction {
 	public CloseGame() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

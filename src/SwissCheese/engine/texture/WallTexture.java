@@ -18,6 +18,8 @@ package SwissCheese.engine.texture;
 
 import java.io.File;
 
+import SwissCheese.annotations.Immutable;
+
 /**
  * A WallTexture object for storing a wall texture
  * 
@@ -26,6 +28,7 @@ import java.io.File;
  * @since v0.2
  * @version v0.1
  */
+@Immutable
 public class WallTexture extends AbstractTexture{
 	private final int size;
 	
@@ -39,7 +42,7 @@ public class WallTexture extends AbstractTexture{
 		size = image.getWidth();
 	}
 	
-	public synchronized int getSize() {
+	public int getSize() {
 		return size;
 	}
 }

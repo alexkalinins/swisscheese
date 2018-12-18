@@ -16,6 +16,7 @@
  */
 package SwissCheese.engine.keyboard.keyActions;
 
+import SwissCheese.annotations.ThreadSafe;
 import SwissCheese.engine.display.Window;
 
 /**
@@ -26,11 +27,10 @@ import SwissCheese.engine.display.Window;
  * @since v0.2
  * @version v0.1
  */
+@ThreadSafe
 public class GoLeft implements KeyAction {
 
 	public GoLeft() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

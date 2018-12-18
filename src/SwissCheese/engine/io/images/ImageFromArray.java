@@ -19,6 +19,8 @@ package SwissCheese.engine.io.images;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
+import SwissCheese.annotations.Immutable;
+
 /**
  * This class converts an array of RGB values (pixels) into an {@code Image}
  * object for rendering.
@@ -26,9 +28,9 @@ import java.awt.image.BufferedImage;
  * @author Alex Kalinins
  * @since 2018-12-15
  */
+@Immutable
 public class ImageFromArray {
-	private static BufferedImage image;
-	
+
 	/**
 	 * Converts pixels array of RGB values into an {@code Image}.
 	 * 
@@ -38,12 +40,19 @@ public class ImageFromArray {
 	 * @return {@code Image} from pixels array
 	 */
 	public static Image getImage(int[] pixels, int width, int height) {
-		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		//WritableRaster raster = (WritableRaster) image.getData();
-		//ColorModel colorModel = ColorModel.getRGBdefault();
-		
-		//raster.setPixels(0, 0, width, height, pixels);
+		final BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		image.setRGB(0, 0, width, height, pixels, 0, width);
 		return image;
+	}
+
+	/**
+	 * Converts an {@code PixelImage} object into a {@code Image}.
+	 * 
+	 * @param image PixelImage being converted
+	 * @return BufferedImage from PixelImage's pixels array
+	 * @see SwissCheese#engine#io#PixelImage
+	 */
+	public static Image getImage(PixelImage image) {
+		return getImage(image.getPixels(), image.getWidth(), image.getHeight());
 	}
 }

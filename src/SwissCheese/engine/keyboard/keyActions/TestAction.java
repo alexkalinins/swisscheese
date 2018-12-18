@@ -16,6 +16,8 @@
  */
 package SwissCheese.engine.keyboard.keyActions;
 
+import SwissCheese.annotations.ThreadSafe;
+
 /**
  * Test action used for testing the keyboard
  * 
@@ -24,10 +26,9 @@ package SwissCheese.engine.keyboard.keyActions;
  * @since v0.2
  * @version v0.1
  */
+@ThreadSafe
 public class TestAction implements KeyAction {
 	public TestAction() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

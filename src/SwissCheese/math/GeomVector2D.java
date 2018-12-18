@@ -18,6 +18,9 @@ package SwissCheese.math;
 
 import java.awt.geom.Point2D;
 
+import SwissCheese.annotations.Immutable;
+
+
 /**
  * A 2D vector to be used in mathematics or geometry calculations
  * 
@@ -26,7 +29,8 @@ import java.awt.geom.Point2D;
  * @since v0.2
  * @since v0.1
  */
-public strictfp class GeomVector2D {
+@Immutable
+public strictfp class GeomVector2D<T extends Number> {
 	private final Point2D.Float endPoint;
 	private final Point2D.Float startPoint;
 	
@@ -57,18 +61,18 @@ public strictfp class GeomVector2D {
 	 * @param x x location of end point
 	 * @param y y location of end point
 	 */
-	public GeomVector2D(float x, float y) {
-		this(new Point2D.Float(x, y));
+	public GeomVector2D(T x, T y) {
+		this(new Point2D.Float((float)x, (float)y));
 	}
 	
-	public GeomVector2D multiplyScalar(final float s) {
-		return new GeomVector2D(startPoint, new Point2D.Float((float)(endPoint.getX()*s),(float)(endPoint.getY()*s)));
+	public GeomVector2D<T> multiplyScalar(final T s) {
+		return new GeomVector2D<T>(startPoint, new Point2D.Float((float)(endPoint.getX()*(float)s),(float)(endPoint.getY()*(float)s)));
 	}
 	
-	public GeomVector2D add(final GeomVector2D o) {
+	public GeomVector2D<T> add(final GeomVector2D<T> o) {
 		Point2D.Float start = new Point2D.Float((float)(o.getStartPoint().getX()+startPoint.getX()), (float) (o.getStartPoint().getY()+startPoint.getY()));
 		Point2D.Float end = new Point2D.Float((float)(o.getEndPoint().getX()+endPoint.getX()), (float) (o.getEndPoint().getY()+endPoint.getY()));
-		return new GeomVector2D(start, end);
+		return new GeomVector2D<T>(start, end);
 	}
 
 	public final Point2D getEndPoint() {
@@ -112,6 +116,7 @@ public strictfp class GeomVector2D {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
+		@SuppressWarnings("rawtypes")
 		GeomVector2D other = (GeomVector2D) obj;
 		if (endPoint == null) {
 			if (other.endPoint != null)
@@ -125,6 +130,8 @@ public strictfp class GeomVector2D {
 			return false;
 		return true;
 	}
+
+	
 	
 	
 }

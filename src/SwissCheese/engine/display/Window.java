@@ -26,6 +26,7 @@ import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
 
+import SwissCheese.annotations.NotThreadSafe;
 import SwissCheese.engine.camera.Camera;
 import SwissCheese.engine.camera.Mover;
 import SwissCheese.engine.io.images.ImageFromArray;
@@ -44,6 +45,7 @@ import SwissCheese.map.Map;
  * @version v0.1
  *
  */
+@NotThreadSafe
 public class Window extends JFrame {
 	private static final long serialVersionUID = 4044145833868554127L;
 
@@ -61,7 +63,7 @@ public class Window extends JFrame {
 	// primitives:
 	private int width;
 	private int height;
-	private int[] pixels;
+	private volatile int[] pixels;
 
 	public Window(int width, int height, Map map, float FOV) {
 		this.width = width;

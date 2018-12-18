@@ -27,6 +27,8 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+import SwissCheese.annotations.Immutable;
+
 /**
  * A {@code Json} to allow interface types to be serialized by {@code Gson}.
  * <p>
@@ -41,6 +43,7 @@ import com.google.gson.JsonSerializer;
  * @see SwissCheese#engine#io#Convertable
  *
  */
+@Immutable
 public class InterfacetoJson<T extends Convertable> implements JsonSerializer<T>, JsonDeserializer<T> {
 
 	private static final String CLASSNAME = "className";

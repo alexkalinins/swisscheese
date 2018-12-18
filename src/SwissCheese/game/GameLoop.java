@@ -18,6 +18,7 @@ package SwissCheese.game;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import SwissCheese.annotations.NotThreadSafe;
 import SwissCheese.engine.display.Window;
 import SwissCheese.map.Map;
 
@@ -31,6 +32,7 @@ import SwissCheese.map.Map;
  * @since v0.2
  * @version v0.2
  */
+@NotThreadSafe
 public final strictfp class GameLoop implements Runnable {
 	private static Thread thread;
 	private static AtomicBoolean running;

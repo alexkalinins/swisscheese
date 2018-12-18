@@ -18,6 +18,8 @@ package SwissCheese.engine.io.images;
 
 import java.io.File;
 
+import SwissCheese.annotations.Immutable;
+
 /**
  * This object stores an image as an {@code int} array of pixel RGB values and
  * the image's width and height.
@@ -25,44 +27,51 @@ import java.io.File;
  * @author Alex Kalinins
  * @since 2018-12-15
  * @since v0.3
- * @version v0.1
+ * @version v0.2
  */
+@Immutable
 public class PixelImage {
-	private int width;
-	private int height;
-	private int[] pixels;
+	private final int width;
+	private final int height;
+	private final int[] pixels;
 
+	/**
+	 * Constructor from a pixel array (integer array or RGB values), image width and
+	 * height. Since pixels is a regular array, image width and height specify the
+	 * dimensions of the image and how the image would be scanned.
+	 * <p>
+	 * The length of the pixels array should be equal to the width multiplied by the
+	 * height of the image.
+	 * 
+	 * @param pixels {@code int} array of RGB values
+	 * @param width  the width of the image
+	 * @param height the height of the image
+	 */
 	public PixelImage(int[] pixels, int width, int height) {
-		super();
+		assert pixels.length == width * height;
+
 		this.width = width;
 		this.height = height;
 		this.pixels = pixels;
 	}
-	
+
 	public PixelImage(File file) {
-		pixels = ImageToPixels.getPixels(file);
-		width = ImageToPixels.getWidth();
-		height = ImageToPixels.getHeight();
+		this(ImageToPixels.convert(file));
 	}
 
-	public synchronized final int getWidth() {
+	public PixelImage(PixelImage image) {
+		this(image.getPixels(), image.getWidth(), image.getHeight());
+	}
+
+	public final int getWidth() {
 		return width;
 	}
 
-	public synchronized final void setWidth(int width) {
-		this.width = width;
-	}
-
-	public synchronized final int getHeight() {
+	public final int getHeight() {
 		return height;
 	}
 
-	public synchronized final void setHeight(int height) {
-		this.height = height;
+	public final int[] getPixels() {
+		return pixels.clone();
 	}
-
-	public synchronized final int[] getPixels() {
-		return pixels;
-	}
-
 }

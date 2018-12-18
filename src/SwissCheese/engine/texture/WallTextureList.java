@@ -20,6 +20,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import SwissCheese.annotations.Immutable;
+
 /**
  * This class loads images from a list of {@code File} objects into a list of
  * {@code WallTexture} objects.
@@ -29,10 +31,14 @@ import java.util.List;
  * @since v0.3
  * @version v0.1
  */
+@Immutable
 public class WallTextureList {
-	private static List<File> fileList = new ArrayList<>();
+	private final List<File> fileList = new ArrayList<>();
 
-	private WallTextureList() {
+	/**
+	 * Constructor
+	 */
+	public WallTextureList() {
 		fileList.add(new File("resources/textures/test.png"));
 		fileList.add(new File("resources/textures/test1.png"));
 	}
@@ -41,13 +47,11 @@ public class WallTextureList {
 	 * Loads a list of textures
 	 * @return
 	 */
-	public static List<WallTexture> getList() {
-		new WallTextureList();
+	public List<WallTexture> getList() {
 		List<WallTexture> list = new ArrayList<>();
 		for (File file : fileList) {
 			list.add(new WallTexture(file));
 		}
 		return list;
 	}
-
 }

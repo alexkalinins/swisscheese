@@ -22,64 +22,35 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import SwissCheese.annotations.Immutable;
+
 /**
- * Converts an image file to an integer array of pixels (the rgb values of said
- * pixels).
+ * Converts an image file to a PixelImage object.
  * 
  * @author Alex Kalinins
+ * @since 2018-12-14
+ * @since v0.3
+ * @version v0.2
  */
+@Immutable
 public final class ImageToPixels {
-	private static int width;
-	private static int height;
-	private static int[] pixels;
 
 	/**
-	 * Private constructor for {@code ImageToPixels}.
+	 * Reads data from a file into a PixelImage object.
 	 * 
-	 * @param file the file of the image being converted
+	 * @param file source of the image.
+	 * @return image from file as a PixelImage
 	 */
-	private ImageToPixels(File file) {
-		pixels = convert(file);
-	}
-
-	/**
-	 * Creates a new instance of pixels and converts the image.
-	 * 
-	 * @param file the file of image file being converted
-	 * @return the image as an int array
-	 */
-	public static synchronized int[] getPixels(File file) {
-		new ImageToPixels(file);
-		return pixels;
-	}
-
-	/**
-	 * Private converted method
-	 * 
-	 * @param file file of the image
-	 * @return the image as an int array
-	 */
-	private synchronized int[] convert(File file) {
-		int[] pixels = new int[0];
+	public static final PixelImage convert(File file) {
 		try {
 			BufferedImage imageBuffer = ImageIO.read(file);
-			width = imageBuffer.getWidth();
-			height = imageBuffer.getHeight();
-			pixels = new int[width * height];
-			// breaks down imageBuffer into array of color values (RGB)
-			imageBuffer.getRGB(0, 0, width, height, pixels, 0, width);
+			int width = imageBuffer.getWidth();
+			int height = imageBuffer.getHeight();
+			int pixels[] = imageBuffer.getRGB(0, 0, width, height, null, 0, width);
+			return new PixelImage(pixels, width, height);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return pixels;
+		return null;
 	}
-
-	public static synchronized int getWidth() {
-		return width;
-	}
-
-	public static synchronized int getHeight() {
-		return height;
-	}
-
 }

@@ -26,13 +26,11 @@ package SwissCheese.engine.keyboard.keyActions;
  */
 public class SaveGame implements KeyAction {
 	public SaveGame() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public synchronized void doAction() {
-		;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -42,7 +40,7 @@ public class SaveGame implements KeyAction {
 
 	@Override
 	public synchronized void stopAction() {
-		;
+		throw new UnsupportedOperationException();
 	}
 
 }
