@@ -47,12 +47,13 @@ import SwissCheese.maze.CellGrid.Direction;
  * @author Alex Kalinins
  * @since v0.1
  * @since 2018-11-14
+ * @version v0.2
  * @see <a href="https://en.wikipedia.org/wiki/Depth-first_search"> Randomized
  *      Depth-First Search</a>
  */
 public strictfp class Generator {
 	private final int size; // size of maze size*size
-	private Deque<Direction> log = new ArrayDeque<Direction>(); 
+	private Deque<Direction> log = new ArrayDeque<Direction>();
 	private CellGrid grid;
 	private Random rand = new SecureRandom();
 	private Point2D startingCell = new Point2D.Double();
@@ -74,6 +75,7 @@ public strictfp class Generator {
 		grid = CellGrid.newCellGrid(size, size);
 		generate();
 		maze = grid.gridTo2DArray();
+		createRealEntryAndExit(maze);
 	}
 
 	/**
@@ -133,7 +135,24 @@ public strictfp class Generator {
 		}
 
 		exit = intToDirection(rand.nextInt(3) + 1).makeExit(rand.nextInt(size - 1));
+	}
 
+	/**
+	 * Sets the location of the real entry and exit {@code Point2D} from the maze
+	 * array, after it has been converted from {@code CellGrid} object by
+	 * {@link SwissCheese.maze.CellGrid#gridTo2DArray()}
+	 * 
+	 * @param maze final maze
+	 * @since v0.2
+	 * @since 2018-12-19
+	 */
+	private void createRealEntryAndExit(Integer[][] maze) {
+		entry.setLocation(entry.getX() * 2 + 1, 0);
+		if (exit.getY() != size - 1) {
+			exit.setLocation((exit.getX() == 0) ? 0 : (exit.getX() * 2 + 1), exit.getY() * 2 + 1);
+		} else {
+			exit.setLocation(exit.getX() * 2 + 1, maze.length - 1);
+		}
 	}
 
 	/**
