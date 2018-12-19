@@ -28,7 +28,7 @@ package SwissCheese.maze;
 public strictfp class TestMain {
 
 	public static void main(String[] args) {
-		Integer[][] maze = Generator.generateMaze(60);
+		Integer[][] maze = Generator.generateMaze(20);
 
 		String block = "";
 
@@ -40,6 +40,7 @@ public strictfp class TestMain {
 		}
 		
 		System.out.println(block);
+		System.out.printf("Entry: %s, Exit: %s%n", Generator.getEntry(), Generator.getExit());
 
 	}
 

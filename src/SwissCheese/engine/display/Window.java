@@ -121,12 +121,12 @@ public class Window extends JFrame {
 	}
 
 	@Override
-	public synchronized final int getWidth() {
+	public final int getWidth() {
 		return width;
 	}
 
 	@Override
-	public synchronized final int getHeight() {
+	public final int getHeight() {
 		return height;
 	}
 

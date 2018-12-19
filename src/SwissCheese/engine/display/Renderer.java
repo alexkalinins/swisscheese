@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import SwissCheese.annotations.NotThreadSafe;
+import SwissCheese.annotations.ThreadSafe;
 import SwissCheese.engine.camera.Camera;
 import SwissCheese.engine.camera.Mover;
 import SwissCheese.engine.camera.View;
@@ -38,7 +38,7 @@ import SwissCheese.math.GeomVector2D;
  * @since v0.2
  * @version v0.1
  */
-@NotThreadSafe
+@ThreadSafe
 public class Renderer {
 	private final float width;
 	private final float height;
@@ -61,7 +61,7 @@ public class Renderer {
 	}
 
 	/**
-	 * Renders what the player is seeing through {@code Camera}. Renders into an
+	 * Renders what the player is seeing through {@link Camera}. Renders into an
 	 * array of ints (pixels) through ray-casting.
 	 * <p>
 	 * This algorithm goes through each vertical strip of the pixels array and
@@ -118,7 +118,7 @@ public class Renderer {
 			hit = false;
 			wallVertical = false;
 
-			xStrip = 2 * x / width - 1;
+			xStrip = 2f * x / width - 1f;
 
 			// moving away from single objects
 			rayDir = view.getDir().add(view.getPlane().multiplyScalar(xStrip));
@@ -136,7 +136,7 @@ public class Renderer {
 				xSideDistance = (view.getxPos() - xMap) * deltaDistance.getX();
 			} else {
 				xStep = 1;
-				xSideDistance = (xMap + 1f - view.getxPos()) * deltaDistance.getX();
+				xSideDistance = (xMap - view.getxPos() + 1f) * deltaDistance.getX();
 			}
 
 			// checks in which direction steps go and distance (y)
@@ -145,10 +145,11 @@ public class Renderer {
 				ySideDistance = (view.getyPos() - yMap) * deltaDistance.getY();
 			} else {
 				yStep = 1;
-				ySideDistance = (yMap + 1f - view.getyPos()) * deltaDistance.getY();
+				ySideDistance = (yMap - view.getyPos() + 1f) * deltaDistance.getY();
 			}
 
 			// Loop to find where the ray hits a wall
+			// TODO replace with do-while
 			while (!hit) {
 				// Jump to next square
 				if (xSideDistance < ySideDistance) {
@@ -164,37 +165,44 @@ public class Renderer {
 				hit = map.getMap()[xMap][yMap] > 0;
 			}
 
+			// is it here?
 			textureType = map.getMap()[xMap][yMap] - 1;
 
 			wallDist = (wallVertical) ? Math.abs((yMap - view.getyPos() + (1 - yStep) / 2) / rayDir.getY())
 					: Math.abs((xMap - view.getxPos() + (1 - xStep) / 2) / rayDir.getX());
-			lineHeight = (wallDist > 0) ? (int) Math.abs((int) (height / wallDist)) : (int) height;
 
+			lineHeight = (wallDist > 0) ? (int) Math.abs(height / wallDist) : (int) height;
+
+			// determine from where the where the line is drawn
 			wallStart = (int) (height - lineHeight) / 2;
+			// if the line starts at a negative, it starts 0:
 			wallStart = (0 > wallStart) ? 0 : wallStart;
 
+			// determine where the line ends
 			wallEnd = (int) (height + lineHeight) / 2;
-			wallEnd = (wallEnd > height) ? (int) height : wallStart;
+			// if the line ends off the screen, the line is the same as screen height
+			wallEnd = (wallEnd > height) ? (int) height : wallEnd;
 
 			wallHit = (int) ((wallVertical)
 					? (view.getxPos() + ((yMap - view.getyPos() + (1 - yStep) / 2) / rayDir.getY()) * rayDir.getX())
 					: (view.getyPos() + ((xMap - view.getxPos() + (1 - xStep) / 2) / rayDir.getX()) * rayDir.getY()));
-			wallHit -= Math.floor(wallHit);
+			wallHit -= Math.floor(wallHit); // creates a multiplier for scaling texture
 
+			// multiplying texture size by wallHit to get proper texture size
 			xTexture = wallHit * (wallTextures.get(textureType).getSize());
 
-			if (!wallVertical && rayDir.getX() > 0)
+			if ((!wallVertical && rayDir.getX() > 0) || (wallVertical && rayDir.getY() < 0))
 				xTexture = wallTextures.get(textureType).getSize() - textureType - 1;
-			if (wallVertical && rayDir.getY() < 0)
-				xTexture = wallTextures.get(textureType).getSize() - textureType - 1;
+
 			for (int i = wallStart; i < wallEnd; i++) {
 				yTexture = (((int) (i * 2 - height + lineHeight) << 6) / lineHeight) / 2;
 
-				// Array index out of bounds, somethign wrong with math or thread safety
-
+				
+				// Array index out of bounds, something wrong with math or thread safety
 				try {
-					color = wallTextures.get(textureType).getImage().getPixels()[xTexture
-							+ (yTexture * wallTextures.get(textureType).getSize())];
+//					color = wallTextures.get(textureType).getImage().getPixels()[Math.abs(xTexture
+//							+ (yTexture * wallTextures.get(textureType).getSize()))];
+					color = Color.black.getRGB();
 				} catch (ArrayIndexOutOfBoundsException e) {
 					e.printStackTrace();
 					color = 0;
@@ -203,7 +211,7 @@ public class Renderer {
 				// TODO rename to wallHorizontal
 				if (!wallVertical) {
 					color >>= 1;
-					color &= 8500000;
+					color &= 835571;
 				}
 
 				pixels[(int) (x + i * (width))] = color;
