@@ -33,7 +33,7 @@ import SwissCheese.annotations.Immutable;
  * @version v0.2
  */
 @Immutable
-public final class ImageToPixels {
+public final class FileToPixelImage {
 
 	/**
 	 * Reads data from a file into a PixelImage object.

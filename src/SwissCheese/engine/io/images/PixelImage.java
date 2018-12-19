@@ -56,7 +56,7 @@ public class PixelImage {
 	}
 
 	public PixelImage(File file) {
-		this(ImageToPixels.convert(file));
+		this(FileToPixelImage.convert(file));
 	}
 
 	public PixelImage(PixelImage image) {

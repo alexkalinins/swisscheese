@@ -40,7 +40,7 @@ public class ImageFromArray {
 	 * @return {@code Image} from pixels array
 	 */
 	public static Image getImage(int[] pixels, int width, int height) {
-		final BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		final BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		image.setRGB(0, 0, width, height, pixels, 0, width);
 		return image;
 	}
