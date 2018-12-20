@@ -73,7 +73,7 @@ public class View {
 	 * @param yPlane y plane of vector
 	 */
 	public synchronized void updateView(float xPos, float yPos, float xDir, float yDir, float xPlane, float yPlane) {
-		updateView(new GeomVector2D<Float>(xPos, xPos), new GeomVector2D<Float>(xDir, yDir), new GeomVector2D<Float>(xPlane, yPlane));
+		updateView(new GeomVector2D<Float>(xPos, yPos), new GeomVector2D<Float>(xDir, yDir), new GeomVector2D<Float>(xPlane, yPlane));
 	}
 
 	public synchronized void updateView(GeomVector2D<Float> pos, GeomVector2D<Float> dir, GeomVector2D<Float> plane) {
@@ -82,7 +82,7 @@ public class View {
 		this.pos = pos;
 	}
 
-	public synchronized float getxPos() {
+	public float getxPos() {
 		return pos.getX();
 	}
 
@@ -90,15 +90,15 @@ public class View {
 		setPos(new GeomVector2D<Float>(xPos, pos.getY()));
 	}
 
-	public synchronized float getyPos() {
+	public float getyPos() {
 		return pos.getY();
 	}
 
 	public synchronized void setyPos(float yPos) {
-		setPos(new GeomVector2D<Float>(pos.getY(), yPos));
+		setPos(new GeomVector2D<Float>(pos.getX(), yPos));
 	}
 
-	public synchronized float getxDir() {
+	public float getxDir() {
 		return dir.getX();
 	}
 
@@ -106,7 +106,7 @@ public class View {
 		setDir(new GeomVector2D<Float>(xDir, dir.getY()));
 	}
 
-	public synchronized float getyDir() {
+	public float getyDir() {
 		return dir.getY();
 	}
 
@@ -114,24 +114,24 @@ public class View {
 		setDir(new GeomVector2D<Float>(dir.getX(), yDir));
 	}
 
-	public synchronized float getxPlane() {
+	public float getxPlane() {
 		return plane.getX();
 	}
 
 	public synchronized void setxPlane(float xPlane) {
-		setPlane(new GeomVector2D<Float>(xPlane, dir.getY()));
+		setPlane(new GeomVector2D<Float>(xPlane, plane.getY()));
 	}
 
-	public synchronized float getyPlane() {
+	public float getyPlane() {
 		return plane.getY();
 	}
 
 	public synchronized void setyPlane(float yPlane) {
-		setDir(new GeomVector2D<Float>(dir.getX(), yPlane));
+		setDir(new GeomVector2D<Float>(plane.getX(), yPlane));
 
 	}
 
-	public synchronized GeomVector2D<Float> getPos() {
+	public GeomVector2D<Float> getPos() {
 		return pos;
 	}
 
@@ -139,7 +139,7 @@ public class View {
 		this.pos = pos;
 	}
 
-	public synchronized GeomVector2D<Float> getDir() {
+	public GeomVector2D<Float> getDir() {
 		return dir;
 	}
 
@@ -147,7 +147,7 @@ public class View {
 		this.dir = dir;
 	}
 
-	public synchronized GeomVector2D<Float> getPlane() {
+	public GeomVector2D<Float> getPlane() {
 		return plane;
 	}
 
