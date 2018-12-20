@@ -25,10 +25,10 @@ package SwissCheese.maze;
  * @since v0.1
  * @since 2018-11-15
  */
-public strictfp class TestMain {
+public  class TestMain {
 
 	public static void main(String[] args) {
-		Integer[][] maze = Generator.generateMaze(20);
+		int[][] maze = Generator.generateMaze(10);
 
 		String block = "";
 

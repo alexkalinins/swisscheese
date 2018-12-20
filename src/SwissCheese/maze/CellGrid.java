@@ -35,11 +35,11 @@ import java.util.*;
  * WORK!</b>
  * 
  * @author Alex Kalinins
- * @since v0.1
+ * @since v0.2
  * @since 2018-11-14
  *
  */
-public strictfp class CellGrid {
+public class CellGrid {
 	private static int gridWidth;
 	private static int gridHeight;
 	private static boolean[][] northWall;
@@ -385,15 +385,15 @@ public strictfp class CellGrid {
 	}
 
 	/**
-	 * Converts an the CellGrid object to an 2D integer array. If a wall is to be
+	 * Converts an the CellGrid object to an 2D {@code int} array. If a wall is to be
 	 * drawn in that location, the Integer will have a value of 1, else value of 0.
 	 * <p>
-	 * Integers are used instead of booleans because the int value represents the
+	 * Integers are used instead of booleans because the {@code int} value represents the
 	 * type of wall texture used. (randomly selected by a different method).
 	 * 
-	 * @return CellGrid as a 2D Integer Array
+	 * @return CellGrid as a 2D {@code int} Array
 	 */
-	public synchronized Integer[][] gridTo2DArray() {
+	public synchronized int[][] gridTo2DArray() {
 		List<List<Integer>> map = new ArrayList<List<Integer>>();
 
 		List<Integer> line1 = new ArrayList<Integer>();
@@ -442,17 +442,17 @@ public strictfp class CellGrid {
 			else
 				line1.add(1);
 		}
-		line1.add(1); //corner piece
+		line1.add(1); // corner piece
 
 		map.add(line1);
 
-		Integer[][] array = new Integer[2 * gridWidth + 1][2 * gridHeight + 1];
 
-		for (int i = 0; i < array.length; i++) {
-			array[i] = map.get(i).toArray(new Integer[map.get(i).size()]);
+		int[][] primitiveMap = new int[map.size()][map.size()];
+		for (int i = 0; i < primitiveMap.length; i++) {
+			primitiveMap[i] = map.get(i).stream().mapToInt(Integer::intValue).toArray();
 		}
 
-		return array;
+		return primitiveMap;
 	}
 
 	/**

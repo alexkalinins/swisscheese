@@ -31,11 +31,12 @@ import SwissCheese.maze.Generator;
  * @author Alex Kalinins
  * @since 2018-12-19
  * @since v0.3
+ * @version v0.2
  */
 class GeneratorTest {
 	private Point2D entry;
 	private Point2D exit;
-	private Integer[][] maze;
+	private int[][] maze;
 	private final int SIZE = 20;
 
 	/**
@@ -53,9 +54,9 @@ class GeneratorTest {
 	 */
 	@Test
 	void testGetExit() {
-		assertNotEquals(0,(int) exit.getX() % 2); // count starts at 0
-		assertTrue(exit.getY()==maze.length-1||exit.getY()%2 != 0);
-		assertEquals((Integer)0,maze[(int) exit.getY()][(int) exit.getX()]);
+		assertNotEquals(0, (int) exit.getX() % 2); // count starts at 0
+		assertTrue(exit.getY() == maze.length - 1 || exit.getY() % 2 != 0);
+		assertEquals(0, maze[(int) exit.getY()][(int) exit.getX()]);
 	}
 
 	/**
@@ -64,8 +65,8 @@ class GeneratorTest {
 	@Test
 	void testGetEntry() {
 		assertNotEquals(0, (int) entry.getX() % 2);
-		assertEquals(0,(int) entry.getY());
-		assertEquals((Integer)0,maze[(int) entry.getY()][(int) entry.getX()]);
+		assertEquals(0, (int) entry.getY());
+		assertEquals(0, maze[(int) entry.getY()][(int) entry.getX()]);
 
 	}
 

@@ -47,11 +47,11 @@ import SwissCheese.maze.CellGrid.Direction;
  * @author Alex Kalinins
  * @since v0.1
  * @since 2018-11-14
- * @version v0.2
+ * @version v0.3
  * @see <a href="https://en.wikipedia.org/wiki/Depth-first_search"> Randomized
  *      Depth-First Search</a>
  */
-public strictfp class Generator {
+public  class Generator {
 	private final int size; // size of maze size*size
 	private Deque<Direction> log = new ArrayDeque<Direction>();
 	private CellGrid grid;
@@ -60,7 +60,7 @@ public strictfp class Generator {
 	private Point2D currentCell = new Point2D.Double();
 	private static Point2D exit = new Point2D.Double();
 	private static Point2D entry = new Point2D.Double();
-	private static Integer[][] maze;
+	private static int[][] maze;
 	public static Lock lock = new ReentrantLock();
 
 	/**
@@ -86,7 +86,7 @@ public strictfp class Generator {
 	 *             size is only of the CellGrid, and NOT the final map. The size of
 	 * @return the newly generated maze map as a 2D Integer array.
 	 */
-	public static Integer[][] generateMaze(int size) {
+	public static int[][] generateMaze(int size) {
 		lock.lock();
 		new Generator(size);
 		lock.unlock();
@@ -146,7 +146,7 @@ public strictfp class Generator {
 	 * @since v0.2
 	 * @since 2018-12-19
 	 */
-	private void createRealEntryAndExit(Integer[][] maze) {
+	private void createRealEntryAndExit(int[][] maze) {
 		entry.setLocation(entry.getX() * 2 + 1, 0);
 		if (exit.getY() != size - 1) {
 			exit.setLocation((exit.getX() == 0) ? 0 : (exit.getX() * 2 + 1), exit.getY() * 2 + 1);
