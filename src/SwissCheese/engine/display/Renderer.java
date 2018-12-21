@@ -23,7 +23,7 @@ import SwissCheese.annotations.ThreadSafe;
 import SwissCheese.engine.camera.Camera;
 import SwissCheese.engine.camera.Mover;
 import SwissCheese.engine.camera.View;
-import SwissCheese.engine.texture.Darken;
+import SwissCheese.engine.imageEffects.ChangeGamma;
 import SwissCheese.engine.texture.WallTexture;
 import SwissCheese.engine.texture.WallTextureList;
 import SwissCheese.map.Map;
@@ -210,7 +210,7 @@ public class Renderer {
 				rgb = wallTextures.get(textureType).getImage().getPixels()[xTexture + (yTexture * textureSize)];
 				// darkening some walls for 3D effect, 0.6 works the best IMO
 				if (wallVertical)
-					rgb = Darken.getColor(rgb, 0.6f);
+					rgb = ChangeGamma.getColor(rgb, 0.6f);
 				pixels[(int) (x + y * (width))] = rgb;
 			}
 		}

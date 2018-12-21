@@ -14,26 +14,31 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package SwissCheese.engine.texture;
+package SwissCheese.engine.imageEffects;
 
 /**
- * Image darkening effect.
+ * Gamma changing effect. Makes an image brighter or darker.
  * 
  * @author Alex Kalinins
  * @since 2018-12-20
  * @since v0.3
  * @version v0.1
  */
-public class Darken {
+public class ChangeGamma extends ImageEffect {
 
 	/**
-	 * Darkens a color (RGB or RGBA)
+	 * Changes gamma of a color (RGB or RGBA)
 	 * 
-	 * @param color            color being darkened
-	 * @param effectMultiplier by how much color is darkened (closer to 1, brighter)
-	 * @return darkened color
+	 * @param color       color being effected
+	 * @param coefficient by how much color is darkened (0<{@code coefficient}<1 =
+	 *                    darken; 1<{@code coefficient} = brighten)
+	 * @return color with the applied effect.
 	 */
-	public static int getColor(final int color, final float effectMultiplier) {
+	public static int getColor(int color, final float coefficient) {
+		if (coefficient <= 0) {
+			throw new IllegalArgumentException("effect coefficient must be greater than 0");
+		}
+
 		final int MASK = 0xFF; // mask
 		// breaking down color into its components
 		int alpha = (color >>> 24) & MASK;
@@ -42,9 +47,9 @@ public class Darken {
 		int blue = color & MASK;
 
 		// making darkening factor for each component
-		float redDecimal = red / 255f * effectMultiplier;
-		float greenDecimal = green / 255f * effectMultiplier;
-		float blueDecimal = blue / 255f * effectMultiplier;
+		float redDecimal = red / 255f * coefficient;
+		float greenDecimal = green / 255f * coefficient;
+		float blueDecimal = blue / 255f * coefficient;
 
 		// darkening
 		red = (int) (255 * redDecimal);
