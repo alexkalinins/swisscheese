@@ -33,7 +33,7 @@ import SwissCheese.map.Map;
  * @version v0.2
  */
 @NotThreadSafe
-public final strictfp class GameLoop implements Runnable {
+public final class GameLoop implements Runnable {
 	private static Thread thread;
 	private static AtomicBoolean running;
 	private final float FRAME_RATE; // how many frames in a second
@@ -45,7 +45,6 @@ public final strictfp class GameLoop implements Runnable {
 		// calculate how long each frame is.
 		this.FRAME_RATE = FRAME_RATE;
 		FRAME_DURATION = 1f / FRAME_RATE;
-		
 
 		thread = new Thread(this);
 		running = new AtomicBoolean();
@@ -59,7 +58,7 @@ public final strictfp class GameLoop implements Runnable {
 	/**
 	 * starts the game thread
 	 */
-	private synchronized void start() {
+	private void start() {
 		running.set(true);
 		thread.start();
 	}
@@ -67,7 +66,7 @@ public final strictfp class GameLoop implements Runnable {
 	/**
 	 * stops the game safely
 	 */
-	public static synchronized void stop() {
+	public static void stop() {
 		running.set(false);
 		try {
 			thread.join();
@@ -94,6 +93,21 @@ public final strictfp class GameLoop implements Runnable {
 				// happens when the game closes but not fully (BufferStrategy)
 			}
 		} while (running.get());
+	}
+
+	public void pauseGame() {
+		try {
+			thread.wait();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		running.set(false);
+	}
+
+	public void resumeGame() {
+		running.set(true);
+		thread.notify();
+
 	}
 
 	/**
@@ -147,30 +161,18 @@ public final strictfp class GameLoop implements Runnable {
 			}
 			return false;
 		}
-		
+
 		public static AtomicBoolean isUpdating() {
 			updating.set(isWindowUpdating());
 			return updating;
 		}
 	}
 
-//	public synchronized void closeEverything(WindowEvent e) {
-//		System.out.println("window closed by user");
-//		try {
-//
-//			Mover.stopAllThreads();
-//		} catch (InterruptedException e1) {
-//			e1.printStackTrace();
-//		}
-//		stop();
-//		System.exit(0);
-//	}
-
-	public synchronized AtomicBoolean isRunning() {
+	public AtomicBoolean isRunning() {
 		return running;
 	}
 
-	public synchronized float getFRAME_RATE() {
+	public float getFRAME_RATE() {
 		return FRAME_RATE;
 	}
 

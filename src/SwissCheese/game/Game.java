@@ -39,8 +39,8 @@ public class Game{
 	 * Game object constructor
 	 */
 	public Game() {
-		map = new Map(20);
-		g = new GameLoop(640, 480, 60f, -0.6f, map.getSize());
+		map = new Map(10);
+		g = new GameLoop(640, 480, 60f, -0.9f, map.getSize());
 		
 	}
 	
@@ -56,15 +56,6 @@ public class Game{
 	 */
 	public void startGame() {
 		
-	}
-	
-	/**
-	 * Main game loop
-	 */
-	public void loop() {
-		while(true) {
-			
-		}
 	}
 	
 	/**

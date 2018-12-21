@@ -69,7 +69,7 @@ public class Window extends JFrame {
 		this.width = width;
 		this.height = height;
 
-		camera = new Camera(width, height, map, map.getEntry(), FOV);
+		camera = new Camera(width, height, map, FOV);
 		renderer = new Renderer(map, camera, width, height);
 		mover = camera.getMover();
 
@@ -101,23 +101,26 @@ public class Window extends JFrame {
 	 * allows the next frame to be rendered inside a buffer of the buffer strategy,
 	 * and then it switches.
 	 */
-	public synchronized void switchBuffer() {
+	public void switchBuffer() {
 		buffer = getBufferStrategy();
 		if (buffer == null) {
 			System.out.println("Creating a new buffer");
-			createBufferStrategy(3);
+			createBufferStrategy(2);
 			return;
 		}
-		graphics = buffer.getDrawGraphics();
-		graphics.drawImage(bufferImage, 0, 0, bufferImage.getWidth(), bufferImage.getHeight(), null);
-		graphics.dispose();
+		try {
+			graphics = buffer.getDrawGraphics();
+			graphics.drawImage(bufferImage, 0, 0, bufferImage.getWidth(), bufferImage.getHeight(), null);
+		} finally {
+			graphics.dispose();
+		}
 		buffer.show();
 
 	}
 
-	public synchronized void render() {
+	public void render() {
 		pixels = renderer.render(pixels);
-		bufferImage = (BufferedImage)ImageFromArray.getImage(pixels, width, height);
+		bufferImage = (BufferedImage) ImageFromArray.getImage(pixels, width, height);
 	}
 
 	@Override

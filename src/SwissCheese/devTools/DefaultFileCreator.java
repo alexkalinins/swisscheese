@@ -39,7 +39,7 @@ class DefaultFileCreator {
 	public static Gson gson;
 
 	public static void load() {
-		p = new KeyActionPreference();
+		//p = new KeyActionPreference();
 		p = new KeyActionPreference(new GoForward(), new GoLeft(), new GoBackward(), new GoRight(), null, null,
 				new LookLeft(), new LookRight(), new CloseGame(), null, null, null, null, null, null, null, null, null,
 				null, null);

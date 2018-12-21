@@ -16,10 +16,7 @@
  */
 package SwissCheese.math;
 
-import java.awt.geom.Point2D;
-
 import SwissCheese.annotations.Immutable;
-
 
 /**
  * A 2D vector to be used in mathematics or geometry calculations
@@ -30,18 +27,16 @@ import SwissCheese.annotations.Immutable;
  * @since v0.1
  */
 @Immutable
-public strictfp class GeomVector2D<T extends Number> {
-	private final Point2D.Float endPoint;
-	private final Point2D.Float startPoint;
-	
-
+public class GeomVector2D<T extends Number> {
+	private final GeomPoint2D<T> endPoint;
+	private final GeomPoint2D<T> startPoint;
 	/**
 	 * Constructor
 	 * 
 	 * @param startPoint start point of vector
 	 * @param endPoint   end point of vector
 	 */
-	public GeomVector2D(Point2D.Float startPoint, Point2D.Float endPoint) {
+	public GeomVector2D(GeomPoint2D<T> startPoint, GeomPoint2D<T> endPoint) {
 		this.startPoint = startPoint;
 		this.endPoint = endPoint;
 	}
@@ -51,8 +46,9 @@ public strictfp class GeomVector2D<T extends Number> {
 	 * 
 	 * @param endPoint end point of vector
 	 */
-	public GeomVector2D(Point2D.Float endPoint) {
-		this(new Point2D.Float(0, 0), endPoint);
+	public GeomVector2D(GeomPoint2D<T> endPoint) {
+		this(new GeomPoint2D<T>(GenericsMath.castToGeneric(0, endPoint.getClassType()), GenericsMath.castToGeneric(0, endPoint.getClassType())), endPoint);
+		GenericsMath.castToGeneric(new Integer(0), Number.class);
 	}
 
 	/**
@@ -62,41 +58,57 @@ public strictfp class GeomVector2D<T extends Number> {
 	 * @param y y location of end point
 	 */
 	public GeomVector2D(T x, T y) {
-		this(new Point2D.Float((float)x, (float)y));
-	}
-	
-	public GeomVector2D<T> multiplyScalar(final T s) {
-		return new GeomVector2D<T>(startPoint, new Point2D.Float((float)(endPoint.getX()*(float)s),(float)(endPoint.getY()*(float)s)));
-	}
-	
-	public GeomVector2D<T> add(final GeomVector2D<T> o) {
-		Point2D.Float start = new Point2D.Float((float)(o.getStartPoint().getX()+startPoint.getX()), (float) (o.getStartPoint().getY()+startPoint.getY()));
-		Point2D.Float end = new Point2D.Float((float)(o.getEndPoint().getX()+endPoint.getX()), (float) (o.getEndPoint().getY()+endPoint.getY()));
-		return new GeomVector2D<T>(start, end);
+		this(new GeomPoint2D<T>(x, y));
 	}
 
-	public final Point2D getEndPoint() {
+	public GeomVector2D<T> multiplyScalar(final T s) {
+		return new GeomVector2D<T>(startPoint, new GeomPoint2D<T>(GenericsMath.multiplyObj(endPoint.getX(), s),
+				GenericsMath.multiplyObj(endPoint.getY(), s)));
+	}
+
+	public GeomVector2D<T> add(final GeomVector2D<T> o) {
+		GeomPoint2D<T> start = new GeomPoint2D<T>(GenericsMath.addObj(o.getStartPoint().getX(), startPoint.getX()),
+				GenericsMath.addObj(o.getStartPoint().getY(), startPoint.getY()));
+		GeomPoint2D<T> end = new GeomPoint2D<T>(GenericsMath.addObj(o.getEndPoint().getX(), endPoint.getX()),
+				GenericsMath.addObj(o.getEndPoint().getY(), endPoint.getY()));
+		return new GeomVector2D<T>(start, end);
+	}
+	
+	public GeomVector2D<T> power(final int power){
+		GeomPoint2D<T> start = new GeomPoint2D<T>(GenericsMath.power(startPoint.getX(),power), GenericsMath.power(startPoint.getY(),power));
+		GeomPoint2D<T> end = new GeomPoint2D<T>(GenericsMath.power(endPoint.getX(),power), GenericsMath.power(endPoint.getY(),power));
+
+		return new GeomVector2D<T>(start,end);
+	}
+	
+	public GeomVector2D<T> swapXY(){
+		return new GeomVector2D<>(endPoint, startPoint);
+	}
+
+	public final GeomPoint2D<T> getEndPoint() {
 		return endPoint;
 	}
 
-	public final Point2D getStartPoint() {
+	public final GeomPoint2D<T> getStartPoint() {
 		return startPoint;
 	}
-	
+
 	/**
 	 * Retrieves x of endpoint
+	 * 
 	 * @return x of endpoint
 	 */
-	public final float getX() {
-		return (float)endPoint.getX();
+	public final T getX() {
+		return endPoint.getX();
 	}
-	
+
 	/**
 	 * Retrieves y of endpoint
+	 * 
 	 * @return y of endpoint
 	 */
-	public final float getY() {
-		return (float)endPoint.getY();
+	public final T getY() {
+		return endPoint.getY();
 	}
 
 	@Override
@@ -131,7 +143,4 @@ public strictfp class GeomVector2D<T extends Number> {
 		return true;
 	}
 
-	
-	
-	
 }

@@ -26,14 +26,14 @@ import SwissCheese.maze.Generator;
  * 
  * @author Alex Kalinins
  * @since 2018-12-10
- * @since v0.2
+ * @since v0.3
  * @version v0.3
  * @see SwissCheese.maze
  *
  */
 @Immutable
 public final class Map {
-	private final Integer[][] map;
+	private final int[][] map;
 	private final Point2D entry;
 	private final Point2D exit;
 	private final int size; //this size is in walls, not cells
@@ -62,8 +62,8 @@ public final class Map {
 	 * @return 2D Integer array of the maze.
 	 * @see maze#Generator#generateMaze(size)
 	 */
-	private Integer[][] GenerateMaze(int size) {
-		Integer[][] map = Generator.generateMaze(size);
+	private int[][] GenerateMaze(int size) {
+		int[][] map = Generator.generateMaze(size);
 		
 
 		Point2D entry = Generator.getEntry();
@@ -84,8 +84,8 @@ public final class Map {
 	}
 	
 
-	public Integer[][] getMap() {
-		return map;
+	public int[][] getMap() {
+		return map.clone();
 	}
 	
 	public int getSize() {

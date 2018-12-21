@@ -72,6 +72,9 @@ public class PixelImage {
 	}
 
 	public final int[] getPixels() {
-		return pixels.clone();
+		//literally the worst!!!:
+		//return pixels.clone();
+		
+		return pixels;
 	}
 }

@@ -18,13 +18,12 @@ package SwissCheese.engine.display;
 
 import java.awt.Color;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import SwissCheese.annotations.ThreadSafe;
 import SwissCheese.engine.camera.Camera;
 import SwissCheese.engine.camera.Mover;
 import SwissCheese.engine.camera.View;
+import SwissCheese.engine.texture.Darken;
 import SwissCheese.engine.texture.WallTexture;
 import SwissCheese.engine.texture.WallTextureList;
 import SwissCheese.map.Map;
@@ -43,21 +42,20 @@ public class Renderer {
 	private final float width;
 	private final float height;
 	private List<WallTexture> wallTextures;
-	private Map map;
 	private View view;
+	private final int[][] maze;
 	private Camera camera;
-	public static Lock fillLoc = new ReentrantLock();
 	// public static Lock update = new ReentrantLock();
 
 	private final Color FLOOR = Color.DARK_GRAY; // the color of the floor
 	private final Color SKY = Color.cyan; // the color of the sky
 
 	public Renderer(Map map, Camera camera, float width, float height) {
-		this.map = map;
 		this.camera = camera;
 		this.width = width;
 		this.height = height;
 		wallTextures = new WallTextureList().getList();
+		maze = map.getMap();
 	}
 
 	/**
@@ -75,154 +73,152 @@ public class Renderer {
 	 * @return updated pixels array.
 	 * @see <a href="https://lodev.org/cgtutor/raycasting.html">Ray-Casting</a>
 	 */
-	public synchronized int[] render(int[] pixels) {
-		fillLoc.lock();
-		view = camera.getView();
-		fillLoc.unlock();
-
-		float xStrip; // x coordinate of scanning strip on camera plane
-
-		GeomVector2D<Float> rayDir; // rayDirection vector
-
-		int xMap; // x location on the map
-		int yMap; // y location on the map
-
-		float xSideDistance; // distance between current position and next side (x)
-		float ySideDistance; // distance between current position and next side (y)
-
-		GeomVector2D<Float> deltaDistance;
-
-		float wallDist; // distance between player and wall
-
-		int xStep; // the direction in which the ray goes (up or down)
-		int yStep; // the direction in which the ray goes (left or right)
-
-		boolean hit;
-		boolean wallVertical; // true if the wall is vertical
-
-		int lineHeight;
-		int wallStart; // the starting point from which the wall is drawn (top).
-		int wallEnd; // the ending point to which the wall is drawn (bottom).
-		int wallHit; // where on the strip the wall was hit
-
-		int textureType; // the type of texture on the wall (wall number in map array)
-		int xTexture; // x coordinate of the texture
-		int yTexture; // y coordinate of the texture
-		int color; // the color of a pixel.
-
+	public int[] render(int[] pixels) {
 		pixels = fillBackground(pixels);
 
-		fillLoc.lock();
-		// vertical slices:
-		for (int x = 0; x < (int) width; x++) {
-			hit = false;
+		view = camera.getView();
+
+		// caching data from view:
+		GeomVector2D<Float> dir = view.getDir();
+		GeomVector2D<Float> plane = view.getPlane();
+
+		// Does not make sense to use GeomVector2D for pos
+		final float xPos = view.getxPos();
+		final float yPos = view.getyPos();
+
+		float scanLine;
+		int xMap;
+		int yMap;
+
+		// length of a ray from the current position to next x or y-side
+		double xSideDistance;
+		double ySideDistance;
+
+		double distanceToWall;
+
+		// direction to go in x and y
+		int xStep; 
+		int yStep;
+
+		int wallLength; // the length of wall on scanLine
+		int wallStart; // y coordinate on scanLine where the wall starts.
+		int wallEnd;// y coordinate on scanLine where the wall ends.
+
+		int textureType; // type of texture (number in map wall)
+
+		double wallHit; // point where the ray hits the wall
+
+		int xTexture;
+		int yTexture;
+
+		int rgb; //color of a pixel
+
+		//the wall is horizontal or vertical relative to map (top-down)
+		boolean wallVertical;
+
+		GeomVector2D<Float> rayDir; // ray direction vector
+		GeomVector2D<Float> deltaDist; // difference in distance
+
+		/**
+		 * Rendering the image in a series of vertical scans, each one pixel thick.
+		 */
+		for (int x = 0; x < width; x++) {
+			// the position of this scan line on the camera plane relative to POV
+			scanLine = 2 * x / (float) width - 1f;
 			wallVertical = false;
 
-			xStrip = 2f * x / width - 1f;
+			// position on the map; can't move out of for loop for some reason
+			xMap = (int) xPos;
+			yMap = (int) yPos;
 
-			// moving away from single objects
-			rayDir = view.getDir().add(view.getPlane().multiplyScalar(xStrip));
+			// where the ray going.
+			rayDir = dir.add(plane.multiplyScalar(scanLine));
 
-			xMap = (int) view.getxPos();
-			yMap = (int) view.getyPos();
-
-			deltaDistance = new GeomVector2D<Float>(
+			// distance between two walls
+			deltaDist = new GeomVector2D<Float>(
 					(float) Math.sqrt(1 + Math.pow(rayDir.getY(), 2) / Math.pow(rayDir.getX(), 2)),
 					(float) Math.sqrt(1 + Math.pow(rayDir.getX(), 2) / Math.pow(rayDir.getY(), 2)));
 
-			// checks in which direction steps go and distance (x)
+			// calculating in which direction ray is going and initial distance.
+			// in x direction:
 			if (rayDir.getX() < 0) {
 				xStep = -1;
-				xSideDistance = (view.getxPos() - xMap) * deltaDistance.getX();
+				xSideDistance = (xPos - xMap) * deltaDist.getX();
 			} else {
 				xStep = 1;
-				xSideDistance = (xMap - view.getxPos() + 1f) * deltaDistance.getX();
+				xSideDistance = (xMap + 1d - xPos) * deltaDist.getX();
 			}
 
-			// checks in which direction steps go and distance (y)
+			// in y direction:
 			if (rayDir.getY() < 0) {
 				yStep = -1;
-				ySideDistance = (view.getyPos() - yMap) * deltaDistance.getY();
+				ySideDistance = (yPos - yMap) * deltaDist.getY();
 			} else {
 				yStep = 1;
-				ySideDistance = (yMap - view.getyPos() + 1f) * deltaDistance.getY();
+				ySideDistance = (yMap + 1d - yPos) * deltaDist.getY();
 			}
 
-			// Loop to find where the ray hits a wall
-			// TODO replace with do-while
-			while (!hit) {
-				// Jump to next square
+			// calculating distance to wall:
+			do {
+				//going closer towards the wall
 				if (xSideDistance < ySideDistance) {
-					xSideDistance += deltaDistance.getX();
+					xSideDistance += deltaDist.getX();
 					xMap += xStep;
 					wallVertical = false;
 				} else {
-					ySideDistance += deltaDistance.getY();
+					ySideDistance += deltaDist.getY();
 					yMap += yStep;
 					wallVertical = true;
 				}
+			} while (maze[xMap][yMap] <= 0);// ray has hit the wall
 
-				hit = map.getMap()[xMap][yMap] > 0;
-			}
+			// distance from the player to the wall
+			distanceToWall = (wallVertical) ? Math.abs((yMap - yPos + (1 - yStep) / 2) / rayDir.getY())
+					: Math.abs((xMap - xPos + (1 - xStep) / 2) / rayDir.getX());
 
-			// is it here?
-			textureType = map.getMap()[xMap][yMap] - 1;
+			// calculating wall line length from wall distance (perspective)
+			wallLength = (int) ((distanceToWall > 0) ? Math.abs(height / distanceToWall) : height);
 
-			wallDist = (wallVertical) ? Math.abs((yMap - view.getyPos() + (1 - yStep) / 2) / rayDir.getY())
-					: Math.abs((xMap - view.getxPos() + (1 - xStep) / 2) / rayDir.getX());
+			// wall line start point:
+			wallStart = (int) (-wallLength / 2 + height / 2);
+			wallStart = (wallStart < 0) ? 0 : wallStart; // if it's off the screen
 
-			lineHeight = (wallDist > 0) ? (int) Math.abs(height / wallDist) : (int) height;
+			// wall line end point:
+			wallEnd = (int) (wallLength / 2 + height / 2);
+			wallEnd = (wallEnd > height) ? (int) height : wallEnd; // off the screen
 
-			// determine from where the where the line is drawn
-			wallStart = (int) (height - lineHeight) / 2;
-			// if the line starts at a negative, it starts 0:
-			wallStart = (0 > wallStart) ? 0 : wallStart;
+			// getting textureType from the wall
+			textureType = maze[xMap][yMap] - 1;
+			wallHit = (wallVertical) ? (xPos + ((yMap - yPos + (1 - yStep) / 2) / rayDir.getY()) * rayDir.getX())
+					: (yPos + ((xMap - xPos + (1 - xStep) / 2) / rayDir.getX()) * rayDir.getY());
+			wallHit -= Math.floor(wallHit);
 
-			// determine where the line ends
-			wallEnd = (int) (height + lineHeight) / 2;
-			// if the line ends off the screen, the line is the same as screen height
-			wallEnd = (wallEnd > height) ? (int) height : wallEnd;
+			// caching texture size
+			final int textureSize = wallTextures.get(textureType).getSize();
 
-			wallHit = (int) ((wallVertical)
-					? (view.getxPos() + ((yMap - view.getyPos() + (1 - yStep) / 2) / rayDir.getY()) * rayDir.getX())
-					: (view.getyPos() + ((xMap - view.getxPos() + (1 - xStep) / 2) / rayDir.getX()) * rayDir.getY()));
-			wallHit -= Math.floor(wallHit); // creates a multiplier for scaling texture
-
-			// multiplying texture size by wallHit to get proper texture size
-			xTexture = wallHit * (wallTextures.get(textureType).getSize());
+			// stretching the texture according to the wall shape (perspective)
+			// calculating x coordinate of the texture
+			xTexture = (int) (wallHit * (textureSize));
 
 			if ((!wallVertical && rayDir.getX() > 0) || (wallVertical && rayDir.getY() < 0))
-				xTexture = wallTextures.get(textureType).getSize() - textureType - 1;
+				xTexture = textureSize - xTexture - 1;
+			// calculating y coordinate of the texture
+			for (int y = wallStart; y < wallEnd; y++) {
+				yTexture = (((int) (y * 2 - height + wallLength) << 6) / wallLength) / 2;
 
-			for (int i = wallStart; i < wallEnd; i++) {
-				yTexture = (((int) (i * 2 - height + lineHeight) << 6) / lineHeight) / 2;
-
-				
-				// Array index out of bounds, something wrong with math or thread safety
-				try {
-//					color = wallTextures.get(textureType).getImage().getPixels()[Math.abs(xTexture
-//							+ (yTexture * wallTextures.get(textureType).getSize()))];
-					color = Color.black.getRGB();
-				} catch (ArrayIndexOutOfBoundsException e) {
-					e.printStackTrace();
-					color = 0;
-				}
-				// makes vertical walls darker
-				// TODO rename to wallHorizontal
-				if (!wallVertical) {
-					color >>= 1;
-					color &= 835571;
-				}
-
-				pixels[(int) (x + i * (width))] = color;
+				// getting a color from texture
+				rgb = wallTextures.get(textureType).getImage().getPixels()[xTexture + (yTexture * textureSize)];
+				// darkening some walls for 3D effect, 0.6 works the best IMO
+				if (wallVertical)
+					rgb = Darken.getColor(rgb, 0.6f);
+				pixels[(int) (x + y * (width))] = rgb;
 			}
 		}
-		fillLoc.unlock();
 		return pixels;
+
 	}
 
-	private synchronized int[] fillBackground(int[] pixels) {
-		fillLoc.lock();
+	private int[] fillBackground(int[] pixels) {
 		for (int i = 0; i < pixels.length / 2; i++) {
 			pixels[i] = SKY.getRGB();
 		}
@@ -231,7 +227,6 @@ public class Renderer {
 		for (int i = pixels.length / 2; i < pixels.length; i++) {
 			pixels[i] = FLOOR.getRGB();
 		}
-		fillLoc.unlock();
 		return pixels;
 	}
 

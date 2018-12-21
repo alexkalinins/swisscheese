@@ -35,7 +35,7 @@ public class WindowCloser {
 	/**
 	 * Stops the game
 	 */
-	public synchronized static void closeEverything() {
+	public static void closeEverything() {
 		System.out.println("window closed by user");
 		Mover.stopAllThreads();
 		GameLoop.stop();
