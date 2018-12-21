@@ -34,7 +34,7 @@ import SwissCheese.engine.keyboard.keyActions.*;
  * @version v0.2
  *
  */
-class DefaultFileCreator {
+class DefaultKeyBindCreator {
 	public static KeyActionPreference p;
 	public static Gson gson;
 

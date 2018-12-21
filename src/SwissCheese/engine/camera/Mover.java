@@ -58,11 +58,12 @@ public class Mover {
 	private AtomicBoolean panleft = new AtomicBoolean(false);
 	private AtomicBoolean panright = new AtomicBoolean(false);
 
-	public final double MOVE_SPEED = .08;
-	public final double ROTATION_SPEED = .045;
+	public final float MOVE_SPEED = .0005f;
+	public final float ROTATION_SPEED = .0005f;
 
 	private View view;
-	private Map map;
+	private Map mapObj;
+	private final int[][] map;
 
 	private static Thread moveleftthread;
 	private static Thread moverightthread;
@@ -79,7 +80,8 @@ public class Mover {
 	public Mover(View view, Map map) {
 		super();
 		update(view);
-		this.map = map;
+		this.mapObj = map;
+		this.map = mapObj.getMap(); // caching map
 	}
 
 	public void update(View view) {
@@ -99,7 +101,7 @@ public class Mover {
 	/**
 	 * Sets moveforward to false, interrupting the moveForward thread.
 	 */
-	public  void stopForward() {
+	public void stopForward() {
 		moveforward.set(false);
 		try {
 			moveforwardthread.join();
@@ -111,14 +113,24 @@ public class Mover {
 
 	class MoveForward implements Runnable {
 		@Override
-		public  void run() {
-			while (moveforward.get() && WindowTimer.isUpdating().get()) {
-				if (map.getMap()[(int) (view.getxPos() + view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
-					view.setxPos((int) (view.getxPos() + view.getxDir() * MOVE_SPEED));
+		public void run() {
+			while (moveforward.get()) {
+				// for caching movement:
+				float xMove;
+				float yMove;
+				if (WindowTimer.isUpdating().get()) {
+					System.out.println("Moving forward");
+					/**
+					 * Move calculations done in if condition to reduce the number of calculations
+					 * necessary in each move from 4 to 2.
+					 */
+					if (map[(int) (xMove = view.getxPos() + view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
+						view.setxPos(xMove);
+					}
+					if (map[(int) view.getxPos()][(int) (yMove = view.getyPos() + view.getyDir() * MOVE_SPEED)] == 0) {
+						view.setyPos(yMove);
+					}
 				}
-				if (map.getMap()[(int) view.getxPos()][(int) (view.getyPos() + view.getyDir() * MOVE_SPEED)] == 0)
-					view.setyPos((int) (view.getyPos() + view.getyDir() * MOVE_SPEED));
-				System.out.println("Moving forward");
 			}
 		}
 	}
@@ -126,7 +138,7 @@ public class Mover {
 	/**
 	 * Creates and delegates a thread to calculate backward movement.
 	 */
-	public  void moveBackward() {
+	public void moveBackward() {
 		movebackward.set(true);
 		movebackwardthread = new Thread(new MoveBackward());
 		movebackwardthread.start();
@@ -135,7 +147,7 @@ public class Mover {
 	/**
 	 * Sets movebackward to false, ending the backward movement.
 	 */
-	public  void stopBackward() {
+	public void stopBackward() {
 		movebackward.set(false);
 		try {
 			movebackwardthread.join();
@@ -146,14 +158,20 @@ public class Mover {
 
 	class MoveBackward implements Runnable {
 		@Override
-		public  void run() {
-			while (movebackward.get()&& WindowTimer.isUpdating().get()) {
-				if (map.getMap()[(int) (view.getxPos() - view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0)
-					view.setxPos((int) (view.getxPos() - view.getxDir() * MOVE_SPEED));
-				if (map.getMap()[(int) view.getxPos()][(int) (view.getyPos() - view.getyDir() * MOVE_SPEED)] == 0)
-					view.setyPos((int) (view.getyPos() - view.getyDir() * MOVE_SPEED));
-				System.out.println("Moving back");
-
+		public void run() {
+			float xMove;
+			float yMove;
+			while (movebackward.get()) {
+				// limiting movement to the fps
+				if (WindowTimer.isUpdating().get()) {
+					if (map[(int) (xMove = view.getxPos() - view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
+						view.setxPos(xMove);
+					}
+					if (map[(int) view.getxPos()][(int) (yMove = view.getyPos() - view.getyDir() * MOVE_SPEED)] == 0) {
+						view.setyPos(yMove);
+					}
+					System.out.println("Moving back");
+				}
 			}
 		}
 	}
@@ -161,7 +179,7 @@ public class Mover {
 	/**
 	 * Moves the camera to the left. Math is likely incorrect.
 	 */
-	public  void moveLeft() {
+	public void moveLeft() {
 		moveleft.set(true);
 		moveleftthread = new Thread(new MoveLeft());
 		moveleftthread.start();
@@ -170,7 +188,7 @@ public class Mover {
 	/**
 	 * Stops the camera left movement
 	 */
-	public  void stopLeft() {
+	public void stopLeft() {
 		moveleft.set(false);
 		try {
 			moveleftthread.join();
@@ -181,14 +199,19 @@ public class Mover {
 
 	class MoveLeft implements Runnable {
 		@Override
-		public  void run() {
-			while (moveleft.get()&& WindowTimer.isUpdating().get()) {
-				if (map.getMap()[(int) (view.getxPos() + view.getyDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
-					view.setxPos((int) (view.getxPos() + view.getyDir() * MOVE_SPEED));
+		public void run() {
+			float xMove;
+			float yMove;
+			while (moveleft.get()) {
+				if(WindowTimer.isUpdating().get()) {
+					if (map[(int) (xMove = view.getxPos() + view.getyDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
+						view.setxPos(xMove);
+					}
+					if (map[(int) view.getxPos()][(int) (yMove = view.getyPos() + view.getxDir() * MOVE_SPEED)] == 0) {
+						view.setyPos(yMove);
+					}
+					System.out.println("Moving left");
 				}
-				if (map.getMap()[(int) view.getxPos()][(int) (view.getyPos() + view.getxDir() * MOVE_SPEED)] == 0)
-					view.setyPos((int) (view.getyPos() + view.getxDir() * MOVE_SPEED));
-				System.out.println("Moving left");
 			}
 		}
 	}
@@ -196,9 +219,8 @@ public class Mover {
 	/**
 	 * Moves the camera to the right. Math is likely incorrect
 	 */
-	public  void moveRight() {
+	public void moveRight() {
 		moveright.set(true);
-
 		moverightthread = new Thread(new MoveRight());
 		moverightthread.start();
 
@@ -207,7 +229,7 @@ public class Mover {
 	/**
 	 * Stops the camera from moving to the right.
 	 */
-	public  void stopRight() {
+	public void stopRight() {
 		moveright.set(false);
 		try {
 			moverightthread.join();
@@ -218,14 +240,19 @@ public class Mover {
 
 	class MoveRight implements Runnable {
 		@Override
-		public  void run() {
-			while (moveright.get()&& WindowTimer.isUpdating().get()) {
-				if (map.getMap()[(int) (view.getyPos() + view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
-					view.setyPos((int) (view.getyPos() + view.getxDir() * MOVE_SPEED));
+		public void run() {
+			float xMove;
+			float yMove;
+			while (moveright.get()) {
+				if (WindowTimer.isUpdating().get()) {
+					if (map[(int) (xMove = view.getxPos() - view.getyDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
+						view.setxPos(xMove);
+					}
+					if (map[(int) view.getxPos()][(int) (yMove = view.getyPos() - view.getxDir() * MOVE_SPEED)] == 0) {
+						view.setyPos(yMove);
+					}
+					System.out.println("Moving right");
 				}
-				if (map.getMap()[(int) (view.getxPos())][(int) (view.getxPos() + view.getyDir() * MOVE_SPEED)] == 0)
-					view.setxPos((int) (view.getxPos() + view.getyDir() * MOVE_SPEED));
-				System.out.println("Moving right");
 			}
 		}
 	}
@@ -233,7 +260,7 @@ public class Mover {
 	/**
 	 * Pans camera to the left.
 	 */
-	public  void panLeft() {
+	public void panLeft() {
 		panleft.set(true);
 
 		panleftthread = new Thread(new PanLeft());
@@ -243,7 +270,7 @@ public class Mover {
 	/**
 	 * Stops left panning.
 	 */
-	public  void stopPanLeft() {
+	public void stopPanLeft() {
 		panleft.set(false);
 		try {
 			panleftthread.join();
@@ -254,31 +281,34 @@ public class Mover {
 
 	class PanLeft implements Runnable {
 		@Override
-		public  void run() {
+		public void run() {
 			double oldxDir;
 			double oldxPlane;
 
-			while (panleft.get()&& WindowTimer.isUpdating().get()) {
+			while (panleft.get() && WindowTimer.isUpdating().get()) {
 				System.out.println("Panning left");
 				oldxDir = view.getxDir();
-				view.setxDir((float) (view.getxDir() * Math.cos(ROTATION_SPEED)- view.getyDir() * Math.sin(ROTATION_SPEED)));
+				view.setxDir((float) (view.getxDir() * Math.cos(ROTATION_SPEED)
+						- view.getyDir() * Math.sin(ROTATION_SPEED)));
 				view.setyDir((float) (oldxDir * Math.sin(ROTATION_SPEED) + view.getyDir() * Math.cos(ROTATION_SPEED)));
-				
+
 				oldxPlane = view.getxPlane();
-				
-				view.setxPlane((float) (view.getxPlane() * Math.cos(ROTATION_SPEED) - view.getyPlane() * Math.sin(ROTATION_SPEED)));
-				view.setyPlane((float) (oldxPlane * Math.sin(ROTATION_SPEED) + view.getyPlane() * Math.cos(ROTATION_SPEED)));
+
+				view.setxPlane((float) (view.getxPlane() * Math.cos(ROTATION_SPEED)
+						- view.getyPlane() * Math.sin(ROTATION_SPEED)));
+				view.setyPlane(
+						(float) (oldxPlane * Math.sin(ROTATION_SPEED) + view.getyPlane() * Math.cos(ROTATION_SPEED)));
 			}
 		}
 	}
 
-	public  void panRight() {
+	public void panRight() {
 		panright.set(true);
 		panrightthread = new Thread(new PanRight());
 		panrightthread.start();
 	}
 
-	public  void stopPanRight() {
+	public void stopPanRight() {
 		panright.set(false);
 		try {
 			panrightthread.join();
@@ -289,21 +319,25 @@ public class Mover {
 
 	class PanRight implements Runnable {
 		@Override
-		public  void run() {
+		public void run() {
 			double oldxDir;
 			double oldxPlane;
 
-			while (panright.get()&& WindowTimer.isUpdating().get()) {
+			while (panright.get() && WindowTimer.isUpdating().get()) {
 				System.out.println("panning right");
 				oldxDir = view.getxDir();
-				
-				view.setxDir((float) (view.getxDir() * Math.cos(-ROTATION_SPEED)- view.getyDir() * Math.sin(-ROTATION_SPEED)));
-				view.setyDir((float) (oldxDir * Math.sin(-ROTATION_SPEED) + view.getyDir() * Math.cos(-ROTATION_SPEED)));
-				
+
+				view.setxDir((float) (view.getxDir() * Math.cos(-ROTATION_SPEED)
+						- view.getyDir() * Math.sin(-ROTATION_SPEED)));
+				view.setyDir(
+						(float) (oldxDir * Math.sin(-ROTATION_SPEED) + view.getyDir() * Math.cos(-ROTATION_SPEED)));
+
 				oldxPlane = view.getxPlane();
-				
-				view.setxPlane((float) (view.getxPlane() * Math.cos(-ROTATION_SPEED) - view.getyPlane() * Math.sin(-ROTATION_SPEED)));
-				view.setyPlane((float) (oldxPlane * Math.sin(-ROTATION_SPEED) + view.getyPlane() * Math.cos(-ROTATION_SPEED)));
+
+				view.setxPlane((float) (view.getxPlane() * Math.cos(-ROTATION_SPEED)
+						- view.getyPlane() * Math.sin(-ROTATION_SPEED)));
+				view.setyPlane(
+						(float) (oldxPlane * Math.sin(-ROTATION_SPEED) + view.getyPlane() * Math.cos(-ROTATION_SPEED)));
 			}
 		}
 	}
@@ -311,7 +345,7 @@ public class Mover {
 	/**
 	 * Stops all moving threads.
 	 */
-	public static  void stopAllThreads() {
+	public static void stopAllThreads() {
 		try {
 			moveleftthread.join();
 		} catch (InterruptedException | NullPointerException e) {
@@ -341,31 +375,31 @@ public class Mover {
 		}
 	}
 
-	public  AtomicBoolean isMoveleft() {
+	public AtomicBoolean isMoveleft() {
 		return moveleft;
 	}
 
-	public  AtomicBoolean isMoveright() {
+	public AtomicBoolean isMoveright() {
 		return moveright;
 	}
 
-	public  AtomicBoolean isMoveforward() {
+	public AtomicBoolean isMoveforward() {
 		return moveforward;
 	}
 
-	public  AtomicBoolean isMovebackward() {
+	public AtomicBoolean isMovebackward() {
 		return movebackward;
 	}
 
-	public  AtomicBoolean isPanleft() {
+	public AtomicBoolean isPanleft() {
 		return panleft;
 	}
 
-	public  AtomicBoolean isPanright() {
+	public AtomicBoolean isPanright() {
 		return panright;
 	}
 
-	public  View getView() {
+	public View getView() {
 		return view;
 	}
 

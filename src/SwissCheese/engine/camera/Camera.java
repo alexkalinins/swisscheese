@@ -16,8 +16,6 @@
  */
 package SwissCheese.engine.camera;
 
-import java.awt.geom.Point2D;
-
 import SwissCheese.annotations.ThreadSafe;
 import SwissCheese.map.Map;
 
@@ -37,7 +35,7 @@ public final class Camera {
 
 	public Camera(int width, int height, Map map, float FOV) {
 		this.FOV = FOV; //0 -> -1
-		view = new View((float)map.getEntry().getX(), (float)map.getEntry().getY()+1.5f, 1, 0, 0, FOV);
+		view = new View((float)map.getEntry().getX(), (float)map.getEntry().getY()+1.5f, 1f, 0f, 0f, FOV);
 		mover = new Mover(view, map);
 	}
 	public final View getView() {

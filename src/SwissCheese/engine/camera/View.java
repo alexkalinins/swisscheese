@@ -127,7 +127,7 @@ public class View {
 	}
 
 	public synchronized void setyPlane(float yPlane) {
-		setDir(new GeomVector2D<Float>(plane.getX(), yPlane));
+		setPlane(new GeomVector2D<Float>(plane.getX(), yPlane));
 
 	}
 

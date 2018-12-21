@@ -36,7 +36,6 @@ public class GoRight implements KeyAction {
 	@Override
 	public synchronized void doAction() {
 		Window.mover.moveRight();
-
 	}
 
 	@Override
