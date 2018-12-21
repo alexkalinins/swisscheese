@@ -16,10 +16,7 @@
  */
 package SwissCheese.engine.camera;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import SwissCheese.annotations.NotThreadSafe;
-import SwissCheese.game.GameLoop.WindowTimer;
+import SwissCheese.annotations.ThreadSafe;
 import SwissCheese.map.Map;
 
 /**
@@ -36,371 +33,250 @@ import SwissCheese.map.Map;
  * <li>Right</li>
  * <p>
  * Each type of movement will have two methods: start and stop. When a movement
- * is started, an new thread is created to run a while loop for said movement.
- * The stop method would interrupt the while loop, thus stopping the movement
+ * is started, a boolean flag is set to true. The {@code update} method calls
+ * private calculating methods to calculate the movement.
  * <p>
- * Left and right movement may have incorrect calculations and will be figured
- * out once the graphics load and are working.
+ * Movement and rotation speed are set as final floats. There is a possibility
+ * of passing them through in future versions of {@code Mover} in order to
+ * select control sensitivity.
  * 
  * @author Alex Kalinins
  * @since 2018-12-10
  * @since v0.2
- * @version v0.3
+ * @version v0.4
  *
  */
-@NotThreadSafe
+@ThreadSafe
 public class Mover {
-	private AtomicBoolean moveleft = new AtomicBoolean(false);
-	private AtomicBoolean moveright = new AtomicBoolean(false);
-	private AtomicBoolean moveforward = new AtomicBoolean(false);
-	private AtomicBoolean movebackward = new AtomicBoolean(false);
-
-	private AtomicBoolean panleft = new AtomicBoolean(false);
-	private AtomicBoolean panright = new AtomicBoolean(false);
-
-	public final float MOVE_SPEED = .0005f;
-	public final float ROTATION_SPEED = .0005f;
-
-	private View view;
-	private Map mapObj;
+	private boolean moveF;
+	private boolean moveB;
+	private boolean moveL;
+	private boolean moveR;
+	private boolean panL;
+	private boolean panR;
 	private final int[][] map;
-
-	private static Thread moveleftthread;
-	private static Thread moverightthread;
-	private static Thread moveforwardthread;
-	private static Thread movebackwardthread;
-	private static Thread panleftthread;
-	private static Thread panrightthread;
+	private View view;
+	private final float MOVE_SPEED = 0.05f;
+	private final float ROTATION_SPEED = 0.05f;
 
 	/**
-	 * Constructor for Mover class
+	 * Constructor
 	 * 
-	 * @param view the initial view of the player
+	 * @param view a {@link SwissCheese.engine.camera.View} object containing
+	 *             Vectors of the players location and POV
+	 * @param map  a {@link SwissCheese.map.Map} object containing the map the
+	 *             player is in.
 	 */
 	public Mover(View view, Map map) {
-		super();
-		update(view);
-		this.mapObj = map;
-		this.map = mapObj.getMap(); // caching map
+		setView(view);
+		this.map = map.getMap(); // caching map
 	}
 
-	public void update(View view) {
+	public void setView(View view) {
 		this.view = view;
-	}
-
-	/**
-	 * Creates and delegates a thread to do a loop of move forward calculations
-	 * until stopForward() void is called and the thread is interrupted.
-	 */
-	public void moveForward() {
-		moveforward.set(true);
-		moveforwardthread = new Thread(new MoveForward());
-		moveforwardthread.start();
-	}
-
-	/**
-	 * Sets moveforward to false, interrupting the moveForward thread.
-	 */
-	public void stopForward() {
-		moveforward.set(false);
-		try {
-			moveforwardthread.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	class MoveForward implements Runnable {
-		@Override
-		public void run() {
-			while (moveforward.get()) {
-				// for caching movement:
-				float xMove;
-				float yMove;
-				if (WindowTimer.isUpdating().get()) {
-					System.out.println("Moving forward");
-					/**
-					 * Move calculations done in if condition to reduce the number of calculations
-					 * necessary in each move from 4 to 2.
-					 */
-					if (map[(int) (xMove = view.getxPos() + view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
-						view.setxPos(xMove);
-					}
-					if (map[(int) view.getxPos()][(int) (yMove = view.getyPos() + view.getyDir() * MOVE_SPEED)] == 0) {
-						view.setyPos(yMove);
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * Creates and delegates a thread to calculate backward movement.
-	 */
-	public void moveBackward() {
-		movebackward.set(true);
-		movebackwardthread = new Thread(new MoveBackward());
-		movebackwardthread.start();
-	}
-
-	/**
-	 * Sets movebackward to false, ending the backward movement.
-	 */
-	public void stopBackward() {
-		movebackward.set(false);
-		try {
-			movebackwardthread.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-
-	class MoveBackward implements Runnable {
-		@Override
-		public void run() {
-			float xMove;
-			float yMove;
-			while (movebackward.get()) {
-				// limiting movement to the fps
-				if (WindowTimer.isUpdating().get()) {
-					if (map[(int) (xMove = view.getxPos() - view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
-						view.setxPos(xMove);
-					}
-					if (map[(int) view.getxPos()][(int) (yMove = view.getyPos() - view.getyDir() * MOVE_SPEED)] == 0) {
-						view.setyPos(yMove);
-					}
-					System.out.println("Moving back");
-				}
-			}
-		}
-	}
-
-	/**
-	 * Moves the camera to the left. Math is likely incorrect.
-	 */
-	public void moveLeft() {
-		moveleft.set(true);
-		moveleftthread = new Thread(new MoveLeft());
-		moveleftthread.start();
-	}
-
-	/**
-	 * Stops the camera left movement
-	 */
-	public void stopLeft() {
-		moveleft.set(false);
-		try {
-			moveleftthread.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-
-	class MoveLeft implements Runnable {
-		@Override
-		public void run() {
-			float xMove;
-			float yMove;
-			while (moveleft.get()) {
-				if(WindowTimer.isUpdating().get()) {
-					if (map[(int) (xMove = view.getxPos() + view.getyDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
-						view.setxPos(xMove);
-					}
-					if (map[(int) view.getxPos()][(int) (yMove = view.getyPos() + view.getxDir() * MOVE_SPEED)] == 0) {
-						view.setyPos(yMove);
-					}
-					System.out.println("Moving left");
-				}
-			}
-		}
-	}
-
-	/**
-	 * Moves the camera to the right. Math is likely incorrect
-	 */
-	public void moveRight() {
-		moveright.set(true);
-		moverightthread = new Thread(new MoveRight());
-		moverightthread.start();
-
-	}
-
-	/**
-	 * Stops the camera from moving to the right.
-	 */
-	public void stopRight() {
-		moveright.set(false);
-		try {
-			moverightthread.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-
-	class MoveRight implements Runnable {
-		@Override
-		public void run() {
-			float xMove;
-			float yMove;
-			while (moveright.get()) {
-				if (WindowTimer.isUpdating().get()) {
-					if (map[(int) (xMove = view.getxPos() - view.getyDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
-						view.setxPos(xMove);
-					}
-					if (map[(int) view.getxPos()][(int) (yMove = view.getyPos() - view.getxDir() * MOVE_SPEED)] == 0) {
-						view.setyPos(yMove);
-					}
-					System.out.println("Moving right");
-				}
-			}
-		}
-	}
-
-	/**
-	 * Pans camera to the left.
-	 */
-	public void panLeft() {
-		panleft.set(true);
-
-		panleftthread = new Thread(new PanLeft());
-		panleftthread.start();
-	}
-
-	/**
-	 * Stops left panning.
-	 */
-	public void stopPanLeft() {
-		panleft.set(false);
-		try {
-			panleftthread.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-
-	class PanLeft implements Runnable {
-		@Override
-		public void run() {
-			double oldxDir;
-			double oldxPlane;
-
-			while (panleft.get() && WindowTimer.isUpdating().get()) {
-				System.out.println("Panning left");
-				oldxDir = view.getxDir();
-				view.setxDir((float) (view.getxDir() * Math.cos(ROTATION_SPEED)
-						- view.getyDir() * Math.sin(ROTATION_SPEED)));
-				view.setyDir((float) (oldxDir * Math.sin(ROTATION_SPEED) + view.getyDir() * Math.cos(ROTATION_SPEED)));
-
-				oldxPlane = view.getxPlane();
-
-				view.setxPlane((float) (view.getxPlane() * Math.cos(ROTATION_SPEED)
-						- view.getyPlane() * Math.sin(ROTATION_SPEED)));
-				view.setyPlane(
-						(float) (oldxPlane * Math.sin(ROTATION_SPEED) + view.getyPlane() * Math.cos(ROTATION_SPEED)));
-			}
-		}
-	}
-
-	public void panRight() {
-		panright.set(true);
-		panrightthread = new Thread(new PanRight());
-		panrightthread.start();
-	}
-
-	public void stopPanRight() {
-		panright.set(false);
-		try {
-			panrightthread.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-
-	class PanRight implements Runnable {
-		@Override
-		public void run() {
-			double oldxDir;
-			double oldxPlane;
-
-			while (panright.get() && WindowTimer.isUpdating().get()) {
-				System.out.println("panning right");
-				oldxDir = view.getxDir();
-
-				view.setxDir((float) (view.getxDir() * Math.cos(-ROTATION_SPEED)
-						- view.getyDir() * Math.sin(-ROTATION_SPEED)));
-				view.setyDir(
-						(float) (oldxDir * Math.sin(-ROTATION_SPEED) + view.getyDir() * Math.cos(-ROTATION_SPEED)));
-
-				oldxPlane = view.getxPlane();
-
-				view.setxPlane((float) (view.getxPlane() * Math.cos(-ROTATION_SPEED)
-						- view.getyPlane() * Math.sin(-ROTATION_SPEED)));
-				view.setyPlane(
-						(float) (oldxPlane * Math.sin(-ROTATION_SPEED) + view.getyPlane() * Math.cos(-ROTATION_SPEED)));
-			}
-		}
-	}
-
-	/**
-	 * Stops all moving threads.
-	 */
-	public static void stopAllThreads() {
-		try {
-			moveleftthread.join();
-		} catch (InterruptedException | NullPointerException e) {
-
-		}
-		try {
-			moverightthread.join();
-		} catch (InterruptedException | NullPointerException e) {
-
-		}
-		try {
-			moveforwardthread.join();
-		} catch (InterruptedException | NullPointerException e) {
-
-		}
-		try {
-			movebackwardthread.join();
-		} catch (InterruptedException | NullPointerException e) {
-		}
-		try {
-			panleftthread.join();
-		} catch (InterruptedException | NullPointerException e) {
-		}
-		try {
-			panrightthread.join();
-		} catch (InterruptedException | NullPointerException e) {
-		}
-	}
-
-	public AtomicBoolean isMoveleft() {
-		return moveleft;
-	}
-
-	public AtomicBoolean isMoveright() {
-		return moveright;
-	}
-
-	public AtomicBoolean isMoveforward() {
-		return moveforward;
-	}
-
-	public AtomicBoolean isMovebackward() {
-		return movebackward;
-	}
-
-	public AtomicBoolean isPanleft() {
-		return panleft;
-	}
-
-	public AtomicBoolean isPanright() {
-		return panright;
 	}
 
 	public View getView() {
 		return view;
+	}
+
+	/**
+	 * Updates {@code View} base on which movement/panning flags are set to
+	 * {@code true}.
+	 */
+	public synchronized void update() {
+		if (moveF) {
+			moveForwardCalc();
+		}
+		if (moveB) {
+			moveBackwardCalc();
+		}
+		if (moveL) {
+			moveLeftCalc();
+		}
+		if (moveR) {
+			moveRightCalc();
+		}
+		if (panL) {
+			panLeftCalc();
+		}
+		if (panR) {
+			panRightCalc();
+		}
+	}
+
+	/**
+	 * Does calculation for forward movement.
+	 */
+	private void moveForwardCalc() {
+		float xMove;
+		float yMove;
+
+		if (map[(int) (xMove = view.getxPos() + view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
+			view.setxPos(xMove);
+		}
+		if (map[(int) view.getxPos()][(int) (yMove = view.getyPos() + view.getyDir() * MOVE_SPEED)] == 0) {
+			view.setyPos(yMove);
+		}
+	}
+
+	/**
+	 * Does calculation for backward movement.
+	 */
+	private void moveBackwardCalc() {
+		float xMove;
+		float yMove;
+
+		if (map[(int) (xMove = view.getxPos() - view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
+			view.setxPos(xMove);
+		}
+		if (map[(int) view.getxPos()][(int) (yMove = view.getyPos() - view.getyDir() * MOVE_SPEED)] == 0) {
+			view.setyPos(yMove);
+		}
+	}
+
+	/**
+	 * Does calculation for left movement.
+	 */
+	private void moveLeftCalc() {
+		float xMove;
+		float yMove;
+
+		if (map[(int) (xMove = view.getxPos() + view.getyDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
+			view.setxPos(xMove);
+		}
+		if (map[(int) view.getxPos()][(int) (yMove = view.getyPos() + view.getxDir() * MOVE_SPEED)] == 0) {
+			view.setyPos(yMove);
+		}
+	}
+
+	/**
+	 * Does calculation for right movement.
+	 */
+	private void moveRightCalc() {
+		float xMove;
+		float yMove;
+
+		if (map[(int) (xMove = view.getxPos() - view.getyDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
+			view.setxPos(xMove);
+		}
+		if (map[(int) view.getxPos()][(int) (yMove = view.getyPos() - view.getxDir() * MOVE_SPEED)] == 0) {
+			view.setyPos(yMove);
+		}
+	}
+
+	/**
+	 * Does calculation for left panning.
+	 */
+	private void panLeftCalc() {
+		float oldxDir = view.getxDir();
+		view.setxDir((float) (view.getxDir() * Math.cos(ROTATION_SPEED) - view.getyDir() * Math.sin(ROTATION_SPEED)));
+		view.setyDir((float) (oldxDir * Math.sin(ROTATION_SPEED) + view.getyDir() * Math.cos(ROTATION_SPEED)));
+
+		float oldxPlane = view.getxPlane();
+
+		view.setxPlane(
+				(float) (view.getxPlane() * Math.cos(ROTATION_SPEED) - view.getyPlane() * Math.sin(ROTATION_SPEED)));
+		view.setyPlane((float) (oldxPlane * Math.sin(ROTATION_SPEED) + view.getyPlane() * Math.cos(ROTATION_SPEED)));
+	}
+
+	/**
+	 * Does calculation for right panning
+	 */
+	private void panRightCalc() {
+		float oldxDir = view.getxDir();
+		view.setxDir((float) (view.getxDir() * Math.cos(-ROTATION_SPEED) - view.getyDir() * Math.sin(-ROTATION_SPEED)));
+		view.setyDir((float) (oldxDir * Math.sin(-ROTATION_SPEED) + view.getyDir() * Math.cos(-ROTATION_SPEED)));
+
+		float oldxPlane = view.getxPlane();
+
+		view.setxPlane(
+				(float) (view.getxPlane() * Math.cos(-ROTATION_SPEED) - view.getyPlane() * Math.sin(-ROTATION_SPEED)));
+		view.setyPlane((float) (oldxPlane * Math.sin(-ROTATION_SPEED) + view.getyPlane() * Math.cos(-ROTATION_SPEED)));
+	}
+
+	/**
+	 * Sets flag for moving forward
+	 */
+	public void moveForward() {
+		moveF = true;
+	}
+
+	/**
+	 * Sets flag to stop moving forward.
+	 */
+	public void stopForward() {
+		moveF = false;
+	}
+
+	/**
+	 * Sets flag to move backward
+	 */
+	public void moveBackward() {
+		moveB = true;
+	}
+
+	/**
+	 * Sets flag to stop moving backward
+	 */
+	public void stopBackward() {
+		moveB = false;
+	}
+
+	/**
+	 * sets flag to move left.
+	 */
+	public void moveLeft() {
+		moveL = true;
+	}
+
+	/**
+	 * Sets flag to stop moving left
+	 */
+	public void stopLeft() {
+		moveL = false;
+	}
+
+	/**
+	 * Sets flag to move right
+	 */
+	public void moveRight() {
+		moveR = true;
+	}
+
+	/**
+	 * Sets flag to stop moving right
+	 */
+	public void stopRight() {
+		moveR = false;
+	}
+
+	/**
+	 * Sets flag to pan right.
+	 */
+	public void panRight() {
+		panR = true;
+	}
+
+	/**
+	 * sets flag to stop panning right.
+	 */
+	public void stopPanRight() {
+		panR = false;
+	}
+
+	/**
+	 * Sets flag to pan left.
+	 */
+	public void panLeft() {
+		panL = true;
+	}
+
+	/**
+	 * Sets flag to stop panning left.
+	 */
+	public void stopPanLeft() {
+		panL = false;
 	}
 
 }

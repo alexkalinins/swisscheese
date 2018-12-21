@@ -75,20 +75,35 @@ public final class GameLoop implements Runnable {
 		}
 	}
 
+	private float getTime() {
+		return (float)System.nanoTime()/1000000000F;
+	}
+	
 	/**
 	 * Run method of class. Main loop in here
 	 */
 	@Override
 	public void run() {
-
+		float time;
+		float passedTime;
+		
+		
 		do {
 			try {
-				if (WindowTimer.isUpdating().get()) {
-					// game loop goes here
-					System.out.println("Rendering");
-					window.render();
-				}
+				time = getTime();
+				window.render();
 				window.switchBuffer();
+				
+				passedTime = getTime() - time; //how much time passed
+				
+				if(passedTime<FRAME_DURATION) {
+					//computer went ahead
+					try {
+						Thread.sleep((long) ((FRAME_DURATION - passedTime)*1000));
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
 			} catch (NullPointerException e) {
 				// happens when the game closes but not fully (BufferStrategy)
 			}
@@ -108,64 +123,6 @@ public final class GameLoop implements Runnable {
 		running.set(true);
 		thread.notify();
 
-	}
-
-	/**
-	 * WindowTimer class for limiting the frame rate of the game to a specific frame
-	 * rate. This way, performance is bound to the frame rate and not the hardware
-	 * performance. Limitless frame refreshment can be damaging to hardware.
-	 * <p>
-	 * Borrowed from Vimulateur du Sol 3D project.
-	 * 
-	 * @author Alex Kalinins
-	 * @since 2018-12-11
-	 * @since v0.2
-	 * @version v1.0
-	 *
-	 */
-	public static class WindowTimer {
-
-		private static float seconds;
-		private static float processedSeconds = 0;
-		private static float deltaSeconds;
-		private static float futureSeconds;
-		private static AtomicBoolean updating = new AtomicBoolean(false);
-
-		/**
-		 * Gets time from System.nanoTime as seconds
-		 * 
-		 * @return a double of seconds.
-		 */
-		static float getSeconds() {
-			return System.nanoTime() / 1000000000f;
-		}
-
-		/**
-		 * Checks is the Window is updating. This method limits the update rate (FPS) to
-		 * the FPS rate specified in the Window constructor.
-		 * 
-		 * @return true if the window is updating.
-		 */
-		private static boolean isWindowUpdating() {
-			futureSeconds = getSeconds(); // ahead by one frame
-			deltaSeconds = futureSeconds - seconds; // difference in time
-			processedSeconds += deltaSeconds;
-			seconds = futureSeconds; // seconds is updated to latest time
-
-			/**
-			 * If the Window is updating, processedSeconds will be less than FRAME_DURATION.
-			 */
-			while (processedSeconds > FRAME_DURATION) {
-				processedSeconds -= FRAME_DURATION;
-				return true;
-			}
-			return false;
-		}
-
-		public static AtomicBoolean isUpdating() {
-			updating.set(isWindowUpdating());
-			return updating;
-		}
 	}
 
 	public AtomicBoolean isRunning() {

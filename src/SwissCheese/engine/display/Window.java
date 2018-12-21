@@ -119,6 +119,7 @@ public class Window extends JFrame {
 	}
 
 	public void render() {
+		mover.update();
 		pixels = renderer.render(pixels);
 		bufferImage = (BufferedImage) ImageFromArray.getImage(pixels, width, height);
 	}

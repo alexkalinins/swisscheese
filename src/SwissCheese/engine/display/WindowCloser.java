@@ -17,7 +17,6 @@
 package SwissCheese.engine.display;
 
 import SwissCheese.annotations.Immutable;
-import SwissCheese.engine.camera.Mover;
 import SwissCheese.game.GameLoop;
 
 /**
@@ -37,7 +36,6 @@ public class WindowCloser {
 	 */
 	public static void closeEverything() {
 		System.out.println("window closed by user");
-		Mover.stopAllThreads();
 		GameLoop.stop();
 		System.exit(0);
 	}

@@ -4,6 +4,7 @@ SwissCheese.devTools
 SwissCheese.engine
 SwissCheese.engine.camera
 SwissCheese.engine.display
+SwissCheese.engine.imageEffects
 SwissCheese.engine.io
 SwissCheese.engine.io.gson
 SwissCheese.engine.io.images
