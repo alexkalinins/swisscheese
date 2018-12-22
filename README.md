@@ -19,12 +19,6 @@ To run this game, JRE 1.8 is required.
 
 * **Alex Kalinins** - *Everything* - [poof](https://gitlab.com/poof)
 
-## Other Works Used:
-
-Incomplete list of all works used.
-
-* ***"Fast Money" font*** - **James Vipond** - (CC BY-SA)
-
 ## License
 
 This project is licensed under the Affero GPL v3 (AGPL v3) License - see the [LICENSE.md](LICENSE.md) file for more details
