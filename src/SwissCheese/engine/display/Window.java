@@ -82,7 +82,7 @@ public class Window extends JFrame {
 
 		setSize(width, height);
 		setResizable(false);
-		setTitle("Swiss Cheese - v0.3a");
+		setTitle("Swiss Cheese - v0.5a");
 		addKeyListener(keyboard);
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -105,7 +105,7 @@ public class Window extends JFrame {
 		buffer = getBufferStrategy();
 		if (buffer == null) {
 			System.out.println("Creating a new buffer");
-			createBufferStrategy(2);
+			createBufferStrategy(3);
 			return;
 		}
 		try {

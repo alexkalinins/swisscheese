@@ -54,6 +54,7 @@ public class Mover {
 	private boolean moveR;
 	private boolean panL;
 	private boolean panR;
+	private static boolean usable = true;
 	private final int[][] map;
 	private View view;
 	private final float MOVE_SPEED = 0.1f;
@@ -85,24 +86,33 @@ public class Mover {
 	 * {@code true}.
 	 */
 	public synchronized void update() {
-		if (moveF) {
-			moveForwardCalc();
+		if (usable) {
+			if (moveF) {
+				moveForwardCalc();
+			}
+			if (moveB) {
+				moveBackwardCalc();
+			}
+			if (moveL) {
+				moveLeftCalc();
+			}
+			if (moveR) {
+				moveRightCalc();
+			}
+			if (panL) {
+				panLeftCalc();
+			}
+			if (panR) {
+				panRightCalc();
+			}
 		}
-		if (moveB) {
-			moveBackwardCalc();
-		}
-		if (moveL) {
-			moveLeftCalc();
-		}
-		if (moveR) {
-			moveRightCalc();
-		}
-		if (panL) {
-			panLeftCalc();
-		}
-		if (panR) {
-			panRightCalc();
-		}
+	}
+	
+	/**
+	 * Shuts down {@code Mover} and prevents the user from moving
+	 */
+	public static void close() {
+		usable = false;
 	}
 
 	/**
@@ -112,10 +122,10 @@ public class Mover {
 		float xMove;
 		float yMove;
 
-		if (map[(int) (xMove = view.getxPos() + view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
+		if (map[(int) (xMove = view.getxPos() + view.getxDir() * MOVE_SPEED)][(int) (view.getyPos())] == 0) {
 			view.setxPos(xMove);
 		}
-		if (map[(int) view.getxPos()][(int) (yMove = view.getyPos() + view.getyDir() * MOVE_SPEED)] == 0) {
+		if (map[(int) (view.getxPos())][(int) (yMove = view.getyPos() + view.getyDir() * MOVE_SPEED)] == 0) {
 			view.setyPos(yMove);
 		}
 	}
@@ -127,12 +137,13 @@ public class Mover {
 		float xMove;
 		float yMove;
 
-		if (map[(int) (xMove = view.getxPos() - view.getxDir() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
+		if (map[(int) (xMove = view.getxPos() - view.getxDir() * MOVE_SPEED)][(int) (view.getyPos())] == 0) {
 			view.setxPos(xMove);
 		}
-		if (map[(int) view.getxPos()][(int) (yMove = view.getyPos() - view.getyDir() * MOVE_SPEED)] == 0) {
+		if (map[(int) (view.getxPos())][(int) (yMove = view.getyPos() - view.getyDir() * MOVE_SPEED)] == 0) {
 			view.setyPos(yMove);
 		}
+
 	}
 
 	/**
@@ -142,10 +153,10 @@ public class Mover {
 		float xMove;
 		float yMove;
 
-		if (map[(int) (xMove = view.getxPos() - view.getxPlane() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
+		if (map[(int) (xMove = view.getxPos() - view.getxPlane() * MOVE_SPEED)][(int) (view.getyPos())] == 0) {
 			view.setxPos(xMove);
 		}
-		if (map[(int) view.getxPos()][(int) (yMove = view.getyPos() - view.getyPlane() * MOVE_SPEED)] == 0) {
+		if (map[(int) (view.getxPos())][(int) (yMove = view.getyPos() - view.getyPlane() * MOVE_SPEED)] == 0) {
 			view.setyPos(yMove);
 		}
 	}
@@ -157,10 +168,10 @@ public class Mover {
 		float xMove;
 		float yMove;
 
-		if (map[(int) (xMove = view.getxPos() + view.getxPlane() * MOVE_SPEED)][(int) view.getyPos()] == 0) {
+		if (map[(int) (xMove = view.getxPos() + view.getxPlane() * MOVE_SPEED)][(int) (view.getyPos())] == 0) {
 			view.setxPos(xMove);
 		}
-		if (map[(int) view.getxPos()][(int) (yMove = view.getyPos() + view.getyPlane() * MOVE_SPEED)] == 0) {
+		if (map[(int) (view.getxPos())][(int) (yMove = view.getyPos() + view.getyPlane() * MOVE_SPEED)] == 0) {
 			view.setyPos(yMove);
 		}
 	}

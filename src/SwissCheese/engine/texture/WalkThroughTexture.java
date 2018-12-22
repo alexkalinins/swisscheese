@@ -19,6 +19,7 @@ package SwissCheese.engine.texture;
 import java.io.File;
 
 import SwissCheese.annotations.Immutable;
+import SwissCheese.engine.camera.Mover;
 
 /**
  * {@code WalkThroughTexture} is a texture object through which a player can
@@ -40,9 +41,15 @@ public class WalkThroughTexture extends WallTexture {
 		super(fileLoc);
 	}
 
-	public boolean walkThrough() {
-		// TODO game closes with a congratulatory message
-		return true;
+	private boolean done = false;
+	@Override
+	public void doAction() {
+		if(!done) {
+			done = true;
+			System.out.println("User completed maze");
+			Mover.close();
+			//Congratulations message
+		}
 	}
 
 }

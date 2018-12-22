@@ -189,6 +189,7 @@ public class Renderer {
 
 			// getting textureType from the wall
 			textureType = maze[Math.abs(xMap)][Math.abs(yMap)] - 1;
+			wallTextures.get(textureType).doAction();
 			wallHit = (wallVertical) ? (xPos + ((yMap - yPos + (1 - yStep) / 2) / rayDir.getY()) * rayDir.getX())
 					: (yPos + ((xMap - xPos + (1 - xStep) / 2) / rayDir.getX()) * rayDir.getY());
 			wallHit -= Math.floor(wallHit);

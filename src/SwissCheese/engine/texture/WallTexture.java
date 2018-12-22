@@ -45,4 +45,9 @@ public class WallTexture extends AbstractTexture{
 	public int getSize() {
 		return size;
 	}
+	
+	@Override
+	public void doAction() {
+		return;
+	}
 }

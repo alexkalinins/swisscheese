@@ -46,7 +46,6 @@ public abstract class AbstractTexture {
 		this(new File(fileLocation));
 	}
 
-
 	private static final synchronized int nextTextureId() {
 		return ++currenttextureid;
 	}
@@ -55,5 +54,8 @@ public abstract class AbstractTexture {
 		return image;
 	}
 
+	public void doAction() {
+		return;
+	}
 
 }

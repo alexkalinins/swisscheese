@@ -78,7 +78,7 @@ public final class Map {
 //		}
 		
 		map[(int)entry.getX()][(int)entry.getY()] = 2;
-		map[(int)exit.getX()][(int)exit.getY()] = 2;
+		map[(int)exit.getX()][(int)exit.getY()] = 3;
 		
 		return map;
 	}

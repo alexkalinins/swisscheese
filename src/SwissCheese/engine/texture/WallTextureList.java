@@ -39,8 +39,9 @@ public class WallTextureList {
 	 * Constructor
 	 */
 	public WallTextureList() {
-		fileList.add(new File("resources/textures/test.png"));
+		fileList.add(new File("resources/textures/test.bmp"));
 		fileList.add(new File("resources/textures/test1.png"));
+		fileList.add(new File("resources/textures/test2.png"));
 	}
 
 	/**
@@ -49,9 +50,12 @@ public class WallTextureList {
 	 */
 	public List<WallTexture> getList() {
 		List<WallTexture> list = new ArrayList<>();
-		for (File file : fileList) {
-			list.add(new WallTexture(file));
-		}
+//		for (File file : fileList) {
+//			list.add(new WallTexture(file));
+//		}
+		list.add(new WallTexture(fileList.get(0)));
+		list.add(new WallTexture(fileList.get(1)));
+		list.add(new WalkThroughTexture(fileList.get(2)));
 		return list;
 	}
 }
