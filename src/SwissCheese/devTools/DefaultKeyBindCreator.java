@@ -38,11 +38,12 @@ class DefaultKeyBindCreator {
 	public static KeyActionPreference p;
 	public static Gson gson;
 
+	@SuppressWarnings("deprecation")
 	public static void load() {
-		//p = new KeyActionPreference();
+		// don't to use 'full' constructor.
 		p = new KeyActionPreference(new GoForward(), new GoLeft(), new GoBackward(), new GoRight(), null, null,
-				new PanLeft(), new PanRight(), new ExitGame(), null, null, null, null, null, null, null, null, null,
-				null, null);
+				new PanLeft(), new PanRight(), new OpenMenu(), null, null, null, null, null, null, null, null, null,
+				null, new ExitGame());
 	}
 
 	public static void main(String[] args) {

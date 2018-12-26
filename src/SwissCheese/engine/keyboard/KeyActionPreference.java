@@ -306,4 +306,23 @@ public final class KeyActionPreference {
 				Keys.N7.getAction(), Keys.N8.getAction(), Keys.N9.getAction(), Keys.N0.getAction());
 	}
 
+	@Override
+	public String toString() {
+		return "KeyActionPreference [aAction=" + aAction + ", bAction=" + bAction + ", cAction=" + cAction
+				+ ", dAction=" + dAction + ", eAction=" + eAction + ", fAction=" + fAction + ", gAction=" + gAction
+				+ ", hAction=" + hAction + ", iAction=" + iAction + ", jAction=" + jAction + ", kAction=" + kAction
+				+ ", lAction=" + lAction + ", mAction=" + mAction + ", nAction=" + nAction + ", oAction=" + oAction
+				+ ", pAction=" + pAction + ", qAction=" + qAction + ", rAction=" + rAction + ", sAction=" + sAction
+				+ ", tAction=" + tAction + ", uAction=" + uAction + ", vAction=" + vAction + ", wAction=" + wAction
+				+ ", xAction=" + xAction + ", yAction=" + yAction + ", zAction=" + zAction + ", upAction=" + upAction
+				+ ", downAction=" + downAction + ", leftAction=" + leftAction + ", rightAction=" + rightAction
+				+ ", escAction=" + escAction + ", shiftAction=" + shiftAction + ", enterAction=" + enterAction
+				+ ", backSpaceAction=" + backSpaceAction + ", spaceAction=" + spaceAction + ", n1Action=" + n1Action
+				+ ", n2Action=" + n2Action + ", n3Action=" + n3Action + ", n4Action=" + n4Action + ", n5Action="
+				+ n5Action + ", n6Action=" + n6Action + ", n7Action=" + n7Action + ", n8Action=" + n8Action
+				+ ", n9Action=" + n9Action + ", n0Action=" + n0Action + "]";
+	}
+	
+	
+
 }

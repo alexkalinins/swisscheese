@@ -16,13 +16,15 @@
  */
 package SwissCheese.engine.keyboard.keyActions;
 
+import SwissCheese.uiWindows.Menu;
+
 /**
  * Opens The Menu
  * 
  * @author Alex Kalinins
  * @since 2018-12-1
  * @since v0.2
- * @version v0.1
+ * @version v0.2
  */
 public class OpenMenu implements KeyAction {
 
@@ -31,7 +33,7 @@ public class OpenMenu implements KeyAction {
 
 	@Override
 	public void doAction() {
-		throw new UnsupportedOperationException();
+		Menu.display();
 	}
 
 	public static String getDesc() {
@@ -43,7 +45,7 @@ public class OpenMenu implements KeyAction {
 	 */
 	@Override
 	public void stopAction() {
-		throw new UnsupportedOperationException();
+		return;
 	}
 
 }
