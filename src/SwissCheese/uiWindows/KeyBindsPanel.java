@@ -54,8 +54,7 @@ import SwissCheese.engine.keyboard.keyActions.SaveGame;
  * {@link Keys} {@code enums}) to perform a {@link KeyAction} action.
  * <p>
  * {@code KeyBindsPanel} was created so that a menu in which a user changed
- * KeyBinds did not have to re-implement the panel.
- * 
+ * KeyBinds did not have to re-implement the panel. * 
  * @author Alex Kalinins
  * @since 2018-12-26
  * @since v0.5

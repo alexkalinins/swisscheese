@@ -45,7 +45,7 @@ import SwissCheese.annotations.Immutable;
  * @version v0.2
  */
 @Immutable
-public final class Menu extends JFrame {
+public final class InGameMenu extends JFrame {
 	private static final long serialVersionUID = 3038952637134428918L;
 	private final CardLayout cards;
 	private final JPanel mainPanel;
@@ -66,13 +66,13 @@ public final class Menu extends JFrame {
 	private final JButton exitGame = new JButton("Exit To Menu");
 	
 	private static boolean displaying = false;
-	private static Menu menu;
+	private static InGameMenu menu;
 
 	/**
 	 * Private Constructor. The only way to display the {@code Menu} is through
-	 * {@link Menu#display()}.
+	 * {@link InGameMenu#display()}.
 	 */
-	private Menu() {
+	private InGameMenu() {
 		cards = new CardLayout();
 		mainPanel = new JPanel(cards);
 		setSize(300, 300);
@@ -161,7 +161,6 @@ public final class Menu extends JFrame {
 		scroll.setPreferredSize(this.getSize());
 		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		;
 
 		JPanel panel = new JPanel();
 		panel.add(scroll);
@@ -207,12 +206,12 @@ public final class Menu extends JFrame {
 
 	/**
 	 * Creates a {@code Menu} if it is not being displayed already. Otherwise, it
-	 * calls {@link Menu#goBack} to either return to the 'home' card of the menu or
+	 * calls {@link InGameMenu#goBack} to either return to the 'home' card of the menu or
 	 * to quit the menu and resume the game.
 	 */
 	public static void display() {
 		if (!displaying) {
-			menu = new Menu();
+			menu = new InGameMenu();
 		} else {
 			menu.goBack();
 		}
