@@ -22,13 +22,10 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -37,19 +34,6 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import SwissCheese.annotations.Immutable;
-import SwissCheese.engine.keyboard.KeyActionPreference;
-import SwissCheese.engine.keyboard.KeyPreferenceIO;
-import SwissCheese.engine.keyboard.Keys;
-import SwissCheese.engine.keyboard.keyActions.ExitGame;
-import SwissCheese.engine.keyboard.keyActions.GoBackward;
-import SwissCheese.engine.keyboard.keyActions.GoForward;
-import SwissCheese.engine.keyboard.keyActions.GoLeft;
-import SwissCheese.engine.keyboard.keyActions.GoRight;
-import SwissCheese.engine.keyboard.keyActions.KeyAction;
-import SwissCheese.engine.keyboard.keyActions.OpenMenu;
-import SwissCheese.engine.keyboard.keyActions.PanLeft;
-import SwissCheese.engine.keyboard.keyActions.PanRight;
-import SwissCheese.engine.keyboard.keyActions.SaveGame;
 
 /**
  * This class is the in-game menu that the user sees when they open the menu in
@@ -58,14 +42,13 @@ import SwissCheese.engine.keyboard.keyActions.SaveGame;
  * @author Alex Kalinins
  * @since 2018-12-23
  * @since v0.5
- * @version v0.1
+ * @version v0.2
  */
 @Immutable
 public final class Menu extends JFrame {
 	private static final long serialVersionUID = 3038952637134428918L;
 	private final CardLayout cards;
 	private final JPanel mainPanel;
-	private final Map<KeyAction, Keys> actions;
 
 	private final String HOME = "home";
 	private final String KEYS = "keys";
@@ -81,18 +64,7 @@ public final class Menu extends JFrame {
 	private final JButton settings = new JButton("Settings");
 	private final JButton goBack = new JButton("Return");
 	private final JButton exitGame = new JButton("Exit To Menu");
-	// keybind card:
-	private final JComboBox<Keys> dForward = new JComboBox<>(Keys.values());
-	private final JComboBox<Keys> dBackward = new JComboBox<>(Keys.values());
-	private final JComboBox<Keys> dLeft = new JComboBox<>(Keys.values());
-	private final JComboBox<Keys> dRight = new JComboBox<>(Keys.values());
-	private final JComboBox<Keys> dPanLeft = new JComboBox<>(Keys.values());
-	private final JComboBox<Keys> dPanRight = new JComboBox<>(Keys.values());
-	private final JComboBox<Keys> dOpenMenu = new JComboBox<>(Keys.values());
-	private final JComboBox<Keys> dSaveGame = new JComboBox<>(Keys.values());
-	private final JComboBox<Keys> dExitGame = new JComboBox<>(Keys.values());
-	private final JButton applyKeys = new JButton("Apply Changes");
-
+	
 	private static boolean displaying = false;
 	private static Menu menu;
 
@@ -101,7 +73,6 @@ public final class Menu extends JFrame {
 	 * {@link Menu#display()}.
 	 */
 	private Menu() {
-		actions = makeActionMap();
 		cards = new CardLayout();
 		mainPanel = new JPanel(cards);
 		setSize(300, 300);
@@ -154,11 +125,14 @@ public final class Menu extends JFrame {
 	/**
 	 * Makes and adds each card of the menu to {@code mainPanel}, into a
 	 * {@code CardLayout}.
+	 * <p>
+	 * The keyBindsPanel is a {@link KeyBindsPanel}.
 	 * 
 	 * @see CardLayout
+	 * @see SwissCheese.uiWindows.KeyBindsPanel
 	 */
 	private void initCards() {
-		keyBindsPanel = makeKeyBindsCard();
+		keyBindsPanel = new KeyBindsPanel(this);
 		mainPanel.add(keyBindsPanel, KEYS);
 
 		settingsPanel = makeSettingsCard();
@@ -223,105 +197,6 @@ public final class Menu extends JFrame {
 		return home;
 	}
 
-	/**
-	 * Makes a {@code JPanel} with a {@code JScrollPane} of key bind selections.
-	 * 
-	 * @return a {@code JPanel} of key bind preference selection options.
-	 */
-	private JPanel makeKeyBindsCard() {
-//		JScrollPane keyBinds = new JScrollPane();
-//		keyBinds.setLayout(new ScrollPaneLayout());
-//		keyBinds.setPreferredSize(new Dimension(this.getWidth(), this.getHeight()));
-
-		JPanel keyBinds = new JPanel();
-		keyBinds.setLayout(new BoxLayout(keyBinds, BoxLayout.Y_AXIS));
-
-		Container cGoForward = new Container();
-		cGoForward.setLayout(new BorderLayout());
-		JLabel lblForward = new JLabel(GoForward.getDesc());
-		cGoForward.add(lblForward, BorderLayout.WEST);
-		dForward.setSelectedItem(actions.get(new GoForward()));
-		cGoForward.add(dForward, BorderLayout.EAST);
-		keyBinds.add(cGoForward);
-
-		Container cGoBackward = new Container();
-		cGoBackward.setLayout(new BorderLayout());
-		JLabel lblBackward = new JLabel(GoBackward.getDesc());
-		cGoBackward.add(lblBackward, BorderLayout.WEST);
-		dBackward.setSelectedItem(actions.get(new GoBackward()));
-		cGoBackward.add(dBackward, BorderLayout.EAST);
-		keyBinds.add(cGoBackward);
-
-		Container cGoLeft = new Container();
-		cGoLeft.setLayout(new BorderLayout());
-		JLabel lblLeft = new JLabel(GoLeft.getDesc());
-		cGoLeft.add(lblLeft, BorderLayout.WEST);
-		dLeft.setSelectedItem(actions.get(new GoLeft()));
-		cGoLeft.add(dLeft, BorderLayout.EAST);
-		keyBinds.add(cGoLeft);
-
-		Container cGoRight = new Container();
-		cGoRight.setLayout(new BorderLayout());
-		JLabel lblRight = new JLabel(GoRight.getDesc());
-		cGoRight.add(lblRight, BorderLayout.WEST);
-		dRight.setSelectedItem(actions.get(new GoRight()));
-		cGoRight.add(dRight, BorderLayout.EAST);
-		keyBinds.add(cGoRight);
-
-		Container cPanLeft = new Container();
-		cPanLeft.setLayout(new BorderLayout());
-		JLabel lblPanLeft = new JLabel(PanLeft.getDesc());
-		cPanLeft.add(lblPanLeft, BorderLayout.WEST);
-		dPanLeft.setSelectedItem(actions.get(new PanLeft()));
-		// TODO dPanLeft not showing
-		cPanLeft.add(dPanLeft, BorderLayout.EAST);
-		keyBinds.add(cPanLeft);
-
-		Container cPanRight = new Container();
-		cPanRight.setLayout(new BorderLayout());
-		JLabel lblPanRight = new JLabel(PanRight.getDesc());
-		cPanRight.add(lblPanRight, BorderLayout.WEST);
-		dPanRight.setSelectedItem(actions.get(new PanRight()));
-		cPanRight.add(dPanRight, BorderLayout.EAST);
-		keyBinds.add(cPanRight);
-
-		Container cOpenMenu = new Container();
-		cOpenMenu.setLayout(new BorderLayout());
-		JLabel lblOpenMenu = new JLabel(OpenMenu.getDesc());
-		cOpenMenu.add(lblOpenMenu, BorderLayout.WEST);
-		dOpenMenu.setSelectedItem(actions.get(new OpenMenu()));
-		cOpenMenu.add(dOpenMenu, BorderLayout.EAST);
-		keyBinds.add(cOpenMenu);
-
-		Container cSaveGame = new Container();
-		cSaveGame.setLayout(new BorderLayout());
-		JLabel lblSaveGame = new JLabel(SaveGame.getDesc());
-		cSaveGame.add(lblSaveGame, BorderLayout.WEST);
-		dSaveGame.setSelectedItem(actions.get(new SaveGame()));
-		cSaveGame.add(dSaveGame, BorderLayout.EAST);
-		keyBinds.add(cSaveGame);
-
-		Container cExitGame = new Container();
-		cExitGame.setLayout(new BorderLayout());
-		JLabel lblExitGame = new JLabel(ExitGame.getDesc());
-		cExitGame.add(lblExitGame, BorderLayout.WEST);
-		dExitGame.setSelectedItem(actions.get(new ExitGame()));
-		cExitGame.add(dPanLeft, BorderLayout.EAST);
-		keyBinds.add(cExitGame);
-
-		applyKeys.addActionListener(e -> saveKeyBinds());
-
-		JScrollPane scroll = new JScrollPane(keyBinds);
-		scroll.setPreferredSize(this.getSize());
-		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(scroll, BorderLayout.CENTER);
-		panel.add(applyKeys, BorderLayout.SOUTH);
-
-		return panel;
-	}
-
 	private void saveGame() {
 		// TODO write save game method
 	}
@@ -344,23 +219,6 @@ public final class Menu extends JFrame {
 	}
 
 	/**
-	 * Loads a {@code Map} of classes extending {@link KeyAction} that correspond to
-	 * their {@link Keys} ENUM.
-	 * 
-	 * @return new {@code Map<KeyAction, Keys>}
-	 */
-	private Map<KeyAction, Keys> makeActionMap() {
-		Map<KeyAction, Keys> map = new HashMap<>();
-		KeyAction action;
-		for (Keys key : Keys.values()) {
-			if ((action = key.getAction()) != null) {
-				map.put(action, key);
-			}
-		}
-		return map;
-	}
-
-	/**
 	 * Resumes the game and disposes of the JFrame.
 	 */
 	@Override
@@ -380,24 +238,5 @@ public final class Menu extends JFrame {
 		} else {
 			cards.show(mainPanel, HOME);
 		}
-	}
-
-	/**
-	 * Sets actions to the selected {@link Keys} from each KeyBind
-	 * {@code JComboBox}. Calls to
-	 * {@link SwissCheese.engine.keyboard.KeyActionPreferenceIO#writeToFile()} to
-	 * save the new preference to a file and to bind the keys.
-	 */
-	private void saveKeyBinds() {
-		((Keys) dForward.getSelectedItem()).setAction(new GoForward());
-		((Keys) dBackward.getSelectedItem()).setAction(new GoBackward());
-		((Keys) dLeft.getSelectedItem()).setAction(new GoLeft());
-		((Keys) dRight.getSelectedItem()).setAction(new GoRight());
-		((Keys) dPanLeft.getSelectedItem()).setAction(new PanLeft());
-		((Keys) dPanRight.getSelectedItem()).setAction(new PanRight());
-		((Keys) dOpenMenu.getSelectedItem()).setAction(new OpenMenu());
-		((Keys) dSaveGame.getSelectedItem()).setAction(new SaveGame());
-		((Keys) dExitGame.getSelectedItem()).setAction(new ExitGame());
-		KeyPreferenceIO.writeToFile(KeyActionPreference.makeFromKeys());
 	}
 }
