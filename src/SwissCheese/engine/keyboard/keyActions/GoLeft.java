@@ -38,8 +38,7 @@ public class GoLeft implements KeyAction {
 		Window.mover.moveLeft();
 	}
 
-	@Override
-	public String toString() {
+	public static String getDesc() {
 		return "Walk Left";
 	}
 

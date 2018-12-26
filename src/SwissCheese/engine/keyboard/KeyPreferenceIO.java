@@ -95,6 +95,8 @@ public class KeyPreferenceIO {
 			out.print(gson.toJson(p));
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			p.bindPreferences();
 		}
 	}
 

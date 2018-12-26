@@ -39,8 +39,7 @@ public class GoBackward implements KeyAction {
 
 	}
 
-	@Override
-	public String toString() {
+	public static String getDesc() {
 		return "Walk Backward";
 	}
 

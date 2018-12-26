@@ -16,38 +16,34 @@
  */
 package SwissCheese.engine.keyboard.keyActions;
 
-import SwissCheese.annotations.ThreadSafe;
-import SwissCheese.engine.display.Window;
+import SwissCheese.annotations.Immutable;
+import SwissCheese.engine.display.WindowCloser;
 
 /**
- * Pans camera left
+ * Quits Game (WITHOUT SAVING)
  * 
  * @author Alex Kalinins
  * @since 2018-12-1
  * @since v0.2
  * @version v0.1
  */
-@ThreadSafe
-public class LookLeft implements KeyAction {
-
-	public LookLeft() {
+@Immutable
+public class ExitGame implements KeyAction {
+	public ExitGame() {
 	}
 
 	@Override
 	public synchronized void doAction() {
-		Window.mover.panLeft();
-
+		WindowCloser.closeEverything();
 	}
 
-	@Override
-	public String toString() {
-		return "Look Left";
+	public static String getDesc() {
+		return "Quits Game (NO SAVE!)";
 	}
-
+	
 	@Override
 	public synchronized void stopAction() {
-		Window.mover.stopPanLeft();
-
+		return;
 	}
 
 }

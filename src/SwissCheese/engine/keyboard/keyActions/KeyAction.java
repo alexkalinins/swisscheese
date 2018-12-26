@@ -19,14 +19,28 @@ package SwissCheese.engine.keyboard.keyActions;
 import SwissCheese.engine.io.gson.Convertable;
 
 /**
- * Key Action Interface
+ * Interface for Key Actions of buttons. Key Actions are actions that are done
+ * when a key is pressed and/or released. Each KeyAction has a doAction, which
+ * is done when the key is pressed, and a stopAction which is executed when the
+ * key is released.
+ * <p>
+ * Some actions are single actions (such as opening a menu), in that case,
+ * stopAction would do nothing, and the action will be done in doAction.
+ * <p>
+ * All implementing methods should have a static {@code getDesc()} String method
+ * that returns a description of what the key action does.
+ * <p>
+ * This interface extends the {@link Convertable} interface in order for the
+ * {@code GSON} library to work. Every time a new class implementing the
+ * {@code KeyAction} interface is written or the name is changed,
+ * {@link SwissCheese.devTools.DefaultKeyBindCreator} must be run.
  * 
  * @author Alex Kalinins
  * @since 2018-12-1
  * @since v0.2
  * @version v0.2
  */
-public interface KeyAction extends Convertable{
+public interface KeyAction extends Convertable {
 
 	/**
 	 * Does an action (only for continuous actions).
@@ -35,7 +49,7 @@ public interface KeyAction extends Convertable{
 
 	/**
 	 * Stops doing an action. (only applicable to continuous actions such as
-	 * walking). 
+	 * walking).
 	 */
 	public void stopAction();
 

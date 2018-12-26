@@ -14,37 +14,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package SwissCheese.engine.keyboard.keyActions;
-
-import SwissCheese.annotations.Immutable;
-import SwissCheese.engine.display.WindowCloser;
-
 /**
- * Quits Game (WITHOUT SAVING)
+ * This package contains all classes for Swing windows of the user interface
+ * (such as menus).
  * 
  * @author Alex Kalinins
- * @since 2018-12-1
- * @since v0.2
+ * @since 2018-12-23
+ * @since v0.5
  * @version v0.1
  */
-@Immutable
-public class CloseGame implements KeyAction {
-	public CloseGame() {
-	}
-
-	@Override
-	public synchronized void doAction() {
-		WindowCloser.closeEverything();
-	}
-
-	@Override
-	public String toString() {
-		return "Quits Game (NO SAVE!)";
-	}
-
-	@Override
-	public synchronized void stopAction() {
-		return;
-	}
-
-}
+package SwissCheese.uiWindows;

@@ -39,9 +39,8 @@ public class GoForward implements KeyAction {
 		Window.mover.moveForward();
 	}
 
-	@Override
-	public String toString() {
-		return "Walk Foreward";
+	public static String getDesc() {
+		return "Walk Forward";
 	}
 
 	@Override

@@ -16,34 +16,35 @@
  */
 package SwissCheese.engine.keyboard.keyActions;
 
+import SwissCheese.annotations.ThreadSafe;
+import SwissCheese.engine.display.Window;
+
 /**
- * Opens The Menu
+ * Pans camera right
  * 
  * @author Alex Kalinins
  * @since 2018-12-1
  * @since v0.2
  * @version v0.1
  */
-public class OpenMenu implements KeyAction {
+@ThreadSafe
+public class PanRight implements KeyAction {
 
-	public OpenMenu() {
+	public PanRight() {
 	}
 
 	@Override
-	public void doAction() {
-		throw new UnsupportedOperationException();
+	public synchronized void doAction() {
+		Window.mover.panRight();
 	}
 
 	public static String getDesc() {
-		return "Open Menu";
+		return "Look right";
 	}
 
-	/**
-	 * Menu Opening is not a continuous action
-	 */
 	@Override
-	public void stopAction() {
-		throw new UnsupportedOperationException();
+	public synchronized void stopAction(){
+		Window.mover.stopPanRight();
 	}
 
 }

@@ -20,7 +20,7 @@ import SwissCheese.annotations.ThreadSafe;
 import SwissCheese.engine.display.Window;
 
 /**
- * Pans camera right
+ * Pans camera left
  * 
  * @author Alex Kalinins
  * @since 2018-12-1
@@ -28,24 +28,25 @@ import SwissCheese.engine.display.Window;
  * @version v0.1
  */
 @ThreadSafe
-public class LookRight implements KeyAction {
+public class PanLeft implements KeyAction {
 
-	public LookRight() {
+	public PanLeft() {
 	}
 
 	@Override
 	public synchronized void doAction() {
-		Window.mover.panRight();
+		Window.mover.panLeft();
+
+	}
+
+	public static String getDesc() {
+		return "Look Left";
 	}
 
 	@Override
-	public String toString() {
-		return "Look right";
-	}
+	public synchronized void stopAction() {
+		Window.mover.stopPanLeft();
 
-	@Override
-	public synchronized void stopAction(){
-		Window.mover.stopPanRight();
 	}
 
 }

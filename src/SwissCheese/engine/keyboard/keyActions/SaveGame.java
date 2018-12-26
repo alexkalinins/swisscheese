@@ -33,8 +33,7 @@ public class SaveGame implements KeyAction {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
-	public String toString() {
+	public static String getDesc() {
 		return "Save Game";
 	}
 

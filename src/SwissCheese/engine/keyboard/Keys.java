@@ -30,15 +30,29 @@ import SwissCheese.engine.keyboard.keyActions.KeyAction;
  * @author Alex Kalinins
  * @since 2018-12-1
  * @since v0.2
- * @version v0.1
+ * @version v0.2
  */
 @ThreadSafe
 public enum Keys {
-	A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, N1, N2, N3, N4, N5, N6, N7, N8, N9,
-	N0, SHIFT, ESC, UP, DOWN, LEFT, RIGHT, SPACE, ENTER, BACK_SPACE;
+	A("A"), B("B"), C("C"), D("D"), E("E"), F("F"), G("G"), H("H"), I("I"), J("J"), K("K"), L("L"), M("M"), N("N"),
+	O("O"), P("P"), Q("Q"), R("R"), S("S"), T("T"), U("U"), V("V"), W("W"), X("X"), Y("K"), Z("Z"), N1("1"), N2("2"),
+	N3("3"), N4("4"), N5("5"), N6("6"), N7("7"), N8("8"), N9("9"), N0("0"), SHIFT("Shift"), ESC("Esc"), UP("Up"),
+	DOWN("Down"), LEFT("Left"), RIGHT("Right"), SPACE("Space"), ENTER("Enter"), BACK_SPACE("Back Space");
 
 	private KeyAction action;
-
+	private final String name;
+	
+	/**
+	 * Private constructor
+	 * @param name name of enum
+	 */
+	private Keys(String name) {
+		this.name = name;
+	}
+	
+	public String toString() {
+		return name;
+	}
 	/**
 	 * Sets the action of the Key ENUM to a specific action
 	 * 
@@ -58,9 +72,10 @@ public enum Keys {
 	/**
 	 * Calls action to stop an action. Only applicable to continuous actions such as
 	 * walking.
-	 * @throws InterruptedException 
+	 * 
+	 * @throws InterruptedException
 	 */
-	public synchronized void stopAction(){
+	public synchronized void stopAction() {
 		action.stopAction();
 	}
 
