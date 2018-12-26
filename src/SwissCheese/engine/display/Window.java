@@ -33,7 +33,7 @@ import SwissCheese.engine.io.images.ImageFromArray;
 import SwissCheese.engine.keyboard.KeyPreferenceIO;
 import SwissCheese.engine.keyboard.Keyboard;
 import SwissCheese.map.Map;
-import SwissCheese.uiWindows.Menu;
+import SwissCheese.uiWindows.InGameMenu;
 
 /**
  * A window class. This is a JFrame window which renders the game while the game
@@ -96,7 +96,7 @@ public class Window extends JFrame {
 		setLocationRelativeTo(null);
 		setVisible(true);
 
-		Menu.display();
+		InGameMenu.display();
 
 	}
 

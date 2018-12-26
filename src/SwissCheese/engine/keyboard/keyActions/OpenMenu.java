@@ -16,7 +16,7 @@
  */
 package SwissCheese.engine.keyboard.keyActions;
 
-import SwissCheese.uiWindows.Menu;
+import SwissCheese.uiWindows.InGameMenu;
 
 /**
  * Opens The Menu
@@ -33,7 +33,7 @@ public class OpenMenu implements KeyAction {
 
 	@Override
 	public void doAction() {
-		Menu.display();
+		InGameMenu.display();
 	}
 
 	public static String getDesc() {
