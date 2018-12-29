@@ -28,6 +28,7 @@ import SwissCheese.engine.texture.WallTexture;
 import SwissCheese.engine.texture.WallTextureList;
 import SwissCheese.map.Map;
 import SwissCheese.math.GeomVector2D;
+import SwissCheese.texturePacks.TexturePack;
 
 /**
  * Display Object for rendering graphics on screen.
@@ -35,7 +36,7 @@ import SwissCheese.math.GeomVector2D;
  * @author Alex Kalinins
  * @since 2018-12-10
  * @since v0.2
- * @version v0.1
+ * @version v0.2
  */
 @ThreadSafe
 public class Renderer {
@@ -50,11 +51,11 @@ public class Renderer {
 	private final Color FLOOR = Color.DARK_GRAY; // the color of the floor
 	private final Color SKY = Color.cyan; // the color of the sky
 
-	public Renderer(Map map, Camera camera, float width, float height) {
+	public Renderer(Map map, Camera camera, TexturePack texturePack, float width, float height) {
 		this.camera = camera;
 		this.width = width;
 		this.height = height;
-		wallTextures = new WallTextureList().getList();
+		wallTextures = new WallTextureList(texturePack).getList();
 		maze = map.getMap();
 	}
 
@@ -97,7 +98,7 @@ public class Renderer {
 		double distanceToWall;
 
 		// direction to go in x and y
-		int xStep; 
+		int xStep;
 		int yStep;
 
 		int wallLength; // the length of wall on scanLine
@@ -111,9 +112,9 @@ public class Renderer {
 		int xTexture;
 		int yTexture;
 
-		int rgb; //color of a pixel
+		int rgb; // color of a pixel
 
-		//the wall is horizontal or vertical relative to map (top-down)
+		// the wall is horizontal or vertical relative to map (top-down)
 		boolean wallVertical;
 
 		GeomVector2D<Float> rayDir; // ray direction vector
@@ -160,7 +161,7 @@ public class Renderer {
 
 			// calculating distance to wall:
 			do {
-				//going closer towards the wall
+				// going closer towards the wall
 				if (xSideDistance < ySideDistance) {
 					xSideDistance += deltaDist.getX();
 					xMap += xStep;

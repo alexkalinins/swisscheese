@@ -17,7 +17,9 @@
 package SwissCheese.engine.display;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
@@ -29,11 +31,13 @@ import javax.swing.JFrame;
 import SwissCheese.annotations.NotThreadSafe;
 import SwissCheese.engine.camera.Camera;
 import SwissCheese.engine.camera.Mover;
+import SwissCheese.engine.camera.View;
 import SwissCheese.engine.io.images.ImageFromArray;
 import SwissCheese.engine.keyboard.KeyPreferenceIO;
 import SwissCheese.engine.keyboard.Keyboard;
+import SwissCheese.gameSaving.SaveMetadata;
 import SwissCheese.map.Map;
-import SwissCheese.uiWindows.InGameMenu;
+import SwissCheese.texturePacks.TexturePack;
 
 /**
  * A window class. This is a JFrame window which renders the game while the game
@@ -43,7 +47,7 @@ import SwissCheese.uiWindows.InGameMenu;
  * @author Alex Kalinins
  * @since 2018-12-11
  * @since v0.2
- * @version v0.1
+ * @version v0.3
  *
  */
 @NotThreadSafe
@@ -57,21 +61,55 @@ public class Window extends JFrame {
 
 	// my stuff:
 	private Renderer renderer;
-	private Camera camera;
+	private static Camera camera;
 	public static Mover mover;
 	private Keyboard keyboard;
+	private static SaveMetadata metadata;
 
 	// primitives:
 	private int width;
 	private int height;
 	private volatile int[] pixels;
 
-	public Window(int width, int height, Map map, float FOV) {
-		this.width = width;
-		this.height = height;
+	/**
+	 * Constructor for the window of {@code SwissCheese}.
+	 * 
+	 * @param width       the width of the {@code Window}.
+	 * @param height      the height of the {@code Window}
+	 * @param fitToScreen true if {@code Window} will fit the monitor size. If true,
+	 *                    {@code width} and {@code height} will be disregarded, and
+	 *                    the monitor width and height will be used in their place.
+	 * @param map         the {@link Map} of the game in which the player is placed.
+	 * @param FOV         the field of view of the player - how much they are
+	 *                    seeing. This float must be between -0.1 and -2.5. If it is
+	 *                    less than -2.5 the game is un-playable. If it is 0 or
+	 *                    more, raycasting calculations will not work.
+	 * @param metadataa   the {@link SaveMetadata} of the game. Needed for saving
+	 *                    the game so that they can be identified in the future
+	 *                    based on their name, and the time of saving. (Variable
+	 *                    name misspelled intentionally).
+	 * @param texturePack the {@link TexturePack} object from which texture
+	 *                    resources will be opened in order to have walls with
+	 *                    textures.
+	 * @param view        the view from the camera. This variable is <b>only needed
+	 *                    if opening a game save!</b> If no variable is passed
+	 *                    through, a new {@code View} is created.
+	 */
+	public Window(int width, int height, boolean fitToScreen, Map map, float FOV, SaveMetadata metadataa,
+			TexturePack texturePack, View... view) {
+		if (fitToScreen) {
+			// Getting the screen size.
+			Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+			this.width = (int) screen.getWidth();
+			this.height = (int) screen.getHeight();
+		} else {
+			this.width = width;
+			this.height = height;
+		}
+		metadata = metadataa;
 
-		camera = new Camera(width, height, map, FOV);
-		renderer = new Renderer(map, camera, width, height);
+		camera = new Camera(width, height, map, FOV, view);
+		renderer = new Renderer(map, camera, texturePack, width, height);
 		mover = camera.getMover();
 
 		bufferImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -95,8 +133,6 @@ public class Window extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setVisible(true);
-
-		InGameMenu.display();
 
 	}
 
@@ -136,6 +172,18 @@ public class Window extends JFrame {
 	@Override
 	public final int getHeight() {
 		return height;
+	}
+
+	public static View getView() {
+		return camera.getView();
+	}
+
+	public static final SaveMetadata getMetadata() {
+		return metadata;
+	}
+
+	public static final void setMetadata(SaveMetadata metadataa) {
+		metadata = metadataa;
 	}
 
 }

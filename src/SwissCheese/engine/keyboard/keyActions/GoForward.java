@@ -28,8 +28,7 @@ import SwissCheese.engine.display.Window;
  * @version v0.1
  */
 @ThreadSafe
-public class GoForward implements KeyAction {
-
+public class GoForward implements KeyAction {	
 	public GoForward() {
 
 	}

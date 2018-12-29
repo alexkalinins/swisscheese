@@ -161,7 +161,6 @@ final class KeyBindsPanel extends JPanel {
 		JLabel lblPanLeft = new JLabel(PanLeft.getDesc());
 		cPanLeft.add(lblPanLeft, BorderLayout.WEST);
 		dPanLeft.setSelectedItem(map.get(new PanLeft()));
-		// TODO dPanLeft not showing
 		cPanLeft.add(dPanLeft, BorderLayout.EAST);
 		keyBinds.add(cPanLeft);
 
@@ -194,7 +193,7 @@ final class KeyBindsPanel extends JPanel {
 		JLabel lblExitGame = new JLabel(ExitGame.getDesc());
 		cExitGame.add(lblExitGame, BorderLayout.WEST);
 		dExitGame.setSelectedItem(map.get(new ExitGame()));
-		cExitGame.add(dPanLeft, BorderLayout.EAST);
+		cExitGame.add(dExitGame, BorderLayout.EAST);
 		keyBinds.add(cExitGame);
 
 		JScrollPane scroll = new JScrollPane(keyBinds);

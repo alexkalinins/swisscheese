@@ -107,7 +107,7 @@ public class Mover {
 			}
 		}
 	}
-	
+
 	/**
 	 * Shuts down {@code Mover} and prevents the user from moving
 	 */

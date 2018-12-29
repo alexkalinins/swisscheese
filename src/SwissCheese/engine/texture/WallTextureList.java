@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import SwissCheese.annotations.Immutable;
+import SwissCheese.texturePacks.TexturePack;
 
 /**
  * This class loads images from a list of {@code File} objects into a list of
@@ -29,33 +30,34 @@ import SwissCheese.annotations.Immutable;
  * @author Alex Kalinins
  * @since 2018-12-15
  * @since v0.3
- * @version v0.1
+ * @version v0.2
  */
 @Immutable
 public class WallTextureList {
-	private final List<File> fileList = new ArrayList<>();
+	private final List<File> fileList;
 
 	/**
-	 * Constructor
+	 * Constructor.
+	 * 
+	 * @param textures a {@link TexturePack} from which the textures are loaded.
 	 */
-	public WallTextureList() {
-		fileList.add(new File("resources/textures/test.bmp"));
-		fileList.add(new File("resources/textures/test1.png"));
-		fileList.add(new File("resources/textures/test2.png"));
+	public WallTextureList(TexturePack textures) {
+		fileList = textures.getFileList();
 	}
 
 	/**
 	 * Loads a list of textures
-	 * @return
+	 * 
+	 * @return a list of {@link WallTexture} objects
 	 */
 	public List<WallTexture> getList() {
 		List<WallTexture> list = new ArrayList<>();
-//		for (File file : fileList) {
-//			list.add(new WallTexture(file));
-//		}
-		list.add(new WallTexture(fileList.get(0)));
-		list.add(new WallTexture(fileList.get(1)));
-		list.add(new WalkThroughTexture(fileList.get(2)));
+		list.add(new WallTexture(fileList.get(0))); // entry
+		list.add(new WalkThroughTexture(fileList.get(1))); // exit
+		list.add(new WallTexture(fileList.get(2))); // wall1
+		list.add(new WallTexture(fileList.get(3)));// wall2
+		list.add(new WallTexture(fileList.get(4)));// wall3
+
 		return list;
 	}
 }

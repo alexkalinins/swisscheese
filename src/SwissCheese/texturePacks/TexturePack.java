@@ -14,10 +14,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package SwissCheese.engine.texture;
+package SwissCheese.texturePacks;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import SwissCheese.annotations.Immutable;
@@ -33,8 +34,11 @@ import SwissCheese.annotations.Immutable;
  * @since 2018-12-22
  * @since v0.5
  * @version v0.1
+ * 
+ * @see <a href=
+ *      "https://gitlab.com/poof/swisscheese/wikis/Texture--Packs">SwissCheese
+ *      wiki - Texture-Packs</a>
  */
-//TODO make wiki article
 @Immutable
 public final class TexturePack {
 	private final String name;
@@ -62,8 +66,8 @@ public final class TexturePack {
 	 * 
 	 */
 	public void make() {
-		for (String path: filePaths) {
-			fileList.add(new File(path.replaceAll("#name#", name)));	
+		for (String path : filePaths) {
+			fileList.add(new File(path.replaceAll("#name#", name)));
 		}
 	}
 
@@ -73,7 +77,7 @@ public final class TexturePack {
 	public TexturePack() {
 		this(null, null, null, null);
 	}
-	
+
 	public List<File> getFileList() {
 		return fileList;
 	}
@@ -92,5 +96,59 @@ public final class TexturePack {
 
 	public String getVersion() {
 		return version;
+	}
+
+	/**
+	 * To string of {@code TexturePack}.
+	 */
+	@Override
+	public String toString() {
+		return String.format("%s (%s) by %s", name, version, author);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((author == null) ? 0 : author.hashCode());
+		result = prime * result + ((fileList == null) ? 0 : fileList.hashCode());
+		result = prime * result + Arrays.hashCode(filePaths);
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((version == null) ? 0 : version.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TexturePack other = (TexturePack) obj;
+		if (author == null) {
+			if (other.author != null)
+				return false;
+		} else if (!author.equals(other.author))
+			return false;
+		if (fileList == null) {
+			if (other.fileList != null)
+				return false;
+		} else if (!fileList.equals(other.fileList))
+			return false;
+		if (!Arrays.equals(filePaths, other.filePaths))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (version == null) {
+			if (other.version != null)
+				return false;
+		} else if (!version.equals(other.version))
+			return false;
+		return true;
 	}
 }

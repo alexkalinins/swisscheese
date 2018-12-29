@@ -17,6 +17,8 @@
 package SwissCheese.map;
 
 import java.awt.geom.Point2D;
+import java.security.SecureRandom;
+import java.util.Random;
 
 import SwissCheese.annotations.Immutable;
 import SwissCheese.maze.Generator;
@@ -27,7 +29,7 @@ import SwissCheese.maze.Generator;
  * @author Alex Kalinins
  * @since 2018-12-10
  * @since v0.3
- * @version v0.3
+ * @version v0.4
  * @see SwissCheese.maze
  *
  */
@@ -36,7 +38,7 @@ public final class Map {
 	private final int[][] map;
 	private final Point2D entry;
 	private final Point2D exit;
-	private final int size; //this size is in walls, not cells
+	private final int size; // this size is in walls, not cells
 
 	/**
 	 * Constructor for Map
@@ -48,15 +50,14 @@ public final class Map {
 		map = GenerateMaze(size);
 		entry = Generator.getEntry();
 		exit = Generator.getExit();
-		
+
 		this.size = map.length;
 	}
 
 	/**
 	 * Calls maze generator to generate maze.
 	 * <p>
-	 * Unimplemented: will randomize the texture in the maze by replacing the wall
-	 * numbers (types) to make the maze less boring.
+	 * Randomizes all walls that are not entry or exit walls.
 	 * 
 	 * @param size the size of the maze (measured in number of grids)
 	 * @return 2D Integer array of the maze.
@@ -64,30 +65,34 @@ public final class Map {
 	 */
 	private int[][] GenerateMaze(int size) {
 		int[][] map = Generator.generateMaze(size);
-		
 
 		Point2D entry = Generator.getEntry();
 		Point2D exit = Generator.getExit();
 		
-		// TODO make code to randomize textures
+		Random r = new SecureRandom();
+		int val;
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				val = map[i][j];
+				if (val == 1) {
+					val = r.nextInt(3) + 3;
+				}
+				map[i][j] = val;
+			}
+		}
 		
-//		for (int i =0; i<size;i++) {
-//			for(int j = 0; j<size; j++) {
-//				
-//			}
-//		}
+		map[(int) entry.getX()][(int) entry.getY()] = 1;
+		map[(int) exit.getX()][(int) exit.getY()] = 2;
+
 		
-		map[(int)entry.getX()][(int)entry.getY()] = 2;
-		map[(int)exit.getX()][(int)exit.getY()] = 3;
-		
+
 		return map;
 	}
-	
 
 	public int[][] getMap() {
 		return map.clone();
 	}
-	
+
 	public int getSize() {
 		return size;
 	}
@@ -99,7 +104,5 @@ public final class Map {
 	public Point2D getExit() {
 		return exit;
 	}
-	
-	
 
 }

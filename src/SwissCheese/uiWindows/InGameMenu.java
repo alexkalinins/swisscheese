@@ -26,14 +26,17 @@ import java.awt.FlowLayout;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import SwissCheese.annotations.Immutable;
+import SwissCheese.engine.display.Window;
+import SwissCheese.game.GameFromSettings;
+import SwissCheese.gameSaving.GameSave;
+import SwissCheese.gameSaving.GameSaveManager;
+import SwissCheese.gameSaving.SaveMetadata;
 
 /**
  * This class is the in-game menu that the user sees when they open the menu in
@@ -45,7 +48,7 @@ import SwissCheese.annotations.Immutable;
  * @version v0.2
  */
 @Immutable
-public final class InGameMenu extends JFrame {
+public final class InGameMenu extends JDialog {
 	private static final long serialVersionUID = 3038952637134428918L;
 	private final CardLayout cards;
 	private final JPanel mainPanel;
@@ -64,7 +67,7 @@ public final class InGameMenu extends JFrame {
 	private final JButton settings = new JButton("Settings");
 	private final JButton goBack = new JButton("Return");
 	private final JButton exitGame = new JButton("Exit To Menu");
-	
+
 	private static boolean displaying = false;
 	private static InGameMenu menu;
 
@@ -80,6 +83,7 @@ public final class InGameMenu extends JFrame {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setResizable(false);
+		setModal(true);
 
 		setLayout(new BorderLayout());
 
@@ -93,13 +97,6 @@ public final class InGameMenu extends JFrame {
 
 		cards.show(mainPanel, HOME);
 		pack();
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		setVisible(true);
 
 	}
@@ -180,8 +177,8 @@ public final class InGameMenu extends JFrame {
 		JPanel home = new JPanel();
 		saveGame.setAlignmentX(Component.CENTER_ALIGNMENT);
 		keyBinds.setAlignmentX(Component.CENTER_ALIGNMENT);
-		settings.setAlignmentX(Component.CENTER_ALIGNMENT);		
-		
+		settings.setAlignmentX(Component.CENTER_ALIGNMENT);
+
 		home.setLayout(new BoxLayout(home, BoxLayout.PAGE_AXIS));
 		home.add(Box.createRigidArea(new Dimension(0, 7)));
 		saveGame.addActionListener(e -> saveGame());
@@ -197,7 +194,10 @@ public final class InGameMenu extends JFrame {
 	}
 
 	private void saveGame() {
-		// TODO write save game method
+		SaveMetadata metadata = Window.getMetadata().updateMetadata();
+		GameSave save = new GameSave(GameFromSettings.getMap(), Window.getView(), metadata);
+		
+		GameSaveManager.getManager().saveGame(save);
 	}
 
 	private void exitGame() {
@@ -206,12 +206,13 @@ public final class InGameMenu extends JFrame {
 
 	/**
 	 * Creates a {@code Menu} if it is not being displayed already. Otherwise, it
-	 * calls {@link InGameMenu#goBack} to either return to the 'home' card of the menu or
-	 * to quit the menu and resume the game.
+	 * calls {@link InGameMenu#goBack} to either return to the 'home' card of the
+	 * menu or to quit the menu and resume the game.
 	 */
 	public static void display() {
 		if (!displaying) {
 			menu = new InGameMenu();
+			displaying = true;
 		} else {
 			menu.goBack();
 		}
@@ -223,6 +224,7 @@ public final class InGameMenu extends JFrame {
 	@Override
 	public void dispose() {
 		// TODO un-pause game
+		displaying = false;
 		super.dispose();
 	}
 

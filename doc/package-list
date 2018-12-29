@@ -12,9 +12,11 @@ SwissCheese.engine.keyboard
 SwissCheese.engine.keyboard.keyActions
 SwissCheese.engine.texture
 SwissCheese.game
+SwissCheese.gameSaving
 SwissCheese.map
 SwissCheese.math
 SwissCheese.maze
 SwissCheese.settings
+SwissCheese.texturePacks
 SwissCheese.uiWindows
 test
