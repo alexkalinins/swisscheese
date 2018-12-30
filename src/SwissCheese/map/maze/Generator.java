@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package SwissCheese.maze;
+package SwissCheese.map.maze;
 
 import java.awt.geom.Point2D;
 import java.security.SecureRandom;
@@ -24,7 +24,7 @@ import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import SwissCheese.maze.CellGrid.Direction;
+import SwissCheese.map.maze.CellGrid.Direction;
 
 /**
  * The Generator class generates a maze using the CellGrid, through a variant of
@@ -140,7 +140,7 @@ public  class Generator {
 	/**
 	 * Sets the location of the real entry and exit {@code Point2D} from the maze
 	 * array, after it has been converted from {@code CellGrid} object by
-	 * {@link SwissCheese.maze.CellGrid#gridTo2DArray()}
+	 * {@link SwissCheese.map.maze.CellGrid#gridTo2DArray()}
 	 * 
 	 * @param maze final maze
 	 * @since v0.2

@@ -16,7 +16,7 @@
  */
 package SwissCheese.map;
 
-import SwissCheese.maze.CellGrid;
+import SwissCheese.map.maze.CellGrid;
 
 /**
  * An <code>enum</code> for the difficulty level of the maze.

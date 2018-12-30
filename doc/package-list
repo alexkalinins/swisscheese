@@ -14,8 +14,8 @@ SwissCheese.engine.texture
 SwissCheese.game
 SwissCheese.gameSaving
 SwissCheese.map
+SwissCheese.map.maze
 SwissCheese.math
-SwissCheese.maze
 SwissCheese.settings
 SwissCheese.texturePacks
 SwissCheese.uiWindows

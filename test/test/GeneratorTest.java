@@ -23,7 +23,7 @@ import java.awt.geom.Point2D;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import SwissCheese.maze.Generator;
+import SwissCheese.map.maze.Generator;
 
 /**
  * Testing that Entry and exit points of the maze are even numbers (not walls)
@@ -50,7 +50,7 @@ class GeneratorTest {
 	}
 
 	/**
-	 * Test method for {@link SwissCheese.maze.Generator#getExit()}.
+	 * Test method for {@link SwissCheese.map.maze.Generator#getExit()}.
 	 */
 	@Test
 	void testGetExit() {
@@ -60,7 +60,7 @@ class GeneratorTest {
 	}
 
 	/**
-	 * Test method for {@link SwissCheese.maze.Generator#getEntry()}.
+	 * Test method for {@link SwissCheese.map.maze.Generator#getEntry()}.
 	 */
 	@Test
 	void testGetEntry() {

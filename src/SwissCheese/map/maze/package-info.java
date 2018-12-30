@@ -22,4 +22,4 @@
  * @since 2018-11-14
  * @version v0.1
  */
-package SwissCheese.maze;
+package SwissCheese.map.maze;

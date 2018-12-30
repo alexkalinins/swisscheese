@@ -21,7 +21,7 @@ import java.security.SecureRandom;
 import java.util.Random;
 
 import SwissCheese.annotations.Immutable;
-import SwissCheese.maze.Generator;
+import SwissCheese.map.maze.Generator;
 
 /**
  * Map object of the SwissCheese game
@@ -30,7 +30,7 @@ import SwissCheese.maze.Generator;
  * @since 2018-12-10
  * @since v0.3
  * @version v0.4
- * @see SwissCheese.maze
+ * @see SwissCheese.map.maze
  *
  */
 @Immutable
