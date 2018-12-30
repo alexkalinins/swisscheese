@@ -347,11 +347,8 @@ public class StartMenu extends JDialog {
 	}
 
 	public final GameSettings getSettings() {
-		if (newGame) {
-			return settings;
-		} else {
-			throw new IllegalStateException("Cannot return settings: not new game");
-		}
+		return settings;
+
 	}
 
 	public final DifficultyLevel getDiff() {

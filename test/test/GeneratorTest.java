@@ -16,14 +16,15 @@
  */
 package test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.awt.geom.Point2D;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import SwissCheese.map.maze.Generator;
+import SwissCheese.math.GeomPoint2D;
 
 /**
  * Testing that Entry and exit points of the maze are even numbers (not walls)
@@ -31,11 +32,11 @@ import SwissCheese.map.maze.Generator;
  * @author Alex Kalinins
  * @since 2018-12-19
  * @since v0.3
- * @version v0.2
+ * @version v0.3
  */
 class GeneratorTest {
-	private Point2D entry;
-	private Point2D exit;
+	private GeomPoint2D<Integer> entry;
+	private GeomPoint2D<Integer> exit;
 	private int[][] maze;
 	private final int SIZE = 20;
 

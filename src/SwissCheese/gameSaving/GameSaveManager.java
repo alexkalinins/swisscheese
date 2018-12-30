@@ -24,14 +24,19 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.junit.runner.notification.RunListener.ThreadSafe;
+
 import com.google.gson.Gson;
 
 /**
  * Class for managing serialized {@link GameSave} objects. Operations such as
- * creation (serialization), opening (deserialization) and deletion coult be
+ * creation (serialization), opening (deserialization) and deletion could be
  * done through this {@code GameSaveManager} class.
  * <p>
- * All actions involivng serialization are done through the {@code GSON}
+ * This class saves all {@code GameSaves} to a list, and then saves the list to
+ * file. All {@code GameSave} objects are in the same file.
+ * <p>
+ * All actions involving serialization are done through the {@code GSON}
  * library.
  * 
  * @author Alex Kalinins
@@ -41,6 +46,7 @@ import com.google.gson.Gson;
  *
  * @see com.google.gson.Gson
  */
+@ThreadSafe
 public final class GameSaveManager {
 	private final GameSaveList list;
 	private final Gson gson;
@@ -72,7 +78,6 @@ public final class GameSaveManager {
 		if (MANAGER != null) {
 			throw new RuntimeException("Use getInstance() to get an instane of GameSaveManager");
 		}
-
 		gson = new Gson();
 		if (FILE.exists()) {
 			list = readFromFile();
@@ -100,7 +105,7 @@ public final class GameSaveManager {
 	 * 
 	 * @param index the index of the {@code GameSave} being deleted.
 	 */
-	public void deleteGame(int index) {
+	public synchronized void deleteGame(int index) {
 		list.remove(index);
 		if (list.size() == 0) {
 			FILE.delete();

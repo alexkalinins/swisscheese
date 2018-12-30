@@ -16,7 +16,6 @@
  */
 package SwissCheese.map.maze;
 
-import java.awt.geom.Point2D;
 import java.security.SecureRandom;
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -25,6 +24,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import SwissCheese.map.maze.CellGrid.Direction;
+import SwissCheese.math.GeomPoint2D;
 
 /**
  * The Generator class generates a maze using the CellGrid, through a variant of
@@ -47,19 +47,19 @@ import SwissCheese.map.maze.CellGrid.Direction;
  * @author Alex Kalinins
  * @since v0.1
  * @since 2018-11-14
- * @version v0.3
+ * @version v0.4
  * @see <a href="https://en.wikipedia.org/wiki/Depth-first_search"> Randomized
  *      Depth-First Search</a>
  */
-public  class Generator {
+public class Generator {
 	private final int size; // size of maze size*size
 	private Deque<Direction> log = new ArrayDeque<Direction>();
 	private CellGrid grid;
 	private Random rand = new SecureRandom();
-	private Point2D startingCell = new Point2D.Double();
-	private Point2D currentCell = new Point2D.Double();
-	private static Point2D exit = new Point2D.Double();
-	private static Point2D entry = new Point2D.Double();
+	private GeomPoint2D<Integer> startingCell = new GeomPoint2D<>();
+	private GeomPoint2D<Integer> currentCell = new GeomPoint2D<>();
+	private static GeomPoint2D<Integer> exit = new GeomPoint2D<>();
+	private static GeomPoint2D<Integer> entry = new GeomPoint2D<>();
 	private static int[][] maze;
 	public static Lock lock = new ReentrantLock();
 
@@ -138,8 +138,8 @@ public  class Generator {
 	}
 
 	/**
-	 * Sets the location of the real entry and exit {@code Point2D} from the maze
-	 * array, after it has been converted from {@code CellGrid} object by
+	 * Sets the location of the real entry and exit {@code GeomPoint2D} from the
+	 * maze array, after it has been converted from {@code CellGrid} object by
 	 * {@link SwissCheese.map.maze.CellGrid#gridTo2DArray()}
 	 * 
 	 * @param maze final maze
@@ -167,13 +167,13 @@ public  class Generator {
 	}
 
 	/**
-	 * randomDirection overloaded to work with Point2D
+	 * randomDirection overloaded to work with {@link GeomPoint2D}.
 	 * 
-	 * @param p Point2D of the current cell
+	 * @param p {@link GeomPoint2D} of the current cell
 	 * @return a random direction
 	 * @see Generator#randomDirection(int, int)
 	 */
-	private Direction randomDirection(Point2D p) {
+	private Direction randomDirection(GeomPoint2D<Integer> p) {
 		return randomDirection((int) p.getX(), (int) p.getY());
 	}
 
@@ -229,21 +229,21 @@ public  class Generator {
 	/**
 	 * Getter of the exit point of the maze. The exit point is a random location on
 	 * any side (Direction) other than NORTH (starting side). Where the player
-	 * should end the game
+	 * should end the game.
 	 * 
-	 * @return exit point of the maze (Point2D)
+	 * @return exit point of the maze.
 	 */
-	public static Point2D getExit() {
+	public static GeomPoint2D<Integer> getExit() {
 		return exit;
 	}
 
 	/**
 	 * Getter of the entry point of the maze (where the algorithm started). Where
-	 * the player should start the game
+	 * the player should start the game.
 	 * 
-	 * @return entry point (Point2D)
+	 * @return entry point.
 	 */
-	public static Point2D getEntry() {
+	public static GeomPoint2D<Integer> getEntry() {
 		return entry;
 	}
 }

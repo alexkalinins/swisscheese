@@ -16,8 +16,11 @@
  */
 package SwissCheese.map.maze;
 
-import java.awt.geom.Point2D;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import SwissCheese.math.GeomPoint2D;
 
 /**
  * The CellGrid class creates a CellGrid object necessary for the generation of
@@ -37,6 +40,7 @@ import java.util.*;
  * @author Alex Kalinins
  * @since v0.2
  * @since 2018-11-14
+ * @version v0.2
  *
  */
 public class CellGrid {
@@ -84,7 +88,8 @@ public class CellGrid {
 	 * <p>
 	 * The Direction enums contain abstract methods that involve direction, such as
 	 * breaking a wall in a certain direction. Abstract methods in Direction are
-	 * overloaded to work with both x and y int locations and Point2D locations.
+	 * overloaded to work with both x and y int locations and {@code GeomPoint2D}
+	 * locations.
 	 * 
 	 * @author Alex Kalinins
 	 * @since v0.1
@@ -106,7 +111,7 @@ public class CellGrid {
 			}
 
 			@Override
-			public Point2D move(final int x, final int y) {
+			public GeomPoint2D<Integer> move(final int x, final int y) {
 				northWall[x][y] = true;
 
 				southWall[x][y - 1] = true;
@@ -121,13 +126,13 @@ public class CellGrid {
 			}
 
 			@Override
-			public Point2D go(int x, int y) {
-				point.setLocation(x, (double) y - 1);
+			public GeomPoint2D<Integer> go(int x, int y) {
+				point.setLocation(x, y - 1);
 				return point;
 			}
 
 			@Override
-			public Point2D makeExit(int randomNumber) {
+			public GeomPoint2D<Integer> makeExit(int randomNumber) {
 				northWall[randomNumber][0] = true;
 				point.setLocation(randomNumber, 0);
 				return point;
@@ -148,7 +153,7 @@ public class CellGrid {
 			}
 
 			@Override
-			public Point2D move(final int x, final int y) {
+			public GeomPoint2D<Integer> move(final int x, final int y) {
 				southWall[x][y] = true;
 				northWall[x][y + 1] = true;
 				visited[x][y + 1] = true;
@@ -161,15 +166,15 @@ public class CellGrid {
 			}
 
 			@Override
-			public Point2D go(int x, int y) {
-				point.setLocation(x, (double) y + 1);
+			public GeomPoint2D<Integer> go(int x, int y) {
+				point.setLocation(x, y + 1);
 				return point;
 			}
 
 			@Override
-			public Point2D makeExit(int randomNumber) {
+			public GeomPoint2D<Integer> makeExit(int randomNumber) {
 				southWall[randomNumber][gridHeight - 1] = true;
-				point.setLocation(randomNumber, (double) gridHeight - 1);
+				point.setLocation(randomNumber, gridHeight - 1);
 				return point;
 			}
 
@@ -188,7 +193,7 @@ public class CellGrid {
 			}
 
 			@Override
-			public Point2D move(final int x, final int y) {
+			public GeomPoint2D<Integer> move(final int x, final int y) {
 				eastWall[x][y] = true;
 				westWall[x + 1][y] = true;
 				visited[x + 1][y] = true;
@@ -201,15 +206,15 @@ public class CellGrid {
 			}
 
 			@Override
-			public Point2D go(int x, int y) {
-				point.setLocation((double) x + 1, y);
+			public GeomPoint2D<Integer> go(int x, int y) {
+				point.setLocation(x + 1, y);
 				return point;
 			}
 
 			@Override
-			public Point2D makeExit(int randomNumber) {
+			public GeomPoint2D<Integer> makeExit(int randomNumber) {
 				eastWall[gridWidth - 1][randomNumber] = true;
-				point.setLocation((double) gridWidth - 1, randomNumber);
+				point.setLocation(gridWidth - 1, randomNumber);
 				return point;
 			}
 		},
@@ -228,7 +233,7 @@ public class CellGrid {
 			}
 
 			@Override
-			public Point2D move(final int x, final int y) {
+			public GeomPoint2D<Integer> move(final int x, final int y) {
 				westWall[x][y] = true;
 				eastWall[x - 1][y] = true;
 				visited[x - 1][y] = true;
@@ -241,13 +246,13 @@ public class CellGrid {
 			}
 
 			@Override
-			public Point2D go(int x, int y) {
-				point.setLocation((double) x - 1, y);
+			public GeomPoint2D<Integer> go(int x, int y) {
+				point.setLocation(x - 1, y);
 				return point;
 			}
 
 			@Override
-			public Point2D makeExit(int randomNumber) {
+			public GeomPoint2D<Integer> makeExit(int randomNumber) {
 				westWall[0][randomNumber] = true;
 				point.setLocation(0, randomNumber);
 				return point;
@@ -255,7 +260,7 @@ public class CellGrid {
 
 		};
 
-		private static Point2D point = new Point2D.Double();
+		private static GeomPoint2D<Integer> point = new GeomPoint2D<>();
 
 		/**
 		 * Uses the randomNumber in the argument to pick a cell on the wall of a
@@ -264,9 +269,9 @@ public class CellGrid {
 		 * Used to make the entry and exit of the maze.
 		 * 
 		 * @param randomNumber random number to pick the exit point
-		 * @return Point2D of the location of the exit/entry.
+		 * @return point of the location of the exit/entry.
 		 */
-		public abstract Point2D makeExit(int randomNumber);
+		public abstract GeomPoint2D<Integer> makeExit(int randomNumber);
 
 		/**
 		 * Checks if the cell in that direction is unvisited
@@ -277,7 +282,7 @@ public class CellGrid {
 		 */
 		public abstract boolean directionAvailable(int x, int y);
 
-		public boolean directionAvailable(Point2D p) {
+		public boolean directionAvailable(GeomPoint2D<Integer> p) {
 			return this.directionAvailable((int) p.getX(), (int) p.getY());
 		}
 
@@ -292,12 +297,12 @@ public class CellGrid {
 		public abstract void breakWall(int x, int y);
 
 		/**
-		 * Overloaded breakWall() to work with Point2d
+		 * Overloaded breakWall() to work with {@link GeomPoint2D}.
 		 * 
-		 * @param p Point2D
+		 * @param p the point of the cell whose wall is being broken.
 		 * @see Direction#breakWall(int, int);
 		 */
-		public void breakWall(Point2D p) {
+		public void breakWall(GeomPoint2D<Integer> p) {
 			this.breakWall((int) p.getX(), (int) p.getY());
 		}
 
@@ -307,19 +312,19 @@ public class CellGrid {
 		 * 
 		 * @param x x-location of the current cell
 		 * @param y y-location of the current cell
-		 * @return Point2D of the current cell <b>after</b> move
+		 * @return point of the current cell <b>after</b> move
 		 */
-		public abstract Point2D move(final int x, final int y);
+		public abstract GeomPoint2D<Integer> move(final int x, final int y);
 
 		/**
-		 * Overloaded move() to work with Point2D
+		 * Overloaded move() to work with {@link GeomPoint2D}
 		 * 
-		 * @param p Point2D
-		 * @return Point2D of current cell after move
+		 * @param p starting position
+		 * @return point of current cell after move
 		 * @see Direction#move(int, int)
 		 */
-		public Point2D move(Point2D p) {
-			return this.move((int) p.getX(), (int) p.getY());
+		public GeomPoint2D<Integer> move(GeomPoint2D<Integer> p) {
+			return this.move(p.getX(), p.getY());
 		}
 
 		/**
@@ -330,24 +335,24 @@ public class CellGrid {
 		public abstract Direction antiDirection();
 
 		/**
-		 * Point2D for a cell in a direction of a cell <b>without</> breaking any walls
-		 * or marking adjacent cell as visited.
+		 * The point of a cell in a direction of a cell <b>without</b> breaking any
+		 * walls or marking adjacent cell as visited.
 		 * 
 		 * @param x x-location
 		 * @param y y-location
-		 * @return Point2D of an adjacent cell
+		 * @return point of an adjacent cell
 		 */
-		public abstract Point2D go(int x, int y);
+		public abstract GeomPoint2D<Integer> go(int x, int y);
 
 		/**
 		 * Cell in the direction from a current cell
 		 * 
-		 * @param p Point2D of current cell
+		 * @param p point of current cell
 		 * @return cell adjacent in the direction from p
 		 * @see Direction#go(int, int)
 		 */
-		public Point2D go(Point2D p) {
-			return this.go((int) p.getX(), (int) p.getY());
+		public GeomPoint2D<Integer> go(GeomPoint2D<Integer> p) {
+			return this.go(p.getX(), p.getY());
 		}
 	}; // end for ENUMs
 
@@ -385,11 +390,13 @@ public class CellGrid {
 	}
 
 	/**
-	 * Converts an the CellGrid object to an 2D {@code int} array. If a wall is to be
-	 * drawn in that location, the Integer will have a value of 1, else value of 0.
+	 * Converts an the CellGrid object to an 2D {@code int} array. If a wall is to
+	 * be drawn in that location, the Integer will have a value of 1, else value of
+	 * 0.
 	 * <p>
-	 * Integers are used instead of booleans because the {@code int} value represents the
-	 * type of wall texture used. (randomly selected by a different method).
+	 * Integers are used instead of booleans because the {@code int} value
+	 * represents the type of wall texture used. (randomly selected by a different
+	 * method).
 	 * 
 	 * @return CellGrid as a 2D {@code int} Array
 	 */
@@ -446,7 +453,6 @@ public class CellGrid {
 
 		map.add(line1);
 
-
 		int[][] primitiveMap = new int[map.size()][map.size()];
 		for (int i = 0; i < primitiveMap.length; i++) {
 			primitiveMap[i] = map.get(i).stream().mapToInt(Integer::intValue).toArray();
@@ -459,11 +465,11 @@ public class CellGrid {
 	 * Checks the number of possible directions the maze generator can go by
 	 * checking the visited[][] array of the adjacent cells.
 	 * 
-	 * @param p Point2D of the cell being checked
+	 * @param p point of the cell being checked
 	 * @return number of possible directions
 	 * @see CellGrid#checkRemainingPaths(int, int)
 	 */
-	public int checkRemainingPaths(Point2D p) {
+	public int checkRemainingPaths(GeomPoint2D<Integer> p) {
 		return checkRemainingPaths((int) p.getX(), (int) p.getY());
 	}
 

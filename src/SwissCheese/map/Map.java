@@ -16,12 +16,12 @@
  */
 package SwissCheese.map;
 
-import java.awt.geom.Point2D;
 import java.security.SecureRandom;
 import java.util.Random;
 
 import SwissCheese.annotations.Immutable;
 import SwissCheese.map.maze.Generator;
+import SwissCheese.math.GeomPoint2D;
 
 /**
  * Map object of the SwissCheese game
@@ -36,8 +36,8 @@ import SwissCheese.map.maze.Generator;
 @Immutable
 public final class Map {
 	private final int[][] map;
-	private final Point2D entry;
-	private final Point2D exit;
+	private final GeomPoint2D<Integer> entry;
+	private final GeomPoint2D<Integer> exit;
 	private final int size; // this size is in walls, not cells
 
 	/**
@@ -66,8 +66,8 @@ public final class Map {
 	private int[][] GenerateMaze(int size) {
 		int[][] map = Generator.generateMaze(size);
 
-		Point2D entry = Generator.getEntry();
-		Point2D exit = Generator.getExit();
+		GeomPoint2D<Integer> entry = Generator.getEntry();
+		GeomPoint2D<Integer> exit = Generator.getExit();
 		
 		Random r = new SecureRandom();
 		int val;
@@ -81,8 +81,8 @@ public final class Map {
 			}
 		}
 		
-		map[(int) entry.getX()][(int) entry.getY()] = 1;
-		map[(int) exit.getX()][(int) exit.getY()] = 2;
+		map[entry.getX()][entry.getY()] = 1;
+		map[exit.getX()][exit.getY()] = 2;
 
 		
 
@@ -97,11 +97,11 @@ public final class Map {
 		return size;
 	}
 
-	public Point2D getEntry() {
+	public GeomPoint2D<Integer> getEntry() {
 		return entry;
 	}
 
-	public Point2D getExit() {
+	public GeomPoint2D<Integer> getExit() {
 		return exit;
 	}
 
