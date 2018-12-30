@@ -70,7 +70,7 @@ final class OpenGamePanel extends AbstractMakeGamePanel {
 	 */
 	private void deleteSelected() {
 		int index = gameList.getSelectedIndex();
-		GameSaveManager.getManager().deleteGame(index);
+		GameSaveManager.getInstance().deleteGame(index);
 		updateJList();
 
 	}
@@ -101,7 +101,7 @@ final class OpenGamePanel extends AbstractMakeGamePanel {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private DefaultListModel loadModel(DefaultListModel model) {
 		model.clear();
-		for (GameSave save : GameSaveManager.getManager().getList()) {
+		for (GameSave save : GameSaveManager.getInstance().getList()) {
 			model.addElement(save);
 		}
 		return model;

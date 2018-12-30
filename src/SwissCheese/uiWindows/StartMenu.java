@@ -306,7 +306,7 @@ public class StartMenu extends JDialog {
 
 	private void startSavedGame() {
 		newGame = false;
-		gameSave = GameSaveManager.getManager().getList().get(openGamePanel.getGameSaveIndex());
+		gameSave = GameSaveManager.getInstance().getList().get(openGamePanel.getGameSaveIndex());
 		dispose();
 	}
 

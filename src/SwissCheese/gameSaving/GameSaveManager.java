@@ -43,12 +43,25 @@ import com.google.gson.Gson;
  */
 public final class GameSaveManager {
 	private final GameSaveList list;
-	private final Gson gson = new Gson();
+	private final Gson gson;
 	private static final File FILE = new File("settings/user-saves/list.json");
 
-	private static final GameSaveManager MANAGER = new GameSaveManager();
+	private static volatile GameSaveManager MANAGER;
 
-	public static final GameSaveManager getManager() {
+	/**
+	 * Lazy initialization for {@code GameSaveManager}.
+	 * <p>
+	 * If {@code MANAGER} is null, then this method calls the constructor to create
+	 * a new instance of {@code GameSaveManager}. Otherwise, no new instance is
+	 * created. In any case, the method returns {@code MANAGER}.
+	 * 
+	 * @return MANAGER
+	 */
+	public static synchronized final GameSaveManager getInstance() {
+		if (MANAGER == null) {
+			MANAGER = new GameSaveManager();
+		}
+
 		return MANAGER;
 	}
 
@@ -56,6 +69,11 @@ public final class GameSaveManager {
 	 * Private constructor.
 	 */
 	private GameSaveManager() {
+		if (MANAGER != null) {
+			throw new RuntimeException("Use getInstance() to get an instane of GameSaveManager");
+		}
+
+		gson = new Gson();
 		if (FILE.exists()) {
 			list = readFromFile();
 		} else {

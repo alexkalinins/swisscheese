@@ -177,6 +177,7 @@ public class Window extends JFrame {
 	public static View getView() {
 		return camera.getView();
 	}
+	
 
 	public static final SaveMetadata getMetadata() {
 		return metadata;

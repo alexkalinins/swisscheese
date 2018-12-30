@@ -71,8 +71,8 @@ public final class Map {
 		
 		Random r = new SecureRandom();
 		int val;
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
+		for (int i = 0; i < map.length; i++) {
+			for (int j = 0; j < map[i].length; j++) {
 				val = map[i][j];
 				if (val == 1) {
 					val = r.nextInt(3) + 3;

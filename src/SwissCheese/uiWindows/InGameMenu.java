@@ -28,6 +28,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -196,12 +197,24 @@ public final class InGameMenu extends JDialog {
 	private void saveGame() {
 		SaveMetadata metadata = Window.getMetadata().updateMetadata();
 		GameSave save = new GameSave(GameFromSettings.getMap(), Window.getView(), metadata);
-		
-		GameSaveManager.getManager().saveGame(save);
+
+		GameSaveManager.getInstance().saveGame(save);
 	}
 
 	private void exitGame() {
-		// TODO write exit game method
+		int val = JOptionPane.showConfirmDialog(this, "Do you wish to save game?", "Exit Game",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+		if (val == 2) {
+			System.out.println("User cancelled leaving game");
+			return;
+		} else if (val == 0) {
+			SaveMetadata metadata = Window.getMetadata().updateMetadata();
+			GameSave save = new GameSave(GameFromSettings.getMap(), Window.getView(), metadata);
+			GameSaveManager.getInstance().saveGame(save);
+			System.out.println("User exiting game with saving");
+		}
+		System.out.println("Exiting game");
+		System.exit(0);
 	}
 
 	/**
