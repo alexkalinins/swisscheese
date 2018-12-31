@@ -25,10 +25,10 @@ import SwissCheese.engine.display.Window;
  * @author Alex Kalinins
  * @since 2018-12-1
  * @since v0.2
- * @version v0.1
+ * @version v0.2
  */
 @ThreadSafe
-public class GoForward implements KeyAction {	
+public class GoForward implements KeyAction {
 	public GoForward() {
 
 	}
@@ -45,6 +45,16 @@ public class GoForward implements KeyAction {
 	@Override
 	public synchronized void stopAction() {
 		Window.mover.stopForward();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return this == obj || obj instanceof GoForward;
+	}
+
+	@Override
+	public int hashCode() {
+		return GoForward.class.hashCode();
 	}
 
 }

@@ -48,5 +48,15 @@ public class PanLeft implements KeyAction {
 		Window.mover.stopPanLeft();
 
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return this == obj || obj instanceof PanLeft;
+	}
+	
+	@Override
+	public int hashCode() {
+		return PanLeft.class.hashCode();
+	}
 
 }

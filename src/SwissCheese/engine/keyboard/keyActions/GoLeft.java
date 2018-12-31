@@ -25,7 +25,7 @@ import SwissCheese.engine.display.Window;
  * @author Alex Kalinins
  * @since 2018-12-1
  * @since v0.2
- * @version v0.1
+ * @version v0.2
  */
 @ThreadSafe
 public class GoLeft implements KeyAction {
@@ -45,6 +45,16 @@ public class GoLeft implements KeyAction {
 	@Override
 	public synchronized void stopAction() {
 		Window.mover.stopLeft();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return this == obj || obj instanceof GoLeft;
+	}
+
+	@Override
+	public int hashCode() {
+		return GoLeft.class.hashCode();
 	}
 
 }

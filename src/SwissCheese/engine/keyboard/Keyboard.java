@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import SwissCheese.annotations.Immutable;
-import SwissCheese.engine.keyboard.keyActions.TestAction;
 
 /**
  * Keyboard listener class for game's ui
@@ -52,7 +51,6 @@ public class Keyboard implements KeyListener {
 	private Map<Integer, Keys> loadKeyMap() {
 		Map<Integer, Keys> map = new HashMap<Integer, Keys>();
 
-		Keys.A.setAction(new TestAction());
 		map.put(KeyEvent.VK_A, Keys.A);
 		map.put(KeyEvent.VK_B, Keys.B);
 		map.put(KeyEvent.VK_C, Keys.C);

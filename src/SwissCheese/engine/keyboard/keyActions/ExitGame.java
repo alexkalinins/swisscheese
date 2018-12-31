@@ -25,7 +25,7 @@ import SwissCheese.engine.display.WindowCloser;
  * @author Alex Kalinins
  * @since 2018-12-1
  * @since v0.2
- * @version v0.1
+ * @version v0.2
  */
 @Immutable
 public class ExitGame implements KeyAction {
@@ -40,10 +40,20 @@ public class ExitGame implements KeyAction {
 	public static String getDesc() {
 		return "Quits Game (NO SAVE!)";
 	}
-	
+
 	@Override
 	public synchronized void stopAction() {
 		return;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return this == obj || obj instanceof ExitGame;
+	}
+	
+	@Override
+	public int hashCode() {
+		return ExitGame.class.hashCode();
 	}
 
 }

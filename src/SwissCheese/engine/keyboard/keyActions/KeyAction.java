@@ -30,6 +30,11 @@ import SwissCheese.engine.io.gson.Convertable;
  * All implementing methods should have a static {@code getDesc()} String method
  * that returns a description of what the key action does.
  * <p>
+ * It is assumed that all implementing methods contain no fields, and just call
+ * other <i>static</i> methods. Therefore, the <code>equals</code>
+ * implementation does not look at any fields, but rather if an object is an
+ * instance of implementing class.
+ * <p>
  * This interface extends the {@link Convertable} interface in order for the
  * {@code GSON} library to work. Every time a new class implementing the
  * {@code KeyAction} interface is written or the name is changed,
@@ -52,5 +57,4 @@ public interface KeyAction extends Convertable {
 	 * walking).
 	 */
 	public void stopAction();
-
 }

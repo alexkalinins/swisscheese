@@ -22,7 +22,7 @@ package SwissCheese.engine.keyboard.keyActions;
  * @author Alex Kalinins
  * @since 2018-12-1
  * @since v0.2
- * @version v0.1
+ * @version v0.2
  */
 public class SaveGame implements KeyAction {
 	public SaveGame() {
@@ -40,6 +40,16 @@ public class SaveGame implements KeyAction {
 	@Override
 	public synchronized void stopAction() {
 		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return  this == obj || obj instanceof SaveGame;
+	}
+	
+	@Override
+	public int hashCode() {
+		return SaveGame.class.hashCode();
 	}
 
 }

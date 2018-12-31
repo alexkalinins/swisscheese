@@ -47,5 +47,15 @@ public class OpenMenu implements KeyAction {
 	public void stopAction() {
 		return;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return  this == obj || obj instanceof OpenMenu;
+	}
+	
+	@Override
+	public int hashCode() {
+		return OpenMenu.class.hashCode();
+	}
 
 }

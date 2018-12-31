@@ -14,31 +14,36 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package SwissCheese.engine.keyboard.keyActions;
+package test;
 
-import SwissCheese.annotations.ThreadSafe;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+import SwissCheese.engine.keyboard.keyActions.GoForward;
+import SwissCheese.engine.keyboard.keyActions.GoLeft;
+import SwissCheese.engine.keyboard.keyActions.KeyAction;
 
 /**
- * Test action used for testing the keyboard
+ * A test for {@code equals} method of classes implementing {@link KeyAction}.
  * 
  * @author Alex Kalinins
- * @since 2018-12-1
- * @since v0.2
- * @version v0.1
+ * @since 2018-12-30
+ * @since v0.5
  */
-@ThreadSafe
-public class TestAction implements KeyAction {
-	public TestAction() {
-	}
+class KeyActionEquals {
 
-	@Override
-	public void doAction() {
-		System.out.println("You are holding a key");
-	}
+	@Test
+	void testEqualsObject() {
+		KeyAction left1 = new GoLeft();
+		KeyAction left2 = new GoLeft();
+		GoLeft left3 = new GoLeft();
+		KeyAction notleft = new GoForward();
 
-	@Override
-	public void stopAction() {
-		System.out.println("You released a key");
+		assertEquals(left1, left1);
+		assertTrue(left1.equals(left2));
+		assertTrue(left1.equals(left3));
+		assertNotEquals(notleft, left3);
 
 	}
 
