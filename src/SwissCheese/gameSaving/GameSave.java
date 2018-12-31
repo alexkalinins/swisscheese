@@ -72,10 +72,18 @@ public class GameSave implements Comparable<GameSave> {
 	public int compareTo(GameSave other) {
 		return metadata.compareTo(other.getMetadata());
 	}
-	
+
 	@Override
 	public String toString() {
 		return metadata.toString();
+	}
+
+	public boolean equals(Object obj) {
+		if (!(obj instanceof GameSave))
+			return false;
+		if (obj == this)
+			return true;
+		return metadata.equals(((GameSave)obj).getMetadata());
 	}
 
 }

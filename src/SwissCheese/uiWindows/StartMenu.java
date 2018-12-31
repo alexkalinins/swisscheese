@@ -299,7 +299,7 @@ public class StartMenu extends JDialog {
 
 	private void startNewGame() {
 		newGame = true;
-		gameName = newGamePanel.getName();
+		gameName = newGamePanel.getNameField();
 		diff = newGamePanel.getDifficultyField();
 		dispose();
 	}

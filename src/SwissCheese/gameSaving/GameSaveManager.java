@@ -89,11 +89,21 @@ public final class GameSaveManager {
 	/**
 	 * Adds the {@link GameSave} {@code save} to {@code list}, calls
 	 * {@link GameSaveList#sort()} and calls
-	 * {@link GameSaveManager#writeToFile(GameSaveList)}.
+	 * {@link GameSaveManager#writeToFile(GameSaveList)}. Also deletes any duplicate
+	 * {@code GameSave} objects..
 	 * 
 	 * @param save the {@code GameSave} being added to the list and saved.
 	 */
 	public void saveGame(GameSave save) {
+		// checking for duplicate games.
+		// search is not necesary if list empty
+		if (list.size() != 0) {
+			int val = searchList(save);
+			if (val != -1) {
+				// deleting duplicate game.
+				deleteGame(val);
+			}
+		}
 		list.add(save);
 		list.sort();
 		writeToFile(list);
@@ -106,8 +116,10 @@ public final class GameSaveManager {
 	 * @param index the index of the {@code GameSave} being deleted.
 	 */
 	public synchronized void deleteGame(int index) {
+		System.out.printf("Deleting a GameSave: [%s]%n", list.get(index).toString());
 		list.remove(index);
 		if (list.size() == 0) {
+			System.out.println("Deleting GameSaveList file");
 			FILE.delete();
 		} else {
 			writeToFile(list);
@@ -148,6 +160,26 @@ public final class GameSaveManager {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	/**
+	 * Linear search of the list to find {@code save}. Linear search was used
+	 * instead of binary search because comparison must be made based on
+	 * {@code save}'s identifier and name and not its {@code Calendar}
+	 * 
+	 * @param save the query of the search
+	 * @return the index of the found save or -1 if the search was unsuccessful.
+	 */
+	private int searchList(GameSave save) {
+		System.out.println("Searching GameSaveList");
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).equals(save)) {
+				System.out.println("Game found on index " + i);
+				return i;
+			}
+		}
+		System.out.println("GameSaveList search unsuccessful");
+		return -1;
 	}
 
 	/**

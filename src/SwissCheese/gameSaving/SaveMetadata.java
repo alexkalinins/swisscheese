@@ -16,6 +16,7 @@
  */
 package SwissCheese.gameSaving;
 
+import java.security.SecureRandom;
 import java.util.Calendar;
 
 import SwissCheese.annotations.Immutable;
@@ -33,18 +34,29 @@ import SwissCheese.annotations.Immutable;
  */
 @Immutable
 public final class SaveMetadata implements Comparable<SaveMetadata> {
+	/** The name of the {@code GameSave}. */
 	private final String name;
-	// The time at which the game was saved:
+	/** The time at which the game was saved. */
 	private final Calendar date;
+	/** A random long used to identify {@code GameSaves}. */
+	private final long identifier;
 
 	/**
 	 * Private metadata constructor.
 	 * 
-	 * @param name name of the {@code GameSave}
+	 * @param name       name of the {@code GameSave}
+	 * @param identifier the random identifier for the {@code GameSave}. If left
+	 *                   blank, a random {@code identifier} will be generated using
+	 *                   {@link SecureRandom}.
 	 */
-	private SaveMetadata(String name) {
+	private SaveMetadata(String name, long... identifier) {
 		this.name = name;
 		date = Calendar.getInstance();
+		if (identifier.length == 0) {
+			this.identifier = (new SecureRandom()).nextLong();
+		} else {
+			this.identifier = identifier[0];
+		}
 	}
 
 	/**
@@ -58,13 +70,14 @@ public final class SaveMetadata implements Comparable<SaveMetadata> {
 	}
 
 	/**
-	 * Updates the {@code Calendar} of {@code SaveMetadata}.
+	 * Updates the {@code Calendar} of {@code SaveMetadata}. This method creates a
+	 * new instance of {@code SaveMetadata} with the <b>same</b> identifier.
 	 * 
-	 * @return a new instance of {@code SaveMetadata} with the same name, but
-	 *         updated {@code Calendar}.
+	 * @return a new instance of {@code SaveMetadata} with the same name and
+	 *         identifier, but updated {@code Calendar}.
 	 */
 	public SaveMetadata updateMetadata() {
-		return new SaveMetadata(name);
+		return new SaveMetadata(name, identifier);
 	}
 
 	public final String getName() {
@@ -73,6 +86,10 @@ public final class SaveMetadata implements Comparable<SaveMetadata> {
 
 	public final Calendar getDate() {
 		return date;
+	}
+
+	public final long getIdentifier() {
+		return identifier;
 	}
 
 	/**
@@ -88,13 +105,52 @@ public final class SaveMetadata implements Comparable<SaveMetadata> {
 		return date.compareTo(other.getDate());
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (identifier ^ (identifier >>> 32));
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	/**
+	 * Equals method. This method compares this instance of {@code SaveMetadata} to
+	 * Object {@code obj} based on their name and identifier.
+	 * <p>
+	 * This method does not look at the {@code date} so that if there are two game
+	 * saves with the same name and identifier (thus older and newer
+	 * {@code GameSave}), the older game-save can be deleted so that there are no
+	 * confusing duplicates.s
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SaveMetadata other = (SaveMetadata) obj;
+		if (identifier != other.identifier)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
+
 	/**
 	 * To String that returns {@code name} and {@code date} in a pretty fashion:<br>
-	 * "Name — HH:MM - DD, Month"
+	 * "Name — HH:MM - Month, DD"
 	 */
 	@Override
 	public String toString() {
 		return String.format("%s — %s", name, PrettyTime.tohmDDMonth(date));
 	}
+	
+	
 
 }

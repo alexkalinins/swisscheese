@@ -40,18 +40,19 @@ class PrettyTime {
 	 * @return calendar in pretty format.
 	 */
 	static String tohmDDMonth(Calendar calendar) {
-		return String.format("%d:%d - %d, %s", calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE),
-				calendar.get(Calendar.DATE), intToMonth(calendar.get(Calendar.MONTH)));
+		int minute = calendar.get(Calendar.MINUTE);
+		return String.format("%d:%s - %s %d", calendar.get(Calendar.HOUR), String.format("%s%d",(minute<10?'0':""),minute),
+				intToMonth(calendar.get(Calendar.MONTH)), calendar.get(Calendar.DATE));
 	}
 
 	/**
 	 * Converts {@code month} integer into a Month word (e.g., 2 = February)
 	 * 
-	 * @param month the month number (starting count at 1)
+	 * @param month the month number (starting count at 0)
 	 * @return month as word
 	 */
 	private static String intToMonth(int month) {
-		return new DateFormatSymbols().getMonths()[--month];
+		return new DateFormatSymbols().getMonths()[month];
 	}
 
 }
