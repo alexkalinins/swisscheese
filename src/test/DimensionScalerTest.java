@@ -16,12 +16,12 @@
  */
 package test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.awt.Dimension;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import org.swisscheese.swisscheese.math.DimensionScaler;
 
 /**
@@ -41,7 +41,7 @@ class DimensionScalerTest {
 	Dimension t2result;
 	Dimension t2expected = new Dimension(400, 320);
 
-	@BeforeEach
+	@Before
 	void setUp() throws Exception {
 		t1result = DimensionScaler.scale(t1original, t1prefered);
 		t2result = DimensionScaler.scale(t2original, t2prefered);

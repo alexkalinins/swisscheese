@@ -16,12 +16,12 @@
  */
 package test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import org.swisscheese.swisscheese.map.maze.Generator;
 import org.swisscheese.swisscheese.math.GeomPoint2D;
 
@@ -42,7 +42,7 @@ class GeneratorTest {
 	/**
 	 * @throws java.lang.Exception
 	 */
-	@BeforeEach
+	@Before
 	void setUp() throws Exception {
 		maze = Generator.generateMaze(SIZE);
 		entry = Generator.getEntry();

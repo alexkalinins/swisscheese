@@ -17,11 +17,11 @@
 package test;
 
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.swisscheese.swisscheese.engine.keyboard.keyActions.GoBackward;
 import org.swisscheese.swisscheese.engine.keyboard.keyActions.GoForward;
 import org.swisscheese.swisscheese.engine.keyboard.keyActions.GoLeft;

@@ -16,12 +16,12 @@
  */
 package test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import org.swisscheese.swisscheese.devTools.GameCleaner;
 import org.swisscheese.swisscheese.gameSaving.GameSave;
 import org.swisscheese.swisscheese.gameSaving.GameSaveList;
@@ -50,7 +50,7 @@ class GameCleanerTest {
 	 * 
 	 * @throws Exception
 	 */
-	@BeforeEach
+	@Before
 	void setUp() throws Exception {
 		GameSave save = new GameSave(null, null, SaveMetadata.makeMetadata("hello world"));
 		GameSaveManager.getInstance().saveGame(save);

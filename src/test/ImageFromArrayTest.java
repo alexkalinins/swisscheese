@@ -16,18 +16,19 @@
  */
 package test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import org.swisscheese.swisscheese.engine.io.images.ImageFromArray;
 
 /**
- * Testing to see if {@link org.swisscheese.swisscheese.engine.io.images.ImageFromArray} works
- * and converts an array of pixels into a {@code BufferedImage}.
+ * Testing to see if
+ * {@link org.swisscheese.swisscheese.engine.io.images.ImageFromArray} works and
+ * converts an array of pixels into a {@code BufferedImage}.
  * 
  * @author Alex Kalinins
  * @since 2018-12-18
@@ -44,7 +45,7 @@ class ImageFromArrayTest {
 	/**
 	 * @throws java.lang.Exception
 	 */
-	@BeforeEach
+	@Before
 	void setUp() throws Exception {
 		// array of arbitrarily picked colors
 		int[] colors = { Color.black.getRGB(), Color.blue.getRGB(), Color.red.getRGB(), Color.pink.getRGB(),
@@ -67,7 +68,7 @@ class ImageFromArrayTest {
 		int[] pixels2 = imageFromArray.getRGB(0, 0, WIDTH, HEIGHT, null, 0, WIDTH);
 
 		for (int i = 0; i < pixels.length; i++) {
-			assertEquals(pixels[i], pixels2[i], "Should be the same");
+			assertEquals(pixels[i], pixels2[i]);
 		}
 	}
 

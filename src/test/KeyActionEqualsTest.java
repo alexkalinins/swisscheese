@@ -16,9 +16,9 @@
  */
 package test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.swisscheese.swisscheese.engine.keyboard.keyActions.GoForward;
 import org.swisscheese.swisscheese.engine.keyboard.keyActions.GoLeft;
 import org.swisscheese.swisscheese.engine.keyboard.keyActions.KeyAction;
