@@ -100,6 +100,7 @@ public class Window extends JFrame {
 		if (fitToScreen) {
 			// Getting the screen size.
 			Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+			System.out.println("Fitting window size to screen: "+screen.toString());
 			this.width = (int) screen.getWidth();
 			this.height = (int) screen.getHeight();
 		} else {
@@ -108,18 +109,18 @@ public class Window extends JFrame {
 		}
 		metadata = metadataa;
 
-		camera = new Camera(width, height, map, FOV, view);
-		renderer = new Renderer(map, camera, texturePack, width, height);
+		camera = new Camera(this.width, this.height, map, FOV, view);
+		renderer = new Renderer(map, camera, texturePack, this.width, this.height);
 		mover = camera.getMover();
 
-		bufferImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		bufferImage = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_RGB);
 
 		pixels = ((DataBufferInt) bufferImage.getRaster().getDataBuffer()).getData();
 
 		keyboard = new Keyboard();
 		KeyPreferenceIO.readFromFile();
 
-		setSize(width, height);
+		setSize(this.width, this.height);
 		setResizable(false);
 		setTitle("Swiss Cheese - v0.5a");
 		addKeyListener(keyboard);
