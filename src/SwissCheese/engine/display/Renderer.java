@@ -171,7 +171,7 @@ public class Renderer {
 					yMap += yStep;
 					wallVertical = true;
 				}
-			} while (maze[Math.abs(xMap)][Math.abs(yMap)] <= 0);// ray has hit the wall
+			} while (maze[xMap][yMap] <= 0);// ray has hit the wall
 
 			// distance from the player to the wall
 			distanceToWall = (wallVertical) ? Math.abs((yMap - yPos + (1 - yStep) / 2) / rayDir.getY())

@@ -42,9 +42,11 @@ public class GameCleaner {
 	 */
 	public static void main(String[] args) {
 		if(SETTINGS.exists()) {
+			System.out.println("Deleting settings");
 			SETTINGS.delete();
 		}
 		if(SAVES.exists()) {
+			System.out.println("Deleting saves");
 			SAVES.delete();
 		}
 

@@ -18,6 +18,7 @@ package SwissCheese.map.maze;
 
 import java.security.SecureRandom;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.Random;
 import java.util.concurrent.locks.Lock;
@@ -76,6 +77,51 @@ public class Generator {
 		generate();
 		maze = grid.gridTo2DArray();
 		createRealEntryAndExit(maze);
+
+		maze = wrapMaze(maze);
+		entry.add(1);
+		exit.add(1);
+	}
+
+	/**
+	 * Wraps {@code maze} in a wall. This is done to prevent the rays of the
+	 * ray-casting algorithm from exiting out out the map (which causes
+	 * {@code ArrayIndexOutOfBoundsException} to occur.
+	 * <p>
+	 * After this method wraps the maze with a wall, 1 must be added to x and y
+	 * values of the entry and exit point of the maze, since they are shifted.
+	 * 
+	 * @param maze the maze that is being wrapped.
+	 * @return the wrapped {@code maze} array.
+	 */
+	private int[][] wrapMaze(int[][] maze) {
+		int[][] newMaze = new int[maze.length + 2][maze.length + 2];
+
+		// array for top and bottom wall
+		int[] topLine = new int[maze.length];
+		Arrays.fill(topLine, 1);
+
+		// loading top wall
+		newMaze[0][0] = 1;
+		System.arraycopy(topLine, 0, newMaze[0], 1, maze.length);
+		newMaze[0][newMaze.length - 1] = 1;
+
+		// loading bottom wall
+		newMaze[newMaze.length - 1][0] = 1;
+		System.arraycopy(topLine, 0, newMaze[newMaze.length - 1], 1, maze.length);
+		newMaze[newMaze.length - 1][newMaze.length - 1] = 1;
+
+		// loading the rest
+		for (int i = 1; i < newMaze.length - 1; i++) {
+			// creating left and right wall
+			newMaze[i][0] = 1;
+			newMaze[i][newMaze.length - 1] = 1;
+
+			// copying array from maze to newMaze
+			System.arraycopy(maze[i-1], 0, newMaze[i], 1, maze.length);
+		}
+
+		return newMaze;
 	}
 
 	/**

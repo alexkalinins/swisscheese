@@ -25,7 +25,7 @@ import SwissCheese.annotations.ThreadSafe;
  * @author Alex Kalinins
  * @since 2018-12-20
  * @since v0.3
- * @version v0.2
+ * @version v0.3
  */
 @ThreadSafe
 public final class GeomPoint2D<T extends Number> {
@@ -59,11 +59,12 @@ public final class GeomPoint2D<T extends Number> {
 	public GeomPoint2D() {
 
 	}
-	
+
 	/**
 	 * Constructor from two {@link Number} objects.
-	 * @param x x-location
-	 * @param y y-location
+	 * 
+	 * @param x  x-location
+	 * @param y  y-location
 	 * @param bs used to prevent ambiguity.
 	 */
 	@SuppressWarnings("unchecked")
@@ -73,12 +74,24 @@ public final class GeomPoint2D<T extends Number> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Class<T> getClassType(){
+	public Class<T> getClassType() {
 		return (Class<T>) x.getClass();
 	}
 
 	/**
+	 * Adds {@code value} to x and y of the {@code GeomPoint2D}.
+	 * 
+	 * @param value value being added to the point.
+	 * @see GenericsMath#addObj(Number, Number)
+	 */
+	public synchronized void add(T value) {
+		setX(GenericsMath.addObj(x, value));
+		setY(GenericsMath.addObj(y, value));
+	}
+
+	/**
 	 * Getter for the x-location of the point.
+	 * 
 	 * @return x location of the point.
 	 */
 	public final T getX() {
@@ -87,6 +100,7 @@ public final class GeomPoint2D<T extends Number> {
 
 	/**
 	 * Getter of the y-location of the point.
+	 * 
 	 * @return y location of the point.
 	 */
 	public final T getY() {
@@ -95,35 +109,39 @@ public final class GeomPoint2D<T extends Number> {
 
 	/**
 	 * Setter for the x-location of the point.
+	 * 
 	 * @param x the new x location.
 	 */
-	public synchronized final void setX(T x) {
+	public final void setX(T x) {
 		this.x = x;
 	}
 
 	/**
 	 * Setter for the y-location of the point.
+	 * 
 	 * @param y the new y location.
 	 */
-	public synchronized final void setY(T y) {
+	public final void setY(T y) {
 		this.y = y;
 	}
-	
+
 	/**
 	 * Setter for the location of the point from points {@code x} and {@code y}
+	 * 
 	 * @param x new x location.
 	 * @param y new y location
 	 */
-	public synchronized final void setLocation(T x, T y) {
+	public final void setLocation(T x, T y) {
 		setX(x);
 		setY(y);
 	}
-	
+
 	/**
 	 * Setter for the location of the point from another {@code GeomPoint2D}.
+	 * 
 	 * @param other the other {@link GeomPoint2D}.
 	 */
-	public synchronized final void setLocation(GeomPoint2D<T> other) {
+	public final void setLocation(GeomPoint2D<T> other) {
 		setLocation(other.getX(), other.getY());
 	}
 

@@ -30,7 +30,7 @@ package SwissCheese.math;
  * @author Alex Kalinins
  * @since 2018-12-20
  * @since v0.3
- * @version v0.1
+ * @version v0.2
  */
 public strictfp class GenericsMath {
 
@@ -42,7 +42,7 @@ public strictfp class GenericsMath {
 	 * @return a product of {@code x} and {@code y}
 	 */
 	@SuppressWarnings("unchecked")
-	public static final synchronized <T extends Number> T multiplyObj(T x, T y) {
+	public static final <T extends Number> T multiplyObj(T x, T y) {
 		if (x == null || y == null) {
 			return null;
 		}
@@ -65,7 +65,7 @@ public strictfp class GenericsMath {
 	 * @return sum of {@code x} and {@code y}
 	 */
 	@SuppressWarnings("unchecked")
-	public static final synchronized <T extends Number> T addObj(T x, T y) {
+	public static final <T extends Number> T addObj(T x, T y) {
 		if (x == null || y == null) {
 			return null;
 		}
@@ -80,8 +80,7 @@ public strictfp class GenericsMath {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public static final synchronized <T extends Number> T power(T x, final int degree) {
+	public static final <T extends Number> T power(T x, final int degree) {
 		if (x == null) {
 			return null;
 		}
@@ -104,7 +103,7 @@ public strictfp class GenericsMath {
 	 * @return {@code y} subtracted from {@code x}
 	 */
 	@SuppressWarnings("unchecked")
-	public static final synchronized <T extends Number> T subtractObj(T x, T y) {
+	public static final <T extends Number> T subtractObj(T x, T y) {
 		if (x == null || y == null) {
 			return null;
 		}
