@@ -16,35 +16,21 @@
  */
 package test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.Test;
-
-import SwissCheese.engine.keyboard.keyActions.GoForward;
-import SwissCheese.engine.keyboard.keyActions.GoLeft;
-import SwissCheese.engine.keyboard.keyActions.KeyAction;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
 
 /**
- * A test for {@code equals} method of classes implementing {@link KeyAction}.
+ * A test suite for all {@code JUnit} tests.
  * 
  * @author Alex Kalinins
  * @since 2018-12-30
  * @since v0.5
+ * @version v1.0
  */
-class KeyActionEquals {
-
-	@Test
-	void testEqualsObject() {
-		KeyAction left1 = new GoLeft();
-		KeyAction left2 = new GoLeft();
-		GoLeft left3 = new GoLeft();
-		KeyAction notleft = new GoForward();
-
-		assertEquals(left1, left1);
-		assertTrue(left1.equals(left2));
-		assertTrue(left1.equals(left3));
-		assertNotEquals(notleft, left3);
-
-	}
+@RunWith(Suite.class)
+@SuiteClasses({ DimensionScalerTest.class, GameCleanerTest.class, GeneratorTest.class, GenericsMathPowerTest.class,
+		ImageFromArrayTest.class, KeyActionEqualsTest.class, KeyActionHashcodeTest.class })
+public class AllTests {
 
 }

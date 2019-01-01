@@ -96,7 +96,7 @@ public final class GameSaveManager {
 	 */
 	public void saveGame(GameSave save) {
 		// checking for duplicate games.
-		// search is not necesary if list empty
+		// search is not necessary if list empty
 		if (list.size() != 0) {
 			int val = searchList(save);
 			if (val != -1) {

@@ -46,7 +46,7 @@ import SwissCheese.engine.keyboard.keyActions.SaveGame;
  * @since 2018-12-31
  * @since v0.5
  */
-class KeyActionHashcode {
+class KeyActionHashcodeTest {
 
 	@Test
 	void test() {
