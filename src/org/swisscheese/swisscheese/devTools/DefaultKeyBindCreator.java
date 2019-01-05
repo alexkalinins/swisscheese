@@ -23,7 +23,15 @@ import java.io.PrintWriter;
 import org.swisscheese.swisscheese.engine.io.gson.InterfacetoJson;
 import org.swisscheese.swisscheese.engine.io.gson.JsonAdapterRegistrar;
 import org.swisscheese.swisscheese.engine.keyboard.KeyActionPreference;
-import org.swisscheese.swisscheese.engine.keyboard.keyActions.*;
+import org.swisscheese.swisscheese.engine.keyboard.keyActions.ExitGame;
+import org.swisscheese.swisscheese.engine.keyboard.keyActions.GoBackward;
+import org.swisscheese.swisscheese.engine.keyboard.keyActions.GoForward;
+import org.swisscheese.swisscheese.engine.keyboard.keyActions.GoLeft;
+import org.swisscheese.swisscheese.engine.keyboard.keyActions.GoRight;
+import org.swisscheese.swisscheese.engine.keyboard.keyActions.KeyAction;
+import org.swisscheese.swisscheese.engine.keyboard.keyActions.OpenMenu;
+import org.swisscheese.swisscheese.engine.keyboard.keyActions.PanLeft;
+import org.swisscheese.swisscheese.engine.keyboard.keyActions.PanRight;
 
 import com.google.gson.Gson;
 

@@ -38,6 +38,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu.Separator;
+import javax.swing.JSeparator;
 
 import org.swisscheese.swisscheese.engine.display.WindowSize;
 import org.swisscheese.swisscheese.engine.io.images.FileToImageIcon;
@@ -46,8 +47,6 @@ import org.swisscheese.swisscheese.gameSaving.GameSaveManager;
 import org.swisscheese.swisscheese.map.DifficultyLevel;
 import org.swisscheese.swisscheese.settings.GameSettings;
 import org.swisscheese.swisscheese.settings.GameSettingsManager;
-
-import javax.swing.JSeparator;
 
 /**
  * This is the menu that the user sees every single time they start the game.
