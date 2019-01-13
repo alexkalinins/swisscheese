@@ -32,6 +32,7 @@ import org.swisscheese.swisscheese.annotations.NotThreadSafe;
 import org.swisscheese.swisscheese.engine.camera.Camera;
 import org.swisscheese.swisscheese.engine.camera.Mover;
 import org.swisscheese.swisscheese.engine.camera.View;
+import org.swisscheese.swisscheese.engine.display.stripRenderer.StripRendererDispatcher;
 import org.swisscheese.swisscheese.engine.io.images.ImageFromArray;
 import org.swisscheese.swisscheese.engine.keyboard.KeyPreferenceIO;
 import org.swisscheese.swisscheese.engine.keyboard.Keyboard;
@@ -60,7 +61,7 @@ public class Window extends JFrame {
 	private Graphics graphics;
 
 	// my stuff:
-	private Renderer renderer;
+	private CanRender renderer;
 	private static Camera camera;
 	public static Mover mover;
 	private Keyboard keyboard;
@@ -110,7 +111,11 @@ public class Window extends JFrame {
 		metadata = metadataa;
 
 		camera = new Camera(this.width, this.height, map, FOV, view);
-		renderer = new Renderer(map, camera, texturePack, this.width, this.height);
+		
+		renderer = new StripRendererDispatcher(map, camera, texturePack, width, height, 1);
+//		renderer = new Renderer(map, camera, texturePack, this.width, this.height);
+		
+		
 		mover = camera.getMover();
 
 		bufferImage = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_RGB);

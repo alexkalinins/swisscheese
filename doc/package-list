@@ -4,6 +4,7 @@ org.swisscheese.swisscheese.devTools
 org.swisscheese.swisscheese.engine
 org.swisscheese.swisscheese.engine.camera
 org.swisscheese.swisscheese.engine.display
+org.swisscheese.swisscheese.engine.display.stripRenderer
 org.swisscheese.swisscheese.engine.imageEffects
 org.swisscheese.swisscheese.engine.io
 org.swisscheese.swisscheese.engine.io.gson

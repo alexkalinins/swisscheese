@@ -25,6 +25,10 @@ package org.swisscheese.swisscheese.engine.imageEffects;
  * @version v0.1
  */
 public class ChangeGamma extends ImageEffect {
+	
+	private ChangeGamma() {
+		//do nothing
+	}
 
 	/**
 	 * Changes gamma of a color (RGB or RGBA)
@@ -55,7 +59,7 @@ public class ChangeGamma extends ImageEffect {
 		red = (int) (255 * redDecimal);
 		green = (int) (255 * greenDecimal);
 		blue = (int) (255 * blueDecimal);
-
+		
 		// assembling color
 		return (alpha << 24) + (red << 16) + (green << 8) + blue;
 	}

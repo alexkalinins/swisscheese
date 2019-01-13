@@ -32,6 +32,28 @@ import org.swisscheese.swisscheese.texturePacks.TexturePack;
 
 /**
  * Display Object for rendering graphics on screen.
+ * <p>
+ * The rendering method and the single-threaded nature of this class makes the
+ * game run poorly with higher screen resolutions. Two possible solutions exist
+ * for improving the game performance:
+ * <p>
+ * <li>Assigning a single scan line to an executor from a thread-pool</li>
+ * <li>Breaking the screen up into chunks, and each thread gets a chunk</li>
+ * <p>
+ * With the first solution, the threads do not have to do the same amount of
+ * work. If one thread is faster, that wouldn't affect the final outcome. Also,
+ * it would be easy to specify how many threads will do the rendering. However,
+ * this solution could result in heavier resource usage due to object creation.
+ * <p>
+ * If the screen was broken-up into chunks, then the current
+ * {@link Renderer#render(int[])} method only needs to be slightly modified to
+ * work with the chunks. However, the amount of threads needs to be an even
+ * number, and it would be difficult to work with many threads (if the client
+ * CPU supports). Also, it is possible that one thread would complete working on
+ * a chunk, while a lagging thread would slow down the performance.
+ * <p>
+ * Strip solution would be attempted first, and if it is not good enough, the
+ * chunk solution would be tried and implemented.
  * 
  * @author Alex Kalinins
  * @since 2018-12-10
@@ -39,7 +61,7 @@ import org.swisscheese.swisscheese.texturePacks.TexturePack;
  * @version v0.2
  */
 @ThreadSafe
-public class Renderer {
+public class Renderer implements CanRender{
 	private final float width;
 	private final float height;
 	private List<WallTexture> wallTextures;

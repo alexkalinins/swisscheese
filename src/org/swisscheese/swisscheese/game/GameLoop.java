@@ -130,8 +130,8 @@ public final class GameLoop implements Runnable {
 					}
 				}
 			} catch (NullPointerException e) {
-				// happens when the game closes but not fully (BufferStrategy)
-			}
+e.printStackTrace();
+}
 		} while (running.get());
 	}
 
