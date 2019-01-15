@@ -14,11 +14,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.swisscheese.swisscheese.engine.display.stripRenderer;
+package org.swisscheese.swisscheese.engine.rendering;
 
-import java.util.Arrays;
 import java.util.concurrent.Callable;
 
+import org.swisscheese.swisscheese.annotations.Immutable;
 import org.swisscheese.swisscheese.engine.camera.View;
 import org.swisscheese.swisscheese.engine.imageEffects.ChangeGamma;
 import org.swisscheese.swisscheese.math.GeomVector2D;
@@ -35,12 +35,12 @@ import org.swisscheese.swisscheese.math.GeomVector2D;
  * @since v0.5
  * @version v1.0
  */
-public class StripRenderer implements Callable<Void> {
-	private static final RendererDetails DETAILS = StripRendererDispatcher.getDetails();
+@Immutable
+public class RenderStrip implements Callable<Void> {
+	private static final RendererDetails DETAILS = Renderer.getDetails();
 	private final int stripNumber;
 	private final View view;
 	private final StripRendererDispatcher parent;
-	private int[] strip;
 
 	/**
 	 * Constructor for the StripRenderer
@@ -52,10 +52,9 @@ public class StripRenderer implements Callable<Void> {
 	 * @param view         the {@link View} object containing the information about
 	 *                     the players point of view.
 	 */
-	public StripRenderer(StripRendererDispatcher parent, int[] strip, int stripNumbers, View view) {
+	public RenderStrip(StripRendererDispatcher parent, int stripNumbers, View view) {
 		this.stripNumber = stripNumbers;
 		this.view = view;
-		this.strip = strip;
 		this.parent = parent;
 	}
 
@@ -198,8 +197,6 @@ public class StripRenderer implements Callable<Void> {
 			// strip[(int) (stripNumber + y * (DETAILS.width))] = rgb;
 			parent.insertValue(rgb, (int) (stripNumber + y * DETAILS.width));
 		}
-
-//		return Arrays.stream(strip).boxed().toArray(Integer[]::new);
 		return null;
 	}
 

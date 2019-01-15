@@ -15,12 +15,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * Experimental attempt at improving game performance.
- * TODO make better desc.
+ * A package for all classes relating to rendering.
  * 
  * @author Alex Kalinins
- * @since 2019-01-05
+ * @since 2019-01-12
  * @since v0.5
  * @version v1.0
  */
-package org.swisscheese.swisscheese.engine.display.stripRenderer;
+package org.swisscheese.swisscheese.engine.rendering;

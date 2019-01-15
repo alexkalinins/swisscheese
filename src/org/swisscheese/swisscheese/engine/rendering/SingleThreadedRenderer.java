@@ -14,18 +14,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.swisscheese.swisscheese.engine.display;
+package org.swisscheese.swisscheese.engine.rendering;
 
-import java.awt.Color;
-import java.util.List;
-
+import org.swisscheese.swisscheese.annotations.Hack;
 import org.swisscheese.swisscheese.annotations.ThreadSafe;
 import org.swisscheese.swisscheese.engine.camera.Camera;
-import org.swisscheese.swisscheese.engine.camera.Mover;
-import org.swisscheese.swisscheese.engine.camera.View;
 import org.swisscheese.swisscheese.engine.imageEffects.ChangeGamma;
-import org.swisscheese.swisscheese.engine.texture.WallTexture;
-import org.swisscheese.swisscheese.engine.texture.WallTextureList;
 import org.swisscheese.swisscheese.map.Map;
 import org.swisscheese.swisscheese.math.GeomVector2D;
 import org.swisscheese.swisscheese.texturePacks.TexturePack;
@@ -46,11 +40,11 @@ import org.swisscheese.swisscheese.texturePacks.TexturePack;
  * this solution could result in heavier resource usage due to object creation.
  * <p>
  * If the screen was broken-up into chunks, then the current
- * {@link Renderer#render(int[])} method only needs to be slightly modified to
- * work with the chunks. However, the amount of threads needs to be an even
- * number, and it would be difficult to work with many threads (if the client
- * CPU supports). Also, it is possible that one thread would complete working on
- * a chunk, while a lagging thread would slow down the performance.
+ * {@link SingleThreadedRenderer#render(int[])} method only needs to be slightly
+ * modified to work with the chunks. However, the amount of threads needs to be
+ * an even number, and it would be difficult to work with many threads (if the
+ * client CPU supports). Also, it is possible that one thread would complete
+ * working on a chunk, while a lagging thread would slow down the performance.
  * <p>
  * Strip solution would be attempted first, and if it is not good enough, the
  * chunk solution would be tried and implemented.
@@ -60,25 +54,14 @@ import org.swisscheese.swisscheese.texturePacks.TexturePack;
  * @since v0.2
  * @version v0.2
  */
+@Hack(reason="inheritance")
 @ThreadSafe
-public class Renderer implements CanRender{
-	private final float width;
-	private final float height;
-	private List<WallTexture> wallTextures;
-	private View view;
-	private final int[][] maze;
-	private Camera camera;
-	// public static Lock update = new ReentrantLock();
-
-	private final Color FLOOR = Color.DARK_GRAY; // the color of the floor
-	private final Color SKY = Color.cyan; // the color of the sky
-
-	public Renderer(Map map, Camera camera, TexturePack texturePack, float width, float height) {
-		this.camera = camera;
-		this.width = width;
-		this.height = height;
-		wallTextures = new WallTextureList(texturePack).getList();
-		maze = map.getMap();
+public class SingleThreadedRenderer extends Renderer {
+	/**
+	 * {@inheritDoc}
+	 */
+	public SingleThreadedRenderer(float width, float height, TexturePack texturePack, Camera camera, Map map) {
+		super(width, height, texturePack, camera, map);
 	}
 
 	/**
@@ -145,9 +128,9 @@ public class Renderer implements CanRender{
 		/**
 		 * Rendering the image in a series of vertical scans, each one pixel thick.
 		 */
-		for (int x = 0; x < width; x++) {
+		for (int x = 0; x < super.getDetails().width; x++) {
 			// the position of this scan line on the camera plane relative to POV
-			scanLine = 2 * x / (float) width - 1f;
+			scanLine = 2 * x / super.getDetails().width - 1f;
 			wallVertical = false;
 
 			// position on the map; can't move out of for loop for some reason
@@ -193,32 +176,34 @@ public class Renderer implements CanRender{
 					yMap += yStep;
 					wallVertical = true;
 				}
-			} while (maze[xMap][yMap] <= 0);// ray has hit the wall
+			} while (super.getDetails().maze[xMap][yMap] <= 0);// ray has hit the wall
 
 			// distance from the player to the wall
 			distanceToWall = (wallVertical) ? Math.abs((yMap - yPos + (1 - yStep) / 2) / rayDir.getY())
 					: Math.abs((xMap - xPos + (1 - xStep) / 2) / rayDir.getX());
 
 			// calculating wall line length from wall distance (perspective)
-			wallLength = (int) ((distanceToWall > 0) ? Math.abs(height / distanceToWall) : height);
+			wallLength = (int) ((distanceToWall > 0) ? Math.abs(super.getDetails().height / distanceToWall)
+					: super.getDetails().height);
 
 			// wall line start point:
-			wallStart = (int) (-wallLength / 2 + height / 2);
+			wallStart = (int) (-wallLength / 2 + super.getDetails().height / 2);
 			wallStart = (wallStart < 0) ? 0 : wallStart; // if it's off the screen
 
 			// wall line end point:
-			wallEnd = (int) (wallLength / 2 + height / 2);
-			wallEnd = (wallEnd > height) ? (int) height : wallEnd; // off the screen
+			wallEnd = (int) (wallLength / 2 + super.getDetails().height / 2);
+			wallEnd = (wallEnd > super.getDetails().height) ? (int) super.getDetails().height : wallEnd; // off the
+																											// screen
 
 			// getting textureType from the wall
-			textureType = maze[Math.abs(xMap)][Math.abs(yMap)] - 1;
-			wallTextures.get(textureType).doAction();
+			textureType = super.getDetails().maze[Math.abs(xMap)][Math.abs(yMap)] - 1;
+			super.getDetails().wallTextures.get(textureType).doAction();
 			wallHit = (wallVertical) ? (xPos + ((yMap - yPos + (1 - yStep) / 2) / rayDir.getY()) * rayDir.getX())
 					: (yPos + ((xMap - xPos + (1 - xStep) / 2) / rayDir.getX()) * rayDir.getY());
 			wallHit -= Math.floor(wallHit);
 
 			// caching texture size
-			final int textureSize = wallTextures.get(textureType).getSize();
+			final int textureSize = super.getDetails().wallTextures.get(textureType).getSize();
 
 			// stretching the texture according to the wall shape (perspective)
 			// calculating x coordinate of the texture
@@ -228,34 +213,37 @@ public class Renderer implements CanRender{
 				xTexture = textureSize - xTexture - 1;
 			// calculating y coordinate of the texture
 			for (int y = wallStart; y < wallEnd; y++) {
-				yTexture = (((int) (y * 2 - height + wallLength) << 6) / wallLength) / 2;
+				yTexture = (((int) (y * 2 - super.getDetails().height + wallLength) << 6) / wallLength) / 2;
 
 				// getting a color from texture
-				rgb = wallTextures.get(textureType).getImage().getPixels()[xTexture + (yTexture * textureSize)];
+				rgb = super.getDetails().wallTextures.get(textureType).getImage().getPixels()[xTexture
+						+ (yTexture * textureSize)];
 				// darkening some walls for 3D effect, 0.6 works the best IMO
 				if (wallVertical)
 					rgb = ChangeGamma.getColor(rgb, 0.6f);
-				pixels[(int) (x + y * (width))] = rgb;
+				pixels[(int) (x + y * (super.getDetails().width))] = rgb;
 			}
 		}
 		return pixels;
 
 	}
 
-	private int[] fillBackground(int[] pixels) {
-		for (int i = 0; i < pixels.length / 2; i++) {
-			pixels[i] = SKY.getRGB();
-		}
-
-		// colors pixels below midway point
-		for (int i = pixels.length / 2; i < pixels.length; i++) {
-			pixels[i] = FLOOR.getRGB();
-		}
-		return pixels;
+	/**
+	 * Always returns false since class is not multi-threaded.
+	 * 
+	 * @return false.
+	 */
+	@Override
+	public final boolean canGetThreads() {
+		return false;
 	}
 
-	public Mover getMover() {
-		return camera.getMover();
+	/**
+	 * Always throws IllegalStateException.
+	 * @see Renderer#getThreads()
+	 */
+	@Override
+	public final int getThreads() throws IllegalStateException {
+		throw new IllegalStateException(String.format("%s is a single-threaded renderer%n", this.getClass().getSimpleName()));
 	}
-
 }

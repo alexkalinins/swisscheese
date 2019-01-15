@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.swisscheese.swisscheese.engine.display.stripRenderer;
+package org.swisscheese.swisscheese.engine.rendering;
 
 import java.util.List;
 
@@ -24,22 +24,22 @@ import org.swisscheese.swisscheese.engine.texture.WallTexture;
 /**
  * A class to make an object that groups all the fields of the
  * {@link StripRendererDispatcher} together in order to pass it to
- * {@link StripRenderer}.
+ * {@link RenderStrip}.
  * <p>
  * A {@code RednererDetails} object will not change during the game.
  * 
  * @author Alex Kalinins
  * @since 2019-01-05
  * @since v0.5
- * @version v1.0
+ * @version v1.1
  */
 @Immutable
 public class RendererDetails {
 	// package private
-	final float width;
-	final float height;
-	final List<WallTexture> wallTextures;
-	final int[][] maze;
+	public final float width;
+	public final float height;
+	public final List<WallTexture> wallTextures;
+	public final int[][] maze;
 
 	/**
 	 * Constructor.

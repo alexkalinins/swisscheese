@@ -32,10 +32,11 @@ import org.swisscheese.swisscheese.annotations.NotThreadSafe;
 import org.swisscheese.swisscheese.engine.camera.Camera;
 import org.swisscheese.swisscheese.engine.camera.Mover;
 import org.swisscheese.swisscheese.engine.camera.View;
-import org.swisscheese.swisscheese.engine.display.stripRenderer.StripRendererDispatcher;
 import org.swisscheese.swisscheese.engine.io.images.ImageFromArray;
 import org.swisscheese.swisscheese.engine.keyboard.KeyPreferenceIO;
 import org.swisscheese.swisscheese.engine.keyboard.Keyboard;
+import org.swisscheese.swisscheese.engine.rendering.Renderer;
+import org.swisscheese.swisscheese.engine.rendering.RendererFactory;
 import org.swisscheese.swisscheese.gameSaving.SaveMetadata;
 import org.swisscheese.swisscheese.map.Map;
 import org.swisscheese.swisscheese.texturePacks.TexturePack;
@@ -61,7 +62,7 @@ public class Window extends JFrame {
 	private Graphics graphics;
 
 	// my stuff:
-	private CanRender renderer;
+	private Renderer renderer;
 	private static Camera camera;
 	public static Mover mover;
 	private Keyboard keyboard;
@@ -101,7 +102,7 @@ public class Window extends JFrame {
 		if (fitToScreen) {
 			// Getting the screen size.
 			Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-			System.out.println("Fitting window size to screen: "+screen.toString());
+			System.out.println("Fitting window size to screen: " + screen.toString());
 			this.width = (int) screen.getWidth();
 			this.height = (int) screen.getHeight();
 		} else {
@@ -111,11 +112,11 @@ public class Window extends JFrame {
 		metadata = metadataa;
 
 		camera = new Camera(this.width, this.height, map, FOV, view);
-		
-		renderer = new StripRendererDispatcher(map, camera, texturePack, width, height, 1);
-//		renderer = new Renderer(map, camera, texturePack, this.width, this.height);
-		
-		
+
+//		renderer = RendererFactory.createSingleThreadedRenderer(width, height, texturePack, camera, map);
+		renderer = RendererFactory.createStripRenderer(width, height, texturePack, camera, map, 4);
+//		renderer = RendererFactory.createChunkRenderer(width, height, texturePack, camera, map, 4);
+
 		mover = camera.getMover();
 
 		bufferImage = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_RGB);
@@ -183,7 +184,6 @@ public class Window extends JFrame {
 	public static View getView() {
 		return camera.getView();
 	}
-	
 
 	public static final SaveMetadata getMetadata() {
 		return metadata;

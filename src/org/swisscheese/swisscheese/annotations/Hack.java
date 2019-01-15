@@ -14,33 +14,25 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.swisscheese.swisscheese.engine.display;
+package org.swisscheese.swisscheese.annotations;
 
-import org.swisscheese.swisscheese.engine.camera.Camera;
-import org.swisscheese.swisscheese.engine.camera.Mover;
+import static java.lang.annotation.ElementType.TYPE;
 
+import java.lang.annotation.Target;
+
+@Target(TYPE)
 /**
- * An interface for rendering engines.
+ * A tag for temporary implementations (a.k.a. "Hacks"). Such hacks may have been
+ * implemented to satisfy project criteria, and are likely considered bad
+ * practice/unstable. These "Hack" may or may not re-implemented to a better
+ * implementation.
  * 
  * @author Alex Kalinins
- * @since 2019-01-05
+ * @since 2019-01-15
  * @since v0.5
  * @version v1.0
  */
-public interface CanRender {
-	/**
-	 * Renders the <code>pixels</code> array.
-	 * 
-	 * @param pixels array of RGB values being rendered
-	 * @return a rendered <code>pixel</code> array.
-	 */
-	public int[] render(int[] pixels);
-
-	/**
-	 * Updates and gets {@link Mover}.
-	 * 
-	 * @return a {@link Mover} from {@link Camera}.
-	 */
-	public Mover getMover();
-
+public @interface Hack {
+	/**The reason why the type is a hack*/
+	String reason();
 }
