@@ -18,8 +18,10 @@ package org.swisscheese.swisscheese.uiWindows;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 
+import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
@@ -57,12 +59,14 @@ final class NewGamePanel extends AbstractMakeGamePanel {
 		add(new JSeparator(SwingConstants.HORIZONTAL));
 		makeSpace();
 		
-		JLabel lblName = new JLabel("Save Name: ");
-		add(lblName, Component.LEFT_ALIGNMENT);
-		lblName.setMaximumSize(lblName.getPreferredSize());
-		makeSpace();
+		Container cName = new Container();
+		cName.setLayout(new FlowLayout());
+		cName.add(new JLabel("Save Name: "));
 		name = new JTextField();
-		add(name);
+		cName.add(name);
+		Dimension nameSize = new Dimension(220,cName.getPreferredSize().height);
+		name.setPreferredSize(nameSize);
+		add(cName);
 		
 		makeSpace();
 
@@ -72,8 +76,9 @@ final class NewGamePanel extends AbstractMakeGamePanel {
 		diff = new JComboBox<>(DifficultyLevel.values());
 		diff.setSelectedItem(DifficultyLevel.NORMAL);
 		cLevel.add(diff);
-
 		add(cLevel);
+		
+		add(Box.createRigidArea(new Dimension(0,250)));
 
 	}
 

@@ -20,19 +20,32 @@ import static java.lang.annotation.ElementType.TYPE;
 
 import java.lang.annotation.Target;
 
-@Target(TYPE)
+
 /**
- * A tag for temporary implementations (a.k.a. "Hacks"). Such hacks may have been
- * implemented to satisfy project criteria, and are likely considered bad
- * practice/unstable. These "Hack" may or may not re-implemented to a better
- * implementation.
+ * An annotation for a type containing temporary implementations, a so called
+ * "<i>Hack</i>". Such <i>hacks</i> may have been implemented <b>to satisfy project
+ * criteria</b>, and are likely considered bad practice/unstable. These <i>Hack</i>
+ * may or may not re-implemented to a better implementation.
+ * <p>
+ * If a type is annotated as a "Hack", its bad design should be outstandingly
+ * obvious. Class may be considered as a <i>hack</i> if it contains (but not
+ * limited to): <b>inheritance</b> using abstract classes (especially if could
+ * be replaced by interface), <b>catching all exceptions as
+ * {@link java.lang.Exception}</b>, <b>one-time parameters</b> declared as
+ * variables (acceptable if any the parameter constructor contains many fields),
+ * declaring and <b>coding against an interface instance</b> as opposed to the
+ * interface (e.g.,
+ * <code>{@code ArrayList<Object> list = new ArrayList();}</code>), <b>not</b>
+ * using a <code>try-with-resources</code> OR <code>try-finally</code> to close
+ * resources, and more god-awful, bad practices.
  * 
  * @author Alex Kalinins
  * @since 2019-01-15
  * @since v0.5
  * @version v1.0
  */
+@Target(TYPE)
 public @interface Hack {
-	/**The reason why the type is a hack*/
+	/** The reason why the type contains a hack or what is wrong. */
 	String reason();
 }
