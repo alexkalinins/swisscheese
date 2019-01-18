@@ -51,7 +51,7 @@ public class GameFromSettings {
 	private GameFromSettings(GameSettings settings, SaveMetadata metadata, Map map, View... view) {
 		GameFromSettings.map = map;
 		loop = new GameLoop(settings.getWindowSize().getSize(),settings.isFitToScreen(), settings.getTexturePack(), 60f, settings.getFOV(), map,
-				metadata, view);
+				metadata, settings.getUseRenderer(), view);
 	}
 
 	/**

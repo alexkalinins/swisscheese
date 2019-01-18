@@ -70,7 +70,7 @@ public class GameSettingsManager {
 	 * @return a new instance of {@code GameSettings}.
 	 */
 	private GameSettings makeGameSettings() {
-		return new GameSettings(WindowSize.S640X480, false, -0.9f, null, 1);
+		return new GameSettings();
 	}
 
 	/**

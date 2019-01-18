@@ -18,13 +18,13 @@ package org.swisscheese.swisscheese.engine.rendering;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutionException;
 
 import org.swisscheese.swisscheese.annotations.Hack;
 import org.swisscheese.swisscheese.annotations.ThreadSafe;
 import org.swisscheese.swisscheese.engine.camera.Camera;
 import org.swisscheese.swisscheese.engine.camera.View;
+import org.swisscheese.swisscheese.engine.details.MultithreadedRendererDetails;
 import org.swisscheese.swisscheese.map.Map;
 import org.swisscheese.swisscheese.texturePacks.TexturePack;
 
@@ -41,16 +41,12 @@ import org.swisscheese.swisscheese.texturePacks.TexturePack;
  * @since v0.5
  * @version v1.0
  */
-@Hack(reason="Inheritance")
+@Hack(reason = "Inheritance")
 @ThreadSafe
 public class ChunkRendererDispatcher extends MultithreadedRendererDispatcher {
 	private int[] pixels;
 	private int chunkSize;
 	private List<RenderChunk> chunkList = new ArrayList<>();
-
-	static {
-		threadPoolQueue = new ArrayBlockingQueue<>(16);
-	}
 
 	/**
 	 * {@inheritDoc}}
@@ -61,14 +57,25 @@ public class ChunkRendererDispatcher extends MultithreadedRendererDispatcher {
 	 *                                  without remainder.
 	 * 
 	 */
-	public ChunkRendererDispatcher(float width, float height, TexturePack texturePack, Camera camera, Map map,
+	ChunkRendererDispatcher(float width, float height, TexturePack texturePack, Camera camera, Map map,
 			int nChunks) throws IllegalStateException, IllegalArgumentException {
-		super(width, height, texturePack, camera, map, nChunks);
+		super(width, height, texturePack, camera, map, nChunks, nChunks);
 		if (width % nChunks != 0 || nChunks > 16)
 			throw new IllegalArgumentException("Width must be devidable by nChunks and less than 16");
 		chunkSize = (int) (width / nChunks);
 		View view = camera.getView();
 		for (int i = 0; i < nChunks; i++) {
+			chunkList.add(new RenderChunk(this, i * chunkSize, (i + 1) * chunkSize, view));
+		}
+	}
+
+	ChunkRendererDispatcher(MultithreadedRendererDetails details, Camera camera) {
+		super(details, camera, details.nThreads);
+		if (details.width % details.nThreads != 0 || details.nThreads > 16)
+			throw new IllegalArgumentException("Width must be devidable by nChunks and less than 16");
+		chunkSize = (int) (details.width / details.nThreads);
+		View view = camera.getView();
+		for (int i = 0; i < details.nThreads; i++) {
 			chunkList.add(new RenderChunk(this, i * chunkSize, (i + 1) * chunkSize, view));
 		}
 	}

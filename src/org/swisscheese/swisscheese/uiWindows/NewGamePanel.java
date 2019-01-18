@@ -53,9 +53,8 @@ final class NewGamePanel extends AbstractMakeGamePanel {
 	protected void initComponents() {
 		makeSpace();
 		JLabel subtitle = makeBoldLabel(new JLabel("New Game"));
-		subtitle.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		subtitle.setAlignmentX(Component.LEFT_ALIGNMENT);
 		add(subtitle);
-		// TODO make space needed?
 		add(new JSeparator(SwingConstants.HORIZONTAL));
 		makeSpace();
 		

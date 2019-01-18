@@ -16,6 +16,7 @@
  */
 package org.swisscheese.swisscheese.uiWindows;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionListener;
@@ -51,7 +52,8 @@ public abstract class AbstractMakeGamePanel extends JPanel {
 
 		initComponents();
 		makeSpace();
-		add(start);
+		add(start, Component.LEFT_ALIGNMENT);
+		start.setPreferredSize(new Dimension(this.getSize().width, start.getPreferredSize().height));
 	}
 
 	/**

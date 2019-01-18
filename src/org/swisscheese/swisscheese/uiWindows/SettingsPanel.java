@@ -19,10 +19,11 @@ package org.swisscheese.swisscheese.uiWindows;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionListener;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -32,6 +33,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 
 import org.swisscheese.swisscheese.annotations.Immutable;
+import org.swisscheese.swisscheese.engine.details.UseRenderer;
 import org.swisscheese.swisscheese.engine.display.WindowSize;
 import org.swisscheese.swisscheese.settings.GameSettings;
 
@@ -56,13 +58,13 @@ class SettingsPanel extends JPanel {
 	private final Dimension size;
 	private JButton keyBinds = null;
 	private final boolean withKeyBinds;
-	private final Dimension space = new Dimension(0, 10);
 	private final JScrollPane scrollPane;
 	private final JComboBox<WindowSize> sizeSelect = new JComboBox<>(WindowSize.values());
 	private final JCheckBox fitToScreen = new JCheckBox("Fit to Screen");
 	private final GameSettings settings;
 	private final JButton applyChanges = new JButton("Apply Changes");
 	private final JSlider fovSlider = new JSlider(JSlider.HORIZONTAL, 5, 15, 9);
+	private final RendererPanel rendererPanel;
 
 	/**
 	 * Constructor.
@@ -77,6 +79,7 @@ class SettingsPanel extends JPanel {
 		size = parent.getSize();
 		this.withKeyBinds = withKeyBinds;
 		this.settings = settings;
+		rendererPanel  = new RendererPanel(settings.getUseRenderer());
 
 		setLayout(new BorderLayout());
 		scrollPane = makeScrollPane();
@@ -114,28 +117,47 @@ class SettingsPanel extends JPanel {
 	 * @return a new {@code JScrollPane} with settings selection components.
 	 */
 	private JScrollPane makeScrollPane() {
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-		panel.add(Box.createRigidArea(new Dimension(0, 7)));
+		JPanel panel = new JPanel(new GridBagLayout());
+		GridBagConstraints cst = new GridBagConstraints();
+		cst.gridheight = 1;
+		cst.gridwidth = 2;
+		cst.gridx = 0;
+		cst.gridy = 0;
+		cst.insets = new Insets(7, 7, 7, 7);
+		cst.fill = GridBagConstraints.BOTH;
 
 		if (withKeyBinds) {
 			keyBinds = new JButton("Key-Binding");
-			panel.add(keyBinds);
+			panel.add(keyBinds, cst);
 		}
 
-		panel.add(new JLabel("Game Window Size:"));
-		panel.add(Box.createRigidArea(space));
-		sizeSelect.setSelectedItem(settings.getWindowSize());
-		panel.add(sizeSelect);
-		panel.add(Box.createRigidArea(space));
-		fitToScreen.setSelected(settings.isFitToScreen());
-		panel.add(fitToScreen);
-		panel.add(Box.createRigidArea(space));
-		panel.add(new JLabel("FOV:"));
-		panel.add(Box.createRigidArea(space));
+		cst.gridy++;
+		cst.gridwidth = 1;
+		panel.add(new JLabel("Game Window Size:"), cst);
 
+		cst.gridx = 1;
+		sizeSelect.setSelectedItem(settings.getWindowSize());
+		panel.add(sizeSelect, cst);
+
+		cst.gridx = 0;
+		cst.gridy++;
+		cst.gridwidth = 2;
+		fitToScreen.setSelected(settings.isFitToScreen());
+		panel.add(fitToScreen, cst);
+
+		cst.gridy++;
+		cst.gridx = 0;
+		cst.gridwidth = 1;
+		panel.add(new JLabel("FOV:"), cst);
+
+		cst.gridy++;
+		cst.gridwidth = 2;
 		fovSlider.setMajorTickSpacing(1);
-		panel.add(fovSlider);
+		panel.add(fovSlider, cst);
+
+		// adding renderer panel
+		cst.gridy++;
+		panel.add(rendererPanel, cst);
 
 		JScrollPane pane = new JScrollPane(panel);
 		pane.setPreferredSize(size);
@@ -146,6 +168,10 @@ class SettingsPanel extends JPanel {
 
 	public final WindowSize getSizeSelect() {
 		return (WindowSize) sizeSelect.getSelectedItem();
+	}
+
+	public final UseRenderer getUseRenderer() {
+		return rendererPanel.getUseRenderer();
 	}
 
 	public final boolean getFitToScreen() {

@@ -22,6 +22,7 @@ import org.swisscheese.swisscheese.annotations.Hack;
 import org.swisscheese.swisscheese.engine.camera.Camera;
 import org.swisscheese.swisscheese.engine.camera.Mover;
 import org.swisscheese.swisscheese.engine.camera.View;
+import org.swisscheese.swisscheese.engine.details.RendererDetails;
 import org.swisscheese.swisscheese.engine.texture.WallTexture;
 import org.swisscheese.swisscheese.engine.texture.WallTextureList;
 import org.swisscheese.swisscheese.map.Map;
@@ -35,7 +36,7 @@ import org.swisscheese.swisscheese.texturePacks.TexturePack;
  * @since v0.5
  * @version v1.0
  */
-@Hack(reason="inheritance")
+@Hack(reason = "inheritance (criteria)")
 public abstract class Renderer {
 	/** The color to which the floor (bottom half of screen) is colored */
 	protected final Color FLOOR = Color.DARK_GRAY;
@@ -58,31 +59,36 @@ public abstract class Renderer {
 	 * @param camera      the {@link Camera} of the game.
 	 * @param map         the map in which the player is.
 	 */
-	public Renderer(float width, float height, TexturePack texturePack, Camera camera, Map map) {
-		this.camera = camera;
-		details = new RendererDetails(width, height, new WallTextureList(texturePack).getList(), map.getMap());
+	protected Renderer(float width, float height, TexturePack texturePack, Camera camera, Map map) {
+		this(new RendererDetails(width, height, new WallTextureList(texturePack).getList(), map.getMap()), camera);
 	}
 
 	/**
-	 * Renders the <code>pixels</code> array.
+	 * A constructor for creating a renderer from existing {@link RendererDetails}
+	 * 
+	 * @param details the details which contain all parameters
+	 * @param camera  camera from which the person is seeing
+	 */
+	protected Renderer(RendererDetails details, Camera camera) {
+		Renderer.details = details;
+		this.camera = camera;
+	}
+
+	/**
+	 * Renders the <code>pixels</code> array. <b>THIS CLASS MUST BE OVERRIDED, SEE
+	 * CLASS ANNOTATION...</b>
 	 * 
 	 * @param pixels array of RGB values being rendered
 	 * @return a rendered <code>pixel</code> array.
 	 */
-	public abstract int[] render(int[] pixels);
-	
+	public int[] render(int[] pixels) {
+		return fillBackground(pixels);
+	}
+
 	/**
-	 * To see if this class returns threads
-	 * @return true if program is multi-threaded
+	 * @return true if the renderer is able to utilize multiple threads.
 	 */
-	public abstract boolean canGetThreads();
-	
-	/**
-	 * To see how many threads are declared for the Renderer.
-	 * @return number of threads.
-	 * @throws IllegalStateException if class is single threaded.
-	 */
-	public abstract int getThreads() throws IllegalStateException;
+	public abstract boolean isMultithreaded();
 
 	/**
 	 * Updates and gets {@link Mover}.
@@ -112,7 +118,12 @@ public abstract class Renderer {
 		return pixels;
 	}
 
-	static final RendererDetails getDetails() {
+	/**
+	 * Getter for renderer details
+	 * 
+	 * @return
+	 */
+	static RendererDetails getDetails() {
 		return details;
 	}
 

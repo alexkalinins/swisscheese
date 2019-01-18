@@ -16,12 +16,13 @@
  */
 package org.swisscheese.swisscheese.engine.rendering;
 
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutionException;
 
 import org.swisscheese.swisscheese.annotations.Hack;
 import org.swisscheese.swisscheese.annotations.ThreadSafe;
 import org.swisscheese.swisscheese.engine.camera.Camera;
+import org.swisscheese.swisscheese.engine.details.MultithreadedRendererDetails;
+import org.swisscheese.swisscheese.engine.details.RendererDetails;
 import org.swisscheese.swisscheese.map.Map;
 import org.swisscheese.swisscheese.texturePacks.TexturePack;
 
@@ -42,10 +43,6 @@ import org.swisscheese.swisscheese.texturePacks.TexturePack;
 @Hack(reason="inheritance")
 @ThreadSafe
 public class StripRendererDispatcher extends MultithreadedRendererDispatcher {
-	// Instantiating threadPoolQueue.
-	static {
-		threadPoolQueue = new ArrayBlockingQueue<>(1000);
-	}
 	/** The pixels array to which the screen is being rendered. */
 	private volatile int[] pixels;
 	/** {@link RendererDetails} from {@link Renderer}. */
@@ -56,7 +53,14 @@ public class StripRendererDispatcher extends MultithreadedRendererDispatcher {
 	 */
 	StripRendererDispatcher(float width, float height, TexturePack texturePack, Camera camera, Map map, int nThreads)
 			throws IllegalStateException {
-		super(width, height, texturePack, camera, map, nThreads);
+		super(width, height, texturePack, camera, map, nThreads, (int) width);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public StripRendererDispatcher(MultithreadedRendererDetails details, Camera camera) {
+		super(details, camera, (int)details.width);
 	}
 
 	/**

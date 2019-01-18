@@ -17,8 +17,11 @@
 package org.swisscheese.swisscheese.settings;
 
 import org.swisscheese.swisscheese.annotations.Immutable;
+import org.swisscheese.swisscheese.engine.details.UseRenderer;
 import org.swisscheese.swisscheese.engine.display.WindowSize;
+import org.swisscheese.swisscheese.engine.rendering.RendererType;
 import org.swisscheese.swisscheese.texturePacks.TexturePack;
+import org.swisscheese.swisscheese.texturePacks.TexturePackList;
 import org.swisscheese.swisscheese.uiWindows.StartMenu;
 
 /**
@@ -49,17 +52,21 @@ public class GameSettings {
 	 */
 	private final boolean fitToScreen;
 	private final TexturePack texturePack;
+	private final UseRenderer useRenderer;
 	private final float FOV;
 
-	//TODO make a default texturepack.
-	public static GameSettings DEFAULT = new GameSettings(WindowSize.S640X480, false, -0.9f, null, 1);
+	public static GameSettings DEFAULT = new GameSettings();
 
 	/**
-	 * A no-args constructor for {@code GSON} serialization and deserialization.
+	 * Empty constructor used to create a default {@link GameSettings} and for
+	 * saving games (GSON/Serialization).
+	 * 
+	 * @deprecated do not use because it defaults to values.
 	 */
 	@Deprecated
 	public GameSettings() {
-		this(null,false,-0.9f, null,1);
+		this(WindowSize.S640X480, false, -0.9f, TexturePackList.LIST.getList().get(0),
+				new UseRenderer(RendererType.SINGLE_THREAD));
 	}
 
 	/**
@@ -69,17 +76,18 @@ public class GameSettings {
 	 * @param fitToScreen if the game will fit the user screen
 	 * @param FOV         the field of view of the user. <strong>Recommended Value:
 	 *                    -0.5 to -1.5</strong>
-	 * @param useless useless variable to avoid ambigous constructor.
+	 * @param useless     useless variable to avoid ambigous constructor.
 	 * @param texturePack the texture pack the game will use.
 	 */
 	public GameSettings(WindowSize windowSize, boolean fitToScreen, float FOV, TexturePack texturePack,
-			int... useless) {
+			UseRenderer useRenderer, int... useless) {
 		if (FOV > -0.1f) {
 			throw new IllegalArgumentException("FOV must be less than -0.1");
 		}
 		this.windowSize = windowSize;
 		this.fitToScreen = fitToScreen;
 		this.FOV = FOV;
+		this.useRenderer = useRenderer;
 		this.texturePack = texturePack;
 	}
 
@@ -95,8 +103,9 @@ public class GameSettings {
 	 * @param fitToScreen if the game will fit the user screen
 	 * @param existing    an existing {@code GameSave}
 	 */
-	public GameSettings(WindowSize windowSize, boolean fitToScreen, float FOV, GameSettings existing) {
-		this(windowSize, fitToScreen, FOV, existing.getTexturePack());
+	public GameSettings(WindowSize windowSize, boolean fitToScreen, float FOV, UseRenderer useRenderer,
+			GameSettings existing) {
+		this(windowSize, fitToScreen, FOV, existing.getTexturePack(), useRenderer);
 	}
 
 	/**
@@ -107,7 +116,8 @@ public class GameSettings {
 	 * @param existing    existing GameSettings object.
 	 */
 	public GameSettings(TexturePack texturePack, GameSettings existing) {
-		this(existing.getWindowSize(), existing.isFitToScreen(), existing.getFOV(), texturePack);
+		this(existing.getWindowSize(), existing.isFitToScreen(), existing.getFOV(), texturePack,
+				existing.getUseRenderer());
 
 	}
 
@@ -125,6 +135,10 @@ public class GameSettings {
 
 	public final float getFOV() {
 		return FOV;
+	}
+
+	public final UseRenderer getUseRenderer() {
+		return useRenderer;
 	}
 
 }

@@ -32,11 +32,16 @@ import org.swisscheese.swisscheese.annotations.NotThreadSafe;
 import org.swisscheese.swisscheese.engine.camera.Camera;
 import org.swisscheese.swisscheese.engine.camera.Mover;
 import org.swisscheese.swisscheese.engine.camera.View;
+import org.swisscheese.swisscheese.engine.details.MultithreadedRendererDetails;
+import org.swisscheese.swisscheese.engine.details.RendererDetails;
+import org.swisscheese.swisscheese.engine.details.UseRenderer;
 import org.swisscheese.swisscheese.engine.io.images.ImageFromArray;
 import org.swisscheese.swisscheese.engine.keyboard.KeyPreferenceIO;
 import org.swisscheese.swisscheese.engine.keyboard.Keyboard;
 import org.swisscheese.swisscheese.engine.rendering.Renderer;
 import org.swisscheese.swisscheese.engine.rendering.RendererFactory;
+import org.swisscheese.swisscheese.engine.rendering.RendererType;
+import org.swisscheese.swisscheese.engine.texture.WallTextureList;
 import org.swisscheese.swisscheese.gameSaving.SaveMetadata;
 import org.swisscheese.swisscheese.map.Map;
 import org.swisscheese.swisscheese.texturePacks.TexturePack;
@@ -98,7 +103,7 @@ public class Window extends JFrame {
 	 *                    through, a new {@code View} is created.
 	 */
 	public Window(int width, int height, boolean fitToScreen, Map map, float FOV, SaveMetadata metadataa,
-			TexturePack texturePack, View... view) {
+			TexturePack texturePack, UseRenderer useRenderer, View... view) {
 		if (fitToScreen) {
 			// Getting the screen size.
 			Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
@@ -112,9 +117,15 @@ public class Window extends JFrame {
 		metadata = metadataa;
 
 		camera = new Camera(this.width, this.height, map, FOV, view);
-
+		RendererDetails details = useRenderer.type == RendererType.SINGLE_THREAD
+				? new RendererDetails(width, height, new WallTextureList(texturePack).getList(), map.getMap())
+				: new MultithreadedRendererDetails(width, height, new WallTextureList(texturePack).getList(),
+						map.getMap(), useRenderer.nThreads);
+		System.out.printf("Creating new %s Renderer%n", useRenderer.type.toString());
+		renderer = RendererFactory.createThreadFromEnum(useRenderer.type, details, camera);
+		
 //		renderer = RendererFactory.createSingleThreadedRenderer(width, height, texturePack, camera, map);
-		renderer = RendererFactory.createStripRenderer(width, height, texturePack, camera, map, 4);
+//		renderer = RendererFactory.createStripRenderer(width, height, texturePack, camera, map, 4);
 //		renderer = RendererFactory.createChunkRenderer(width, height, texturePack, camera, map, 4);
 
 		mover = camera.getMover();

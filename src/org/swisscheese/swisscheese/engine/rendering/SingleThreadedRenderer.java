@@ -19,6 +19,7 @@ package org.swisscheese.swisscheese.engine.rendering;
 import org.swisscheese.swisscheese.annotations.Hack;
 import org.swisscheese.swisscheese.annotations.ThreadSafe;
 import org.swisscheese.swisscheese.engine.camera.Camera;
+import org.swisscheese.swisscheese.engine.details.RendererDetails;
 import org.swisscheese.swisscheese.engine.imageEffects.ChangeGamma;
 import org.swisscheese.swisscheese.map.Map;
 import org.swisscheese.swisscheese.math.GeomVector2D;
@@ -54,14 +55,23 @@ import org.swisscheese.swisscheese.texturePacks.TexturePack;
  * @since v0.2
  * @version v0.2
  */
-@Hack(reason="inheritance")
+@Hack(reason = "inheritance")
 @ThreadSafe
 public class SingleThreadedRenderer extends Renderer {
 	/**
 	 * {@inheritDoc}
 	 */
-	public SingleThreadedRenderer(float width, float height, TexturePack texturePack, Camera camera, Map map) {
+	SingleThreadedRenderer(float width, float height, TexturePack texturePack, Camera camera, Map map) {
 		super(width, height, texturePack, camera, map);
+	}
+	
+	/**
+	 * Constructor from RendererDetails
+	 * @param details
+	 * @param camera
+	 */
+	SingleThreadedRenderer(RendererDetails details, Camera camera) {
+		super(details, camera);
 	}
 
 	/**
@@ -79,8 +89,9 @@ public class SingleThreadedRenderer extends Renderer {
 	 * @return updated pixels array.
 	 * @see <a href="https://lodev.org/cgtutor/raycasting.html">Ray-Casting</a>
 	 */
+	@Override
 	public int[] render(int[] pixels) {
-		pixels = fillBackground(pixels);
+		pixels = super.render(pixels);
 
 		view = camera.getView();
 
@@ -229,21 +240,13 @@ public class SingleThreadedRenderer extends Renderer {
 	}
 
 	/**
-	 * Always returns false since class is not multi-threaded.
+	 * This is a <code>SingleThreadedRenderer</code>. As the name implies, this
+	 * method can only utilize one thread.
 	 * 
 	 * @return false.
 	 */
 	@Override
-	public final boolean canGetThreads() {
+	public boolean isMultithreaded() {
 		return false;
-	}
-
-	/**
-	 * Always throws IllegalStateException.
-	 * @see Renderer#getThreads()
-	 */
-	@Override
-	public final int getThreads() throws IllegalStateException {
-		throw new IllegalStateException(String.format("%s is a single-threaded renderer%n", this.getClass().getSimpleName()));
 	}
 }

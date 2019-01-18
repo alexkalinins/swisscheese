@@ -40,6 +40,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu.Separator;
 import javax.swing.JSeparator;
 
+import org.swisscheese.swisscheese.engine.details.UseRenderer;
 import org.swisscheese.swisscheese.engine.display.WindowSize;
 import org.swisscheese.swisscheese.engine.io.images.FileToImageIcon;
 import org.swisscheese.swisscheese.gameSaving.GameSave;
@@ -318,7 +319,11 @@ public class StartMenu extends JDialog {
 		final WindowSize size = (WindowSize) settingsPanel.getSizeSelect();
 		final boolean fitToScreen = settingsPanel.getFitToScreen();
 		final float FOV = settingsPanel.getFovSelection();
-		settings = new GameSettings(size, fitToScreen, FOV, settings);
+		final UseRenderer useRenderer = settingsPanel.getUseRenderer();
+		if(useRenderer == null) {
+			return;
+		}
+		settings = new GameSettings(size, fitToScreen, FOV, useRenderer, settings);
 		GameSettingsManager.MANAGER.updateSettings(settings);
 	}
 

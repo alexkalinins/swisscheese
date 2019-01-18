@@ -19,6 +19,8 @@ package org.swisscheese.swisscheese.engine.rendering;
 import org.swisscheese.swisscheese.annotations.Hack;
 import org.swisscheese.swisscheese.annotations.Immutable;
 import org.swisscheese.swisscheese.engine.camera.Camera;
+import org.swisscheese.swisscheese.engine.details.MultithreadedRendererDetails;
+import org.swisscheese.swisscheese.engine.details.RendererDetails;
 import org.swisscheese.swisscheese.map.Map;
 import org.swisscheese.swisscheese.texturePacks.TexturePack;
 
@@ -32,12 +34,60 @@ import org.swisscheese.swisscheese.texturePacks.TexturePack;
  * @since v0.5
  * @version v1.0
  */
-@Hack(reason="inheritance")
+@Hack(reason = "inheritance")
 @Immutable
 public final class RendererFactory {
+
 	/** A private constructor - do not instantiate */
 	private RendererFactory() {
 		throw new SecurityException("RendererFactory not meant to be instantiated");
+	}
+
+	/**
+	 * Creates a new renderer based on the <code>type</code> enum.
+	 * 
+	 * @param type    the type of the renderer
+	 * @param details the details of the renderer
+	 * @param camera  the camera that is used.
+	 * @return a new {@link Renderer} instance
+	 * @throws IllegalArgumentException - thrown if:
+	 *                                  <p>
+	 *                                  <ul>
+	 *                                  <li><code>details</code> <b>not</b> an
+	 *                                  instance of
+	 *                                  {@link MultithreadedRendererDetails} if
+	 *                                  declaring a sub-class of
+	 *                                  {@link MultithreadedRendererDispatcher}.</li>
+	 *                                  <li><code>details</code> <b>is</b> an
+	 *                                  instance of
+	 *                                  {@link MultithreadedRendererDetails} when
+	 *                                  creating a
+	 *                                  {@link SingleThreadedRenderer}</li>
+	 *                                  <li><code>type</code> is an invalid
+	 *                                  enum</li>
+	 *                                  </ul>
+	 */
+	public static Renderer createThreadFromEnum(RendererType type, RendererDetails details, Camera camera)
+			throws IllegalArgumentException {
+		switch (type) {
+		case STRIP:
+			if (!(details instanceof MultithreadedRendererDetails)) {
+				throw new IllegalArgumentException("Invalid RendererDetails");
+			}
+			return new StripRendererDispatcher((MultithreadedRendererDetails) details, camera);
+		case CHUNK:
+			if (!(details instanceof MultithreadedRendererDetails)) {
+				throw new IllegalArgumentException("Invalid RendererDetails");
+			}
+			return new ChunkRendererDispatcher((MultithreadedRendererDetails) details, camera);
+		case SINGLE_THREAD:
+			if (details instanceof MultithreadedRendererDetails) {
+				throw new IllegalArgumentException("Invalid RendererDetails");
+			}
+			return new SingleThreadedRenderer(details, camera);
+		default:
+			throw new IllegalArgumentException("Invalid RendererType");
+		}
 	}
 
 	/**
@@ -61,15 +111,15 @@ public final class RendererFactory {
 			Map map, int nThreads) {
 		return new StripRendererDispatcher(width, height, texturePack, camera, map, nThreads);
 	}
-	
+
 	/**
 	 * A public static factory method for {@link ChunkRendererDispatcher}.
 	 * 
 	 * @return a new instance of StripRendererDispatcher.
 	 * @see ChunkRendererDispatcher
 	 */
-	public static Renderer createChunkRenderer(float width, float height, TexturePack texturePack, Camera camera, Map map,
-			int nChunks) {
+	public static Renderer createChunkRenderer(float width, float height, TexturePack texturePack, Camera camera,
+			Map map, int nChunks) {
 		return new ChunkRendererDispatcher(width, height, texturePack, camera, map, nChunks);
 	}
 

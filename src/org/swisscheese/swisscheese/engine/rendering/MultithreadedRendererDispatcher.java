@@ -16,6 +16,7 @@
  */
 package org.swisscheese.swisscheese.engine.rendering;
 
+import java.lang.reflect.Field;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -24,8 +25,11 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import javax.naming.InsufficientResourcesException;
+
 import org.swisscheese.swisscheese.annotations.Hack;
 import org.swisscheese.swisscheese.engine.camera.Camera;
+import org.swisscheese.swisscheese.engine.details.MultithreadedRendererDetails;
 import org.swisscheese.swisscheese.map.Map;
 import org.swisscheese.swisscheese.texturePacks.TexturePack;
 
@@ -48,7 +52,7 @@ import org.swisscheese.swisscheese.texturePacks.TexturePack;
  * @since v0.5
  * @version v1.0
  */
-@Hack(reason="Inheritance")
+@Hack(reason = "Inheritance")
 public abstract class MultithreadedRendererDispatcher extends Renderer {
 	/** ThreadPoolExecutor that contains threads that carry-out rendering. */
 	protected final ThreadPoolExecutor pool;
@@ -61,28 +65,37 @@ public abstract class MultithreadedRendererDispatcher extends Renderer {
 
 	/**
 	 * Constructor for <code>MultithreadedRendererDispatcher</code>.
-	 * <p>
-	 * Instantiation for the {@link ArrayBlockingQueue} <code>threadPoolQueue</code>
-	 * must be instantiated outside of the constructor with a quotation block.
-	 * Otherwise, an exception will be thrown.
 	 * 
-	 * @param width       the width of the screen
-	 * @param height      the height of the screen
-	 * @param texturePack the {@link TexturePack} used.
-	 * @param camera      the {@link Camera} used.
-	 * @param map         the {@link Map} used.
-	 * @param nThreads    the number of threads in the {@link ThreadPoolExecutor}.
-	 * 
-	 * @throws IllegalStateException - If <code>threadPoolQueue</code> is null.
-	 * 
+	 * @param width                      the width of the screen
+	 * @param height                     the height of the screen
+	 * @param texturePack                the {@link TexturePack} used.
+	 * @param camera                     the {@link Camera} used.
+	 * @param map                        the {@link Map} used.
+	 * @param nThreads                   the number of threads in the
+	 *                                   {@link ThreadPoolExecutor}.
+	 * @param arrayBlockingQueueCapacity the capacity of the
+	 *                                   {@link ArrayBlockingQueue}.
 	 * @see Renderer#Renderer(float, float, TexturePack, Camera, Map)
 	 */
-	public MultithreadedRendererDispatcher(float width, float height, TexturePack texturePack, Camera camera, Map map,
-			int nThreads) throws IllegalStateException {
+	protected MultithreadedRendererDispatcher(float width, float height, TexturePack texturePack, Camera camera,
+			Map map, int nThreads, int arrayBlockingQueueCapacity) throws IllegalStateException {
 		super(width, height, texturePack, camera, map);
 		this.nThreads = nThreads;
-		if (threadPoolQueue == null)
-			throw new IllegalStateException("threadPoolQueue must be instantiated");
+		threadPoolQueue = new ArrayBlockingQueue<>(arrayBlockingQueueCapacity);
+		pool = new ThreadPoolExecutor(nThreads, 64, 100, TimeUnit.MILLISECONDS, threadPoolQueue);
+	}
+
+	/**
+	 * A constructor from existing {@link MultithreadedRendererDetails}.
+	 * @param details the details from which it is created
+	 * @param camera camera used
+	 * @param arrayBlockingQueueCapacity capacity of {@link ArrayBlockingQueue}.
+	 */
+	protected MultithreadedRendererDispatcher(MultithreadedRendererDetails details, Camera camera,
+			int arrayBlockingQueueCapacity) {
+		super(details.getRegularDetails(), camera);
+		this.nThreads = details.nThreads;
+		threadPoolQueue = new ArrayBlockingQueue<>(arrayBlockingQueueCapacity);
 		pool = new ThreadPoolExecutor(nThreads, 64, 100, TimeUnit.MILLISECONDS, threadPoolQueue);
 	}
 
@@ -95,21 +108,53 @@ public abstract class MultithreadedRendererDispatcher extends Renderer {
 	public abstract int[] render(int[] pixels);
 
 	/**
-	 * Always returns true.
+	 * Makes a new {@link MultithreadedRendererDetails} from the
+	 * {@link #getDetails()} method of the superclass along with the number of
+	 * threads used by the {@link MultithreadedRendererDispatcher}.
+	 * 
+	 * @return new {@link MultithreadedRendererDetails}
 	 */
-	@Override
-	public final boolean canGetThreads() {
-		return true;
+	public MultithreadedRendererDetails getMultiDetails() {
+		return new MultithreadedRendererDetails(getDetails(), nThreads);
 	}
 
 	/**
-	 * Gets number of threads used.
+	 * Checks to see if this platforms supports MultiThreading-based operations
+	 * inside the Java Virtual Machine.<br>
+	 * <b>DO NOT MODIFY-WILL NOT WORK!</b>
 	 * 
-	 * @return nThreads
+	 * @return true if multithreading is supported.
 	 */
 	@Override
-	public final int getThreads() {
-		return nThreads;
+	public boolean isMultithreaded() {
+		// safest way to do multithreading.
+		try {
+			// creating a new thread to see if it works
+			Thread testThread = new Thread();
+			Field validationData = testThread.getClass().getDeclaredField("MAX_PRIORITY");
+			validationData.setAccessible(true);
+			int supportedMaximumThreads = (int) validationData.get(testThread);
+			if (supportedMaximumThreads == 1)
+				// going to the catch bloc
+				throw new InsufficientResourcesException();
+			else
+				return true;
+		} catch (NoSuchFieldException | SecurityException | IllegalAccessException e) {
+			System.out.println("Something went wrong!");
+			System.exit(-1);
+			return false;
+		} catch (InsufficientResourcesException in) {
+			System.out.println("This JVM does not support multithreading");
+			return false;
+		}
 	}
 
+	/**
+	 * Getter for the thread
+	 * 
+	 * @return
+	 */
+	public int getNThreads() {
+		return nThreads;
+	}
 }

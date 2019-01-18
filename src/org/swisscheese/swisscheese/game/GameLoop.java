@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.swisscheese.swisscheese.annotations.NotThreadSafe;
 import org.swisscheese.swisscheese.engine.camera.View;
+import org.swisscheese.swisscheese.engine.details.UseRenderer;
 import org.swisscheese.swisscheese.engine.display.Window;
 import org.swisscheese.swisscheese.gameSaving.SaveMetadata;
 import org.swisscheese.swisscheese.map.Map;
@@ -67,7 +68,7 @@ public final class GameLoop implements Runnable {
 	 *                    opened.
 	 */
 	public GameLoop(Dimension dimension, boolean fitToScreen, TexturePack texture, final float FRAME_RATE, float FOV,
-			Map map, SaveMetadata metadata, View... view) {
+			Map map, SaveMetadata metadata, UseRenderer useRenderer, View... view) {
 		// calculate how long each frame is.
 		this.FRAME_RATE = FRAME_RATE;
 		FRAME_DURATION = 1f / FRAME_RATE;
@@ -76,7 +77,7 @@ public final class GameLoop implements Runnable {
 		running = new AtomicBoolean();
 
 		window = new Window((int) dimension.getWidth(), (int) dimension.getHeight(), fitToScreen, map, FOV, metadata,
-				texture, view);
+				texture, useRenderer, view);
 		thread = new Thread(this);
 		start();
 	}
@@ -130,8 +131,8 @@ public final class GameLoop implements Runnable {
 					}
 				}
 			} catch (NullPointerException e) {
-e.printStackTrace();
-}
+				e.printStackTrace();
+			}
 		} while (running.get());
 	}
 

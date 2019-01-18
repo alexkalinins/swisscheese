@@ -16,6 +16,8 @@
  */
 package org.swisscheese.swisscheese.uiWindows;
 
+import java.awt.Dimension;
+
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -63,6 +65,7 @@ final class OpenGamePanel extends AbstractMakeGamePanel {
 		delete = new JButton("Delete");
 		delete.addActionListener(e -> deleteSelected());
 		add(delete);
+		delete.setPreferredSize(new Dimension(this.getSize().width, delete.getPreferredSize().height));
 	}
 
 	/**

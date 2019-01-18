@@ -20,6 +20,7 @@ import java.util.concurrent.Callable;
 
 import org.swisscheese.swisscheese.annotations.ThreadSafe;
 import org.swisscheese.swisscheese.engine.camera.View;
+import org.swisscheese.swisscheese.engine.details.RendererDetails;
 import org.swisscheese.swisscheese.engine.imageEffects.ChangeGamma;
 import org.swisscheese.swisscheese.math.GeomVector2D;
 
