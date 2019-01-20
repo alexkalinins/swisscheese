@@ -49,6 +49,7 @@ class RendererPanel extends JPanel {
 	private static final long serialVersionUID = 8747797986392977898L;
 	private final JComboBox<RendererType> type = new JComboBox<>(RendererType.values());
 	private final JSlider threadSlider = new JSlider(SwingConstants.HORIZONTAL, 1, 64, 1);
+	private final GridBagConstraints cst = new GridBagConstraints();
 
 	/**
 	 * Creates a new {@link RendererPanel} that is used in the start menu.
@@ -62,7 +63,6 @@ class RendererPanel extends JPanel {
 		setBorder(BorderFactory.createLineBorder(Color.ORANGE, 1));
 		setLayout(new GridBagLayout());
 
-		GridBagConstraints cst = new GridBagConstraints();
 		cst.gridx = 0;
 		cst.gridy = 0;
 		cst.fill = GridBagConstraints.BOTH;
@@ -80,7 +80,6 @@ class RendererPanel extends JPanel {
 		add(new JLabel("Threads Used: "), cst);
 		cst.gridwidth = 2;
 		cst.gridy = 3;
-		threadSlider.setPaintTicks(true);
 		add(threadSlider, cst);
 
 	}
@@ -91,8 +90,10 @@ class RendererPanel extends JPanel {
 	 * 
 	 * @param renderer existing renderer.
 	 */
-	RendererPanel(Renderer renderer, UseRenderer useRenderer) {
-		this(useRenderer);
+	RendererPanel(Renderer renderer) {
+		// nThread doesnt matter in the overloading.
+		this(new UseRenderer(RendererType.fromRenderer(renderer), 1));
+
 		if (renderer.isMultithreaded()) {
 			threadSlider.setValue(((MultithreadedRendererDispatcher) renderer).getNThreads());
 		} else {
@@ -102,11 +103,17 @@ class RendererPanel extends JPanel {
 
 		if (renderer instanceof SingleThreadedRenderer) {
 			type.setSelectedItem(RendererType.SINGLE_THREAD);
+			cst.gridy = 4;
+			cst.gridwidth = 2;
+			String time = String.format("Avg. Time: %.3f sec.",
+					((SingleThreadedRenderer) renderer).getAverageRenderingTime());
+			add(new JLabel(time), cst);
 		} else if (renderer instanceof ChunkRendererDispatcher) {
 			type.setSelectedItem(RendererType.CHUNK);
 		} else {
 			type.setSelectedItem(RendererType.STRIP);
 		}
+
 	}
 
 	/**

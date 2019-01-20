@@ -92,6 +92,11 @@ public class SingleThreadedRenderer extends Renderer {
 	private GeomVector2D<Float> rayDir; // ray direction vector
 	private GeomVector2D<Float> deltaDist; // difference in distance
 
+	private float[] avgTime = new float[10];
+	private float time = 0;
+	private int timeCounter = 10;
+	private boolean count = true;
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -126,7 +131,14 @@ public class SingleThreadedRenderer extends Renderer {
 	 */
 	@Override
 	public int[] render(int[] pixels) {
-		pixels = render(pixels);
+		count = --timeCounter >= 0;
+		if (count) {
+			avgTime[timeCounter] = (float) System.nanoTime();
+		}
+
+		if (!psychadelic) {
+			pixels = fillBackground(pixels);
+		}
 
 		view = camera.getView();
 
@@ -206,7 +218,7 @@ public class SingleThreadedRenderer extends Renderer {
 			// wall line end point:
 			wallEnd = (int) (wallLength / 2 + getDetails().height / 2);
 			wallEnd = (wallEnd > getDetails().height) ? (int) getDetails().height : wallEnd; // off the
-																											// screen
+																								// screen
 
 			// getting textureType from the wall
 			textureType = getDetails().maze[Math.abs(xMap)][Math.abs(yMap)] - 1;
@@ -237,7 +249,33 @@ public class SingleThreadedRenderer extends Renderer {
 				pixels[(int) (x + y * (getDetails().width))] = rgb;
 			}
 		}
-		return applyDarkness(pixels);
+
+		pixels = applyDarkness(pixels);
+
+		if (count) {
+			avgTime[timeCounter] = ((float) System.nanoTime() - avgTime[timeCounter]) / 1000000000f;
+		}
+
+		return pixels;
+
+	}
+
+	/**
+	 * A method that calculates and return the amount of time it takes for the
+	 * {@link SingleThreadedRenderer} to render.
+	 * 
+	 * @return average time of 10 rendering passes.
+	 */
+	public float getAverageRenderingTime() {
+		if (time == 0) {
+			for (int i = 0; i < avgTime.length; i++) {
+				time += avgTime[i];
+			}
+
+			time /= avgTime.length;
+		}
+
+		return time;
 
 	}
 

@@ -22,20 +22,26 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.swisscheese.swisscheese.annotations.Immutable;
+import org.swisscheese.swisscheese.engine.details.MultithreadedRendererDetails;
+import org.swisscheese.swisscheese.engine.details.RendererDetails;
+import org.swisscheese.swisscheese.engine.details.UseRenderer;
 import org.swisscheese.swisscheese.engine.display.Window;
 import org.swisscheese.swisscheese.engine.imageEffects.GammaState;
 import org.swisscheese.swisscheese.engine.rendering.Renderer;
+import org.swisscheese.swisscheese.engine.rendering.RendererType;
 import org.swisscheese.swisscheese.game.GameFromSettings;
 import org.swisscheese.swisscheese.gameSaving.GameSave;
 import org.swisscheese.swisscheese.gameSaving.GameSaveManager;
@@ -55,7 +61,9 @@ public final class InGameMenu extends JDialog {
 	private static final long serialVersionUID = 3038952637134428918L;
 	private final CardLayout cards;
 	private final JPanel mainPanel;
+	private RendererPanel rPanel;
 
+	private TexturePackPanel tPanel;
 	private final String HOME = "home";
 	private final String KEYS = "keys";
 	private final String SETTINGS = "settings";
@@ -70,6 +78,8 @@ public final class InGameMenu extends JDialog {
 	private final JButton settings = new JButton("Settings");
 	private final JButton goBack = new JButton("Return");
 	private final JButton exitGame = new JButton("Exit To Menu");
+
+	private final JButton apply = new JButton("Apply");
 
 	private static boolean displaying = false;
 	private static InGameMenu menu;
@@ -144,9 +154,7 @@ public final class InGameMenu extends JDialog {
 	}
 
 	/**
-	 * Makes the 'settings' card of the menu. At the moment, it is empty and has no
-	 * features. In the future, buttons, labels and other components will be added
-	 * to a {@code JScrollPane}.
+	 * Makes the 'settings' card of the menu.
 	 * <p>
 	 * This card does not contain KeyBind settings; they are made by
 	 * {@link makeKeyBindsCard()}.
@@ -156,8 +164,28 @@ public final class InGameMenu extends JDialog {
 	 */
 	private JPanel makeSettingsCard() {
 		JPanel pane = new JPanel();
-		pane.setLayout(new BorderLayout());
-		pane.add(new JLabel("Nothing here yet..."), BorderLayout.NORTH);
+		pane.setLayout(new GridBagLayout());
+		GridBagConstraints cst = new GridBagConstraints();
+		rPanel = new RendererPanel(Window.getWindow().getRenderer());
+
+		cst.gridx = 0;
+		cst.gridwidth = 2;
+		cst.gridheight = 1;
+		cst.fill = GridBagConstraints.BOTH;
+		cst.insets = new Insets(5, 5, 5, 5);
+
+		cst.gridy = 0;
+		pane.add(rPanel, cst);
+
+		tPanel = new TexturePackPanel(false);
+		cst.gridy = 1;
+		pane.add(tPanel, cst);
+
+		cst.gridy = 2;
+		apply.addActionListener(e -> applySettings());
+		cst.gridy = 2;
+		pane.add(apply, cst);
+
 		JScrollPane scroll = new JScrollPane(pane);
 		scroll.setPreferredSize(this.getSize());
 		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -166,6 +194,26 @@ public final class InGameMenu extends JDialog {
 		JPanel panel = new JPanel();
 		panel.add(scroll);
 		return panel;
+	}
+
+	private void applySettings() {
+		if (tPanel.getSelectedTexturePack() != null) {
+			Window.getWindow().getRenderer().changeTextures(tPanel.getSelectedTexturePack());
+		}
+
+		UseRenderer use = rPanel.getUseRenderer();
+		@SuppressWarnings("static-access")
+		RendererDetails oldD = Window.getWindow().getRenderer().getDetails();
+		RendererDetails newD;
+		if (use.type == RendererType.CHUNK || use.type == RendererType.STRIP) {
+			newD = new MultithreadedRendererDetails(oldD.width, oldD.height, oldD.wallTextures, oldD.maze,
+					use.nThreads);
+		} else if (use.type == RendererType.SINGLE_THREAD && oldD instanceof MultithreadedRendererDetails) {
+			newD = new RendererDetails(oldD.width, oldD.height, oldD.wallTextures, oldD.maze);
+		} else {
+			newD = oldD;
+		}
+		Window.getWindow().swapRenderer(use, newD);
 	}
 
 	/**

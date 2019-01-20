@@ -45,6 +45,8 @@ public abstract class Renderer {
 	protected final Color SKY = Color.cyan;
 	/** An object containing details about renderer. */
 	private static RendererDetails details;
+	/** 'Secret feature' for turning screen 'psychadelic'*/
+	protected static boolean psychadelic = false;
 	/** Boolean for tracking if an image needs to be darkened */
 	protected static GammaState state = GammaState.NORMAL;
 	/** The {@link Camera} of the game */
@@ -143,8 +145,19 @@ public abstract class Renderer {
 	 * 
 	 * @return
 	 */
-	static RendererDetails getDetails() {
+	public static RendererDetails getDetails() {
 		return details;
+	}
+	
+	/**
+	 * Toggles renderer to become psychadelic (by not clearing background)
+	 */
+	public static void makePsychadelic() {
+		if(psychadelic) {
+			psychadelic = false;
+		}else {
+			psychadelic = true;
+		}
 	}
 	
 	/**

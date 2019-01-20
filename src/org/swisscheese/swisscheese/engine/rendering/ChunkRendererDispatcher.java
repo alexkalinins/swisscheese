@@ -84,6 +84,7 @@ public class ChunkRendererDispatcher extends MultithreadedRendererDispatcher {
 
 	@Override
 	public int[] render(int[] pixels) {
+		if(!psychadelic) {
 		this.pixels = fillBackground(pixels);
 		if (state == GammaState.DARK) {
 			for (int i = 0; i < this.pixels.length; i++) {
@@ -94,7 +95,7 @@ public class ChunkRendererDispatcher extends MultithreadedRendererDispatcher {
 				this.pixels[i] = ChangeGamma.getColor(this.pixels[i], 2f);
 			}
 		}
-		
+		}
 		View view = camera.getView();
 
 		// updating and loading futures.

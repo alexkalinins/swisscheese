@@ -67,7 +67,7 @@ public final class RendererFactory {
 	 *                                  enum</li>
 	 *                                  </ul>
 	 */
-	public static Renderer createThreadFromEnum(RendererType type, RendererDetails details, Camera camera)
+	public static Renderer createFromEnum(RendererType type, RendererDetails details, Camera camera)
 			throws IllegalArgumentException {
 		switch (type) {
 		case STRIP:

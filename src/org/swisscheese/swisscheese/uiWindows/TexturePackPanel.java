@@ -18,6 +18,9 @@ package org.swisscheese.swisscheese.uiWindows;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
@@ -47,19 +50,26 @@ class TexturePackPanel extends JPanel {
 	@SuppressWarnings("rawtypes")
 	private final JList selection;
 
-	TexturePackPanel() {
+	TexturePackPanel(boolean... wApply) {
 		setLayout(new BorderLayout());
 		selection = makeSelectionList();
 		JPanel panel = new JPanel();
-		panel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
-		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-		panel.add(new JLabel("Select a Texture-Pack:"));
-		panel.add(Box.createRigidArea(new Dimension(0, 7)));
-		panel.add(selection);
+		GridBagConstraints cst = new GridBagConstraints();
+		cst.gridx = 0;
+		cst.gridy = 0;
+		cst.gridwidth = 2;
+		cst.gridwidth = 1;
+		cst.insets = new Insets(5, 5, 5, 5);
+		cst.fill = GridBagConstraints.BOTH;
+		panel.setLayout(new GridBagLayout());
+		panel.add(new JLabel("Select a Texture-Pack:"), cst);
+		cst.gridy++;
+		panel.add(selection, cst);
 
-		add(panel, BorderLayout.CENTER);
-		add(applyChanges, BorderLayout.SOUTH);
-
+		add(panel, BorderLayout.NORTH);
+		if (wApply.length == 0 || wApply[0]) {
+			add(applyChanges, BorderLayout.SOUTH);
+		}
 	}
 
 	public void addApplyChangesActionListner(ActionListener l) {

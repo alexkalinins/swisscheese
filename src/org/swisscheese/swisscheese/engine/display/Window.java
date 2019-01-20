@@ -38,6 +38,7 @@ import org.swisscheese.swisscheese.engine.details.UseRenderer;
 import org.swisscheese.swisscheese.engine.io.images.ImageFromArray;
 import org.swisscheese.swisscheese.engine.keyboard.KeyPreferenceIO;
 import org.swisscheese.swisscheese.engine.keyboard.Keyboard;
+import org.swisscheese.swisscheese.engine.rendering.MultithreadedRendererDispatcher;
 import org.swisscheese.swisscheese.engine.rendering.Renderer;
 import org.swisscheese.swisscheese.engine.rendering.RendererFactory;
 import org.swisscheese.swisscheese.engine.rendering.RendererType;
@@ -128,7 +129,7 @@ public class Window extends JFrame {
 				: new MultithreadedRendererDetails(width, height, new WallTextureList(texturePack).getList(),
 						map.getMap(), useRenderer.nThreads);
 		System.out.printf("Creating new %s Renderer%n", useRenderer.type.toString());
-		renderer = RendererFactory.createThreadFromEnum(useRenderer.type, details, camera);
+		renderer = RendererFactory.createFromEnum(useRenderer.type, details, camera);
 		mover = camera.getMover();
 
 		bufferImage = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_RGB);
@@ -251,6 +252,38 @@ public class Window extends JFrame {
 		return metadata;
 	}
 
+	/**
+	 * Renderer getter
+	 * @return <code>renderer</code>
+	 */
+	public final Renderer getRenderer() {
+		return renderer;
+	}
+
+	/**
+	 * Hot-swap <code>renderer</code> with a different {@link Renderer}.
+	 * 
+	 * @param use     the {@link UseRenderer} from which a {@link Renderer} will be
+	 *                created
+	 * @param details the details of the renderer
+	 * @throws IllegalArgumentException if not {@link MultithreadedRendererDetails}
+	 *                                  are passed when creating a sub-class of
+	 *                                  {@link MultithreadedRendererDispatcher}.
+	 */
+	public final void swapRenderer(UseRenderer use, RendererDetails details) throws IllegalArgumentException {
+		if ((use.type == RendererType.CHUNK || use.type == RendererType.STRIP)
+				&& !(details instanceof MultithreadedRendererDetails)) {
+			throw new IllegalArgumentException("RendererDetails must be MultithreadedRendererDetails");
+		}
+		renderer = RendererFactory.createFromEnum(use.type, details, camera);
+		System.out.printf("Creating new %s Renderer%n", use.type.toString());
+
+	}
+
+	/**
+	 * Sets the {@link SaveMetadata} of the window
+	 * @param metadataa new {@link SaveMetadata}
+	 */
 	public static final void setMetadata(SaveMetadata metadataa) {
 		metadata = metadataa;
 	}

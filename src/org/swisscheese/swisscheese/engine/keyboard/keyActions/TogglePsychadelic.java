@@ -14,30 +14,32 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.swisscheese.swisscheese.engine.rendering;
+package org.swisscheese.swisscheese.engine.keyboard.keyActions;
+
+import org.swisscheese.swisscheese.engine.rendering.Renderer;
 
 /**
- * Enum used to create a new renderer from a saved file.
+ * Toggles the <code>psychadelic</code> boolean of {@link Renderer}.
+ * <p>
+ * Causes the renderer to not clear the screen and not make the background fill.
  * 
  * @author Alex Kalinins
+ * @since 2019-01-20
+ * @since v0.5
+ * @version v1.0
  */
-public enum RendererType {
-	STRIP, CHUNK, SINGLE_THREAD,;
+public class TogglePsychadelic implements KeyAction {
 
-	/**
-	 * Returns a {@link RendererType} from <code>renderer</code>.
-	 * 
-	 * @param renderer from which type returned
-	 * @return enumn {@link RendererType}
-	 */
-	public static RendererType fromRenderer(Renderer renderer) {
-		if (renderer instanceof SingleThreadedRenderer)
-			return SINGLE_THREAD;
-		else if (renderer instanceof ChunkRendererDispatcher)
-			return CHUNK;
-		else if (renderer instanceof StripRendererDispatcher)
-			return STRIP;
-		else
-			throw new IllegalArgumentException();
+	@Override
+	public void doAction() {
+		Renderer.makePsychadelic();
+
 	}
+
+	@Override
+	public void stopAction() {
+		return;
+
+	}
+
 }

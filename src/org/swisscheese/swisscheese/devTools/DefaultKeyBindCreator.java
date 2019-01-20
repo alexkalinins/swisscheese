@@ -19,6 +19,7 @@ package org.swisscheese.swisscheese.devTools;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Field;
 
 import org.swisscheese.swisscheese.engine.io.gson.InterfacetoJson;
 import org.swisscheese.swisscheese.engine.io.gson.JsonAdapterRegistrar;
@@ -32,6 +33,7 @@ import org.swisscheese.swisscheese.engine.keyboard.keyActions.KeyAction;
 import org.swisscheese.swisscheese.engine.keyboard.keyActions.OpenMenu;
 import org.swisscheese.swisscheese.engine.keyboard.keyActions.PanLeft;
 import org.swisscheese.swisscheese.engine.keyboard.keyActions.PanRight;
+import org.swisscheese.swisscheese.engine.keyboard.keyActions.TogglePsychadelic;
 
 import com.google.gson.Gson;
 
@@ -43,28 +45,49 @@ import com.google.gson.Gson;
  *
  */
 class DefaultKeyBindCreator {
-	public static KeyActionPreference p;
-	public static Gson gson;
+	private static KeyActionPreference p;
+	private Gson gson;
 
+	private DefaultKeyBindCreator() {
+	}
+	
 	@SuppressWarnings("deprecation")
-	public static void load() {
+	public void load() {
 		// don't to use 'full' constructor.
 		p = new KeyActionPreference(new GoForward(), new GoLeft(), new GoBackward(), new GoRight(), null, null,
 				new PanLeft(), new PanRight(), new OpenMenu(), null, null, null, null, null, null, null, null, null,
 				null, new ExitGame());
+		
+		try {
+			Field field = KeyActionPreference.class.getDeclaredField("pAction");
+			field.setAccessible(true);
+			try {
+				field.set(p, new TogglePsychadelic());
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (NoSuchFieldException | SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public static void main(String[] args) {
-		gson = JsonAdapterRegistrar.makeGson(KeyAction.class, new InterfacetoJson<KeyAction>());
-		load();
-		writeToFile(p);
+		DefaultKeyBindCreator d = new DefaultKeyBindCreator();
+		d.gson = JsonAdapterRegistrar.makeGson(KeyAction.class, new InterfacetoJson<KeyAction>());
+		d.load();
+		d.writeToFile(p);
 	}
 
 	/**
 	 * Serializes and writes preferences to file (/settings/user/keybind.config).
 	 * Now using GSON
 	 */
-	public static void writeToFile(KeyActionPreference p) {
+	public void writeToFile(KeyActionPreference p) {
 		File file = new File("settings/default/keybind.config");
 		if (file.exists()) {
 			file.delete();
