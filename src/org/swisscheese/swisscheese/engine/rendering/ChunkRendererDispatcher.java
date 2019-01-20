@@ -25,6 +25,8 @@ import org.swisscheese.swisscheese.annotations.ThreadSafe;
 import org.swisscheese.swisscheese.engine.camera.Camera;
 import org.swisscheese.swisscheese.engine.camera.View;
 import org.swisscheese.swisscheese.engine.details.MultithreadedRendererDetails;
+import org.swisscheese.swisscheese.engine.imageEffects.ChangeGamma;
+import org.swisscheese.swisscheese.engine.imageEffects.GammaState;
 import org.swisscheese.swisscheese.map.Map;
 import org.swisscheese.swisscheese.texturePacks.TexturePack;
 
@@ -83,6 +85,16 @@ public class ChunkRendererDispatcher extends MultithreadedRendererDispatcher {
 	@Override
 	public int[] render(int[] pixels) {
 		this.pixels = fillBackground(pixels);
+		if (state == GammaState.DARK) {
+			for (int i = 0; i < this.pixels.length; i++) {
+				this.pixels[i] = ChangeGamma.getColor(this.pixels[i], 0.5f);
+			}
+		} else if (state == GammaState.BRIGHT) {
+			for (int i = 0; i < this.pixels.length; i++) {
+				this.pixels[i] = ChangeGamma.getColor(this.pixels[i], 2f);
+			}
+		}
+		
 		View view = camera.getView();
 
 		// updating and loading futures.

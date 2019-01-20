@@ -22,6 +22,7 @@ import org.swisscheese.swisscheese.annotations.ThreadSafe;
 import org.swisscheese.swisscheese.engine.camera.View;
 import org.swisscheese.swisscheese.engine.details.RendererDetails;
 import org.swisscheese.swisscheese.engine.imageEffects.ChangeGamma;
+import org.swisscheese.swisscheese.engine.imageEffects.GammaState;
 import org.swisscheese.swisscheese.math.GeomVector2D;
 
 /**
@@ -46,7 +47,7 @@ public class RenderChunk implements Callable<Void> {
 	/** The end index of {@code RenderChunk} (exclusive). */
 	private final int toIndex;
 	/** Details object. */
-	private final RendererDetails DETAILS = Renderer.getDetails();
+	private RendererDetails details = Renderer.getDetails();
 
 	// reused render variables
 	private GeomVector2D<Float> dir;
@@ -95,12 +96,14 @@ public class RenderChunk implements Callable<Void> {
 	}
 
 	/**
-	 * Updates the view of the render chunk to be <code>view</code>.
+	 * Updates the view of the render chunk to be <code>view</code>. Also gets the
+	 * latest {@link RendererDetails} from {@link Renderer}.
 	 * 
 	 * @param view the view that is being updated.
 	 */
 	public synchronized void update(View view) {
 		this.view = view;
+		details = Renderer.getDetails();
 	}
 
 	/**
@@ -114,7 +117,7 @@ public class RenderChunk implements Callable<Void> {
 		yPos = view.getyPos();
 
 		for (int x = fromIndex; x < toIndex; x++) {
-			scanLine = 2 * x / DETAILS.width - 1f;
+			scanLine = 2 * x / details.width - 1f;
 			wallVertical = false;
 
 			// position on the map; can't move out of for loop for some reason
@@ -160,31 +163,31 @@ public class RenderChunk implements Callable<Void> {
 					yMap += yStep;
 					wallVertical = true;
 				}
-			} while (DETAILS.maze[xMap][yMap] <= 0);// ray has hit the wall
+			} while (details.maze[xMap][yMap] <= 0);// ray has hit the wall
 
 			// distance from the player to the wall
 			distanceToWall = (wallVertical) ? Math.abs((yMap - yPos + (1 - yStep) / 2) / rayDir.getY())
 					: Math.abs((xMap - xPos + (1 - xStep) / 2) / rayDir.getX());
 
 			// calculating wall line length from wall distance (perspective)
-			wallLength = (int) ((distanceToWall > 0) ? Math.abs(DETAILS.height / distanceToWall) : DETAILS.height);
+			wallLength = (int) ((distanceToWall > 0) ? Math.abs(details.height / distanceToWall) : details.height);
 
 			// wall line start point:
-			wallStart = (int) (-wallLength / 2 + DETAILS.height / 2);
+			wallStart = (int) (-wallLength / 2 + details.height / 2);
 			wallStart = (wallStart < 0) ? 0 : wallStart; // if it's off the screen
 
 			// wall line end point:
-			wallEnd = (int) (wallLength / 2 + DETAILS.height / 2);
-			wallEnd = (wallEnd > DETAILS.height) ? (int) DETAILS.height : wallEnd; // off the screen
+			wallEnd = (int) (wallLength / 2 + details.height / 2);
+			wallEnd = (wallEnd > details.height) ? (int) details.height : wallEnd; // off the screen
 			// getting textureType from the wall
-			textureType = DETAILS.maze[Math.abs(xMap)][Math.abs(yMap)] - 1;
-			DETAILS.wallTextures.get(textureType).doAction();
+			textureType = details.maze[Math.abs(xMap)][Math.abs(yMap)] - 1;
+			details.wallTextures.get(textureType).doAction();
 			wallHit = (wallVertical) ? (xPos + ((yMap - yPos + (1 - yStep) / 2) / rayDir.getY()) * rayDir.getX())
 					: (yPos + ((xMap - xPos + (1 - xStep) / 2) / rayDir.getX()) * rayDir.getY());
 			wallHit -= Math.floor(wallHit);
 
 			// caching texture size
-			final int textureSize = DETAILS.wallTextures.get(textureType).getSize();
+			final int textureSize = details.wallTextures.get(textureType).getSize();
 
 			// stretching the texture according to the wall shape (perspective)
 			// calculating x coordinate of the texture
@@ -194,15 +197,21 @@ public class RenderChunk implements Callable<Void> {
 				xTexture = textureSize - xTexture - 1;
 			// calculating y coordinate of the texture
 			for (int y = wallStart; y < wallEnd; y++) {
-				yTexture = (((int) (y * 2 - DETAILS.height + wallLength) << 6) / wallLength) / 2;
+				yTexture = (((int) (y * 2 - details.height + wallLength) << 6) / wallLength) / 2;
 
 				// getting a color from texture
-				rgb = DETAILS.wallTextures.get(textureType).getImage().getPixels()[xTexture + (yTexture * textureSize)];
+				rgb = details.wallTextures.get(textureType).getImage().getPixels()[xTexture + (yTexture * textureSize)];
 				// darkening some walls for 3D effect, 0.6 works the best IMO
 				if (wallVertical)
 					rgb = ChangeGamma.getColor(rgb, 0.6f);
-				// strip[(int) (stripNumber + y * (DETAILS.width))] = rgb;
-				parent.insertValue(rgb, (int) (x + y * DETAILS.width));
+				
+				//Darkening or brightening image (for menu)
+				if (Renderer.getGammaState() == GammaState.DARK) {
+					rgb = ChangeGamma.getColor(rgb, 0.5f);
+				} else if (Renderer.getGammaState() == GammaState.BRIGHT) {
+					rgb = ChangeGamma.getColor(rgb, 2f);
+				}
+				parent.insertValue(rgb, (int) (x + y * details.width));
 			}
 		}
 		return null;

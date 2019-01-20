@@ -23,6 +23,7 @@ import org.swisscheese.swisscheese.engine.camera.Camera;
 import org.swisscheese.swisscheese.engine.camera.Mover;
 import org.swisscheese.swisscheese.engine.camera.View;
 import org.swisscheese.swisscheese.engine.details.RendererDetails;
+import org.swisscheese.swisscheese.engine.imageEffects.GammaState;
 import org.swisscheese.swisscheese.engine.texture.WallTexture;
 import org.swisscheese.swisscheese.engine.texture.WallTextureList;
 import org.swisscheese.swisscheese.map.Map;
@@ -42,8 +43,10 @@ public abstract class Renderer {
 	protected final Color FLOOR = Color.DARK_GRAY;
 	/** The color to which the sky (top half of screen) is colored */
 	protected final Color SKY = Color.cyan;
-	/** An object containing details about renderer that will not change */
+	/** An object containing details about renderer. */
 	private static RendererDetails details;
+	/** Boolean for tracking if an image needs to be darkened */
+	protected static GammaState state = GammaState.NORMAL;
 	/** The {@link Camera} of the game */
 	protected final Camera camera;
 	/** A {@link View} object that is retrieved from <code>camera</code>. */
@@ -91,6 +94,23 @@ public abstract class Renderer {
 	public abstract boolean isMultithreaded();
 
 	/**
+	 * @return the {@link GammaState} of the image (dark, bright, normal)
+	 */
+	public static GammaState getGammaState() {
+		return state;
+	}
+
+	/**
+	 * Makes the image either normal, bright, or dim.
+	 * 
+	 * @param state the state to set
+	 */
+	public static void setGammaState(GammaState state) {
+		Renderer.state = state;
+		System.out.println("Changing screen gamma to: "+ state.toString());
+	}
+
+	/**
 	 * Updates and gets {@link Mover}.
 	 * 
 	 * @return a {@link Mover} from {@link Camera}.
@@ -125,6 +145,14 @@ public abstract class Renderer {
 	 */
 	static RendererDetails getDetails() {
 		return details;
+	}
+	
+	/**
+	 * Changes the {@link TexturePack} of the {@link RendererDetails} used by {@link Renderer}.
+	 * @param pack the texture pack that is being used.
+	 */
+	public synchronized final void changeTextures(TexturePack pack) {
+		details = new RendererDetails(details.width, details.height, new WallTextureList(pack).getList(), details.maze);
 	}
 
 }

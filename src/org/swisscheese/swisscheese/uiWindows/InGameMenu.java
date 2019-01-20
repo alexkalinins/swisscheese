@@ -34,6 +34,8 @@ import javax.swing.JScrollPane;
 
 import org.swisscheese.swisscheese.annotations.Immutable;
 import org.swisscheese.swisscheese.engine.display.Window;
+import org.swisscheese.swisscheese.engine.imageEffects.GammaState;
+import org.swisscheese.swisscheese.engine.rendering.Renderer;
 import org.swisscheese.swisscheese.game.GameFromSettings;
 import org.swisscheese.swisscheese.gameSaving.GameSave;
 import org.swisscheese.swisscheese.gameSaving.GameSaveManager;
@@ -77,6 +79,7 @@ public final class InGameMenu extends JDialog {
 	 * {@link InGameMenu#display()}.
 	 */
 	private InGameMenu() {
+		Renderer.setGammaState(GammaState.DARK);
 		cards = new CardLayout();
 		mainPanel = new JPanel(cards);
 		setSize(300, 300);
@@ -236,8 +239,8 @@ public final class InGameMenu extends JDialog {
 	 */
 	@Override
 	public void dispose() {
-		// TODO un-pause game
 		displaying = false;
+		Renderer.setGammaState(GammaState.NORMAL);
 		super.dispose();
 	}
 

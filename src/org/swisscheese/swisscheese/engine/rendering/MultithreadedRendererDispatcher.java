@@ -87,8 +87,9 @@ public abstract class MultithreadedRendererDispatcher extends Renderer {
 
 	/**
 	 * A constructor from existing {@link MultithreadedRendererDetails}.
-	 * @param details the details from which it is created
-	 * @param camera camera used
+	 * 
+	 * @param details                    the details from which it is created
+	 * @param camera                     camera used
 	 * @param arrayBlockingQueueCapacity capacity of {@link ArrayBlockingQueue}.
 	 */
 	protected MultithreadedRendererDispatcher(MultithreadedRendererDetails details, Camera camera,
@@ -119,6 +120,8 @@ public abstract class MultithreadedRendererDispatcher extends Renderer {
 	}
 
 	/**
+	 * <strong>USES COMPILED NATIVE BYTECODE!</strong>
+	 * <br>
 	 * Checks to see if this platforms supports MultiThreading-based operations
 	 * inside the Java Virtual Machine.<br>
 	 * <b>DO NOT MODIFY-WILL NOT WORK!</b>
@@ -150,9 +153,9 @@ public abstract class MultithreadedRendererDispatcher extends Renderer {
 	}
 
 	/**
-	 * Getter for the thread
+	 * Getter for the thread number
 	 * 
-	 * @return
+	 * @return nThread.
 	 */
 	public int getNThreads() {
 		return nThreads;

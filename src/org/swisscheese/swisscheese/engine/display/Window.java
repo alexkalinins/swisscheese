@@ -59,6 +59,8 @@ import org.swisscheese.swisscheese.texturePacks.TexturePack;
  */
 @NotThreadSafe
 public class Window extends JFrame {
+	private static Window window = null;
+
 	private static final long serialVersionUID = 4044145833868554127L;
 
 	// not my stuff:
@@ -102,8 +104,12 @@ public class Window extends JFrame {
 	 *                    if opening a game save!</b> If no variable is passed
 	 *                    through, a new {@code View} is created.
 	 */
-	public Window(int width, int height, boolean fitToScreen, Map map, float FOV, SaveMetadata metadataa,
+	private Window(int width, int height, boolean fitToScreen, Map map, float FOV, SaveMetadata metadataa,
 			TexturePack texturePack, UseRenderer useRenderer, View... view) {
+		if (window != null) {
+			throw new SecurityException();
+		}
+
 		if (fitToScreen) {
 			// Getting the screen size.
 			Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
@@ -123,11 +129,6 @@ public class Window extends JFrame {
 						map.getMap(), useRenderer.nThreads);
 		System.out.printf("Creating new %s Renderer%n", useRenderer.type.toString());
 		renderer = RendererFactory.createThreadFromEnum(useRenderer.type, details, camera);
-		
-//		renderer = RendererFactory.createSingleThreadedRenderer(width, height, texturePack, camera, map);
-//		renderer = RendererFactory.createStripRenderer(width, height, texturePack, camera, map, 4);
-//		renderer = RendererFactory.createChunkRenderer(width, height, texturePack, camera, map, 4);
-
 		mover = camera.getMover();
 
 		bufferImage = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_RGB);
@@ -152,6 +153,56 @@ public class Window extends JFrame {
 		setLocationRelativeTo(null);
 		setVisible(true);
 
+	}
+
+	/**
+	 * Calls the private constructor to create a new window.
+	 * 
+	 * @param width       the width of the {@code Window}.
+	 * @param height      the height of the {@code Window}
+	 * @param fitToScreen true if {@code Window} will fit the monitor size. If true,
+	 *                    {@code width} and {@code height} will be disregarded, and
+	 *                    the monitor width and height will be used in their place.
+	 * @param map         the {@link Map} of the game in which the player is placed.
+	 * @param FOV         the field of view of the player - how much they are
+	 *                    seeing. This float must be between -0.1 and -2.5. If it is
+	 *                    less than -2.5 the game is un-playable. If it is 0 or
+	 *                    more, raycasting calculations will not work.
+	 * @param metadataa   the {@link SaveMetadata} of the game. Needed for saving
+	 *                    the game so that they can be identified in the future
+	 *                    based on their name, and the time of saving. (Variable
+	 *                    name misspelled intentionally).
+	 * @param texturePack the {@link TexturePack} object from which texture
+	 *                    resources will be opened in order to have walls with
+	 *                    textures.
+	 * @param useRenderer the renderer and the number of threads that will be used.
+	 * @param view        the view from the camera. This variable is <b>only needed
+	 *                    if opening a game save!</b> If no variable is passed
+	 *                    through, a new {@code View} is created.
+	 * 
+	 * @throws SecurityException thrown if an instance already exists.
+	 */
+	public static synchronized void makeWindow(int width, int height, boolean fitToScreen, Map map, float FOV,
+			SaveMetadata metadataa, TexturePack texturePack, UseRenderer useRenderer, View... view)
+			throws SecurityException {
+		if (window == null) {
+			window = new Window(width, height, fitToScreen, map, FOV, metadataa, texturePack, useRenderer, view);
+		} else
+			throw new SecurityException("Window has already been instantiated");
+	}
+
+	/**
+	 * Getter for the Window instance.
+	 * 
+	 * @return the window instance.
+	 * @throws IllegalStateException thrown if <code>window</code> has not been
+	 *                               instantiated.
+	 */
+	public static synchronized Window getWindow() throws IllegalStateException {
+		if (window == null) {
+			throw new IllegalStateException("Window has not been instantiated");
+		}
+		return window;
 	}
 
 	/**

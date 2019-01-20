@@ -44,10 +44,9 @@ import org.swisscheese.swisscheese.texturePacks.TexturePack;
 @NotThreadSafe
 public final class GameLoop implements Runnable {
 	private static Thread thread;
-	private static AtomicBoolean running;
+	private static final AtomicBoolean running = new AtomicBoolean();
 	private final float FRAME_RATE; // how many frames in a second
 	private static float FRAME_DURATION; // length of a frame (in seconds)
-	private Window window;
 
 	/**
 	 * Constructor of {@code GameLoop}
@@ -73,10 +72,7 @@ public final class GameLoop implements Runnable {
 		this.FRAME_RATE = FRAME_RATE;
 		FRAME_DURATION = 1f / FRAME_RATE;
 
-		thread = new Thread(this);
-		running = new AtomicBoolean();
-
-		window = new Window((int) dimension.getWidth(), (int) dimension.getHeight(), fitToScreen, map, FOV, metadata,
+		Window.makeWindow((int) dimension.getWidth(), (int) dimension.getHeight(), fitToScreen, map, FOV, metadata,
 				texture, useRenderer, view);
 		thread = new Thread(this);
 		start();
@@ -117,8 +113,8 @@ public final class GameLoop implements Runnable {
 		do {
 			try {
 				time = getTime();
-				window.render();
-				window.switchBuffer();
+				Window.getWindow().render();
+				Window.getWindow().switchBuffer();
 
 				passedTime = getTime() - time; // how much time passed
 
