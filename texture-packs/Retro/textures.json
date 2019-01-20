@@ -1,0 +1,15 @@
+{
+"name":"Retro",
+"author":"Alex Kalinins",
+"version":"v1.0",
+"filePaths":
+[
+"texture-packs/#name#/start.png",
+"texture-packs/#name#/finish.png",
+"texture-packs/#name#/wall1.png",
+"texture-packs/#name#/wall2.png",
+"texture-packs/#name#/wall3.png"
+],
+"fileList":[]
+}
+
