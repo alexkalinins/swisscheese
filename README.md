@@ -4,7 +4,7 @@ This is a game in which a player has to find a way out of a proceduraly generate
 
 ## Getting Started
 
-This project is complete.
+This project is not yet complete. All current developments are done in the Develop branch (unstable). This project is built using maven. If you want to proceed with installing this project in your IDE, a wiki page will be created soon.
 
 ## Prerequisites
 
