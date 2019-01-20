@@ -26,7 +26,7 @@ import org.swisscheese.swisscheese.game.GameLoop;
  * @author Alex Kalinins
  * @since 2018-12-15
  * @since v0.3
- * @version v0.1
+ * @version v1.0
  */
 @Immutable
 public class WindowCloser {

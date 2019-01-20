@@ -25,7 +25,7 @@ import org.swisscheese.swisscheese.annotations.ThreadSafe;
  * @author Alex Kalinins
  * @since 2018-12-20
  * @since v0.3
- * @version v0.3
+ * @version v1.0
  */
 @ThreadSafe
 public final class GeomPoint2D<T extends Number> {

@@ -54,7 +54,7 @@ import org.swisscheese.swisscheese.gameSaving.SaveMetadata;
  * @author Alex Kalinins
  * @since 2018-12-23
  * @since v0.5
- * @version v0.2
+ * @version v1.0
  */
 @Immutable
 public final class InGameMenu extends JDialog {

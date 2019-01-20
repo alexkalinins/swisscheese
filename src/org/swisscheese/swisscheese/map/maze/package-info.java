@@ -20,6 +20,6 @@
  * @author Alex Kalinins
  * @since v0.1
  * @since 2018-11-14
- * @version v0.1
+ * @version v1.0
  */
 package org.swisscheese.swisscheese.map.maze;

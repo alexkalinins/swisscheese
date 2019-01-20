@@ -24,7 +24,7 @@ package org.swisscheese.swisscheese.engine.imageEffects;
  * @author Alex Kalinins
  * @since 2018-12-21
  * @since v0.4
- * @version v0.1
+ * @version v1.0
  */
 public abstract class ImageEffect {
 	/**

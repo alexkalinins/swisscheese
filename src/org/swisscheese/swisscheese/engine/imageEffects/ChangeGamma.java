@@ -22,7 +22,7 @@ package org.swisscheese.swisscheese.engine.imageEffects;
  * @author Alex Kalinins
  * @since 2018-12-20
  * @since v0.3
- * @version v0.1
+ * @version v1.0
  */
 public class ChangeGamma extends ImageEffect {
 	

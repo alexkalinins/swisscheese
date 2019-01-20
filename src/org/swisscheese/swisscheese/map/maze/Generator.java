@@ -48,7 +48,7 @@ import org.swisscheese.swisscheese.math.GeomPoint2D;
  * @author Alex Kalinins
  * @since v0.1
  * @since 2018-11-14
- * @version v0.4
+ * @version v1.0
  * @see <a href="https://en.wikipedia.org/wiki/Depth-first_search"> Randomized
  *      Depth-First Search</a>
  */

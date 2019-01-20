@@ -29,7 +29,7 @@ import org.swisscheese.swisscheese.engine.camera.Mover;
  * @author Alex Kalinins
  * @since 2018-12-13
  * @since v0.3
- * @version v0.1
+ * @version v1.0
  */
 @Immutable
 public class WalkThroughTexture extends WallTexture {

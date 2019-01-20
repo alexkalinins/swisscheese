@@ -21,6 +21,6 @@
  * @author Alex Kalinins
  * @since 2018-12-23
  * @since v0.5
- * @version v0.1
+ * @version v1.0
  */
 package org.swisscheese.swisscheese.uiWindows;

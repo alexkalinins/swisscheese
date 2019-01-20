@@ -30,7 +30,7 @@ import org.swisscheese.swisscheese.texturePacks.TexturePack;
  * @author Alex Kalinins
  * @since 2018-12-15
  * @since v0.3
- * @version v0.2
+ * @version v1.0
  */
 @Immutable
 public class WallTextureList {

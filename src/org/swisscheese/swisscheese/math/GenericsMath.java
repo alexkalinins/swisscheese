@@ -30,7 +30,7 @@ package org.swisscheese.swisscheese.math;
  * @author Alex Kalinins
  * @since 2018-12-20
  * @since v0.3
- * @version v0.2
+ * @version v1.0
  */
 public strictfp class GenericsMath {
 

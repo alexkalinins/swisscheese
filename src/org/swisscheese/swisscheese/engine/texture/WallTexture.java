@@ -26,7 +26,7 @@ import org.swisscheese.swisscheese.annotations.Immutable;
  * @author Alex Kalinins
  * @since 2018-12-10
  * @since v0.2
- * @version v0.1
+ * @version v1.0
  */
 @Immutable
 public class WallTexture extends AbstractTexture{

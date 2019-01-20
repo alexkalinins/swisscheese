@@ -40,7 +40,7 @@ import org.swisscheese.swisscheese.math.GeomPoint2D;
  * @author Alex Kalinins
  * @since v0.2
  * @since 2018-11-14
- * @version v0.2
+ * @version v1.0
  *
  */
 public class CellGrid {

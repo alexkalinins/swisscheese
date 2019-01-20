@@ -55,7 +55,7 @@ import org.swisscheese.swisscheese.texturePacks.TexturePack;
  * @author Alex Kalinins
  * @since 2018-12-11
  * @since v0.2
- * @version v0.3
+ * @version v1.0
  *
  */
 @NotThreadSafe

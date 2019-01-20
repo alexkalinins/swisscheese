@@ -29,7 +29,7 @@ import org.swisscheese.swisscheese.annotations.Immutable;
  * @author Alex Kalinins
  * @since 2018-12-1
  * @since v0.2
- * @version v0.2
+ * @version v1.0
  */
 @Immutable
 public class Keyboard implements KeyListener {

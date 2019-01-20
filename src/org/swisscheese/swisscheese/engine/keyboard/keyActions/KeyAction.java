@@ -43,7 +43,7 @@ import org.swisscheese.swisscheese.engine.io.gson.Convertable;
  * @author Alex Kalinins
  * @since 2018-12-1
  * @since v0.2
- * @version v0.2
+ * @version v1.0
  */
 public interface KeyAction extends Convertable {
 

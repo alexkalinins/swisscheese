@@ -21,6 +21,6 @@
  * @author Alex Kalinins
  * @since v0.2
  * @since 2018-12-15
- * @version v0.1
+ * @version v1.0
  */
 package org.swisscheese.swisscheese.engine.io.gson;

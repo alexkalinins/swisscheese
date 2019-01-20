@@ -58,7 +58,7 @@ import org.swisscheese.swisscheese.engine.keyboard.keyActions.SaveGame;
  * @author Alex Kalinins
  * @since 2018-12-26
  * @since v0.5
- * @version v1.0a
+ * @version v1.0
  * 
  * @see org.swisscheese.swisscheese.engine.keyboard.keyActions.KeyAction
  * @see org.swisscheese.swisscheese.engine.keyboard.Keys

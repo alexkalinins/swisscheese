@@ -28,7 +28,7 @@ import org.swisscheese.swisscheese.math.GeomPoint2D;
  * @author Alex Kalinins
  * @since 2019-01-04
  * @since v0.5
- * @version v0.1
+ * @version v1.0
  */
 public strictfp class GeomPoint2DAddTest {
 	GeomPoint2D<Integer>intNew = new GeomPoint2D<Integer>(1, 1);

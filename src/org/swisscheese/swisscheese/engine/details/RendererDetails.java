@@ -31,7 +31,7 @@ import org.swisscheese.swisscheese.engine.texture.WallTexture;
  * @author Alex Kalinins
  * @since 2019-01-05
  * @since v0.5
- * @version v1.1
+ * @version v1.0
  */
 @Immutable
 public class RendererDetails {

@@ -41,7 +41,7 @@ import com.google.gson.Gson;
  * Creates a default setting file for KeyActionPreference. Uses GSON
  * 
  * @author Alex Kalinins
- * @version v0.2
+ * @version v1.0
  *
  */
 class DefaultKeyBindCreator {

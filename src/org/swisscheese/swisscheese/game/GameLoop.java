@@ -39,7 +39,7 @@ import org.swisscheese.swisscheese.texturePacks.TexturePack;
  * @author Alex Kalinins
  * @since 2018-12-10
  * @since v0.2
- * @version v0.2
+ * @version v1.0
  */
 @NotThreadSafe
 public final class GameLoop implements Runnable {

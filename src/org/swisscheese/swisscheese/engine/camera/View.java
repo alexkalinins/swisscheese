@@ -28,7 +28,7 @@ import org.swisscheese.swisscheese.math.GeomVector2D;
  * @author Alex Kalinins
  * @since 2018-12-10
  * @since v0.2
- * @version v0.4
+ * @version v1.0
  *
  */
 @ThreadSafe

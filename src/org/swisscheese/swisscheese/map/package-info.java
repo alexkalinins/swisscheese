@@ -21,6 +21,6 @@
  * @author Alex Kalinins
  * @since v0.2
  * @since 2018-12-12
- * @version v0.1
+ * @version v1.0
  */
 package org.swisscheese.swisscheese.map;

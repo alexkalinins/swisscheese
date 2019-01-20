@@ -30,7 +30,7 @@ import org.swisscheese.swisscheese.engine.keyboard.keyActions.KeyAction;
  * @author Alex Kalinins
  * @since 2018-12-1
  * @since v0.2
- * @version v0.2
+ * @version v1.0
  */
 @ThreadSafe
 public enum Keys {

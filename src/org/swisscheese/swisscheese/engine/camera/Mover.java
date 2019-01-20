@@ -43,7 +43,7 @@ import org.swisscheese.swisscheese.map.Map;
  * @author Alex Kalinins
  * @since 2018-12-10
  * @since v0.2
- * @version v0.4
+ * @version v1.0
  *
  */
 @ThreadSafe

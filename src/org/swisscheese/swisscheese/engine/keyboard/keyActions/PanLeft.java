@@ -25,7 +25,7 @@ import org.swisscheese.swisscheese.engine.display.Window;
  * @author Alex Kalinins
  * @since 2018-12-1
  * @since v0.2
- * @version v0.1
+ * @version v1.0
  */
 @ThreadSafe
 public class PanLeft implements KeyAction {

@@ -29,7 +29,7 @@ import org.swisscheese.swisscheese.math.GeomPoint2D;
  * @author Alex Kalinins
  * @since 2018-12-10
  * @since v0.3
- * @version v0.4
+ * @version v1.0
  * @see org.swisscheese.swisscheese.map.maze
  *
  */
