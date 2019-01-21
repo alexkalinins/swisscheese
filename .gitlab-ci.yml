@@ -2,13 +2,12 @@
 
 image: maven:3-jdk-8
 
-clean:
-    stage: clean
+
+build:
+    stage: build
     script: "mvn clean -B"
-    
-compile:
-    stage: compile
     script: "mvn compile -B"
+
     
 test:
     stage: test
