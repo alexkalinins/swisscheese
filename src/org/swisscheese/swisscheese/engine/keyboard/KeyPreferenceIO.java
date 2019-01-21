@@ -89,6 +89,12 @@ public class KeyPreferenceIO {
 		File file = new File("settings/user/keybind.config");
 		if (file.exists()) {
 			file.delete();
+		} else {
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 		try (PrintStream out = new PrintStream(new FileOutputStream(file))) {

@@ -34,6 +34,8 @@ import org.swisscheese.swisscheese.uiWindows.StartMenu;
 public class SwissCheese {
 	@SuppressWarnings("unused")
 	private final GameFromSettings game;
+	/**The name of the game windows.*/
+	public static final String TITLE = "SwissCheese - v1.0";
 
 	/**
 	 * 

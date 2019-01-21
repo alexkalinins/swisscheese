@@ -18,6 +18,8 @@ package org.swisscheese.swisscheese.devTools;
 
 import java.io.File;
 
+import javax.swing.text.JTextComponent.KeyBinding;
+
 import org.swisscheese.swisscheese.gameSaving.GameSaveList;
 import org.swisscheese.swisscheese.settings.GameSettings;
 
@@ -31,23 +33,30 @@ import org.swisscheese.swisscheese.settings.GameSettings;
  *
  */
 public class GameCleaner {
-	/**The file location of the {@link GameSettings} file*/
+	/** The file location of the {@link GameSettings} file */
 	private static final File SETTINGS = new File("settings/game-settings.json");
-	/**The file location of the {@link GameSaveList} file*/
+	/** The file location of the {@link GameSaveList} file */
 	private static final File SAVES = new File("settings/user-saves/list.json");
-	
+	/** The file location of user created {@link KeyBinding} */
+	private static final File KEYS = new File("settings/user/keybind.config");
+
 	/**
 	 * Checks to see if the files exist, and deletes the if they do not.
+	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		if(SETTINGS.exists()) {
+		if (SETTINGS.exists()) {
 			System.out.println("Deleting settings");
 			SETTINGS.delete();
 		}
-		if(SAVES.exists()) {
+		if (SAVES.exists()) {
 			System.out.println("Deleting saves");
 			SAVES.delete();
+		}
+		if (KEYS.exists()) {
+			System.out.println("Deleting User Keys");
+			KEYS.delete();
 		}
 
 	}

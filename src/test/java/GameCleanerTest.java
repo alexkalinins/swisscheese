@@ -20,9 +20,14 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.swisscheese.swisscheese.devTools.GameCleaner;
+import org.swisscheese.swisscheese.engine.keyboard.KeyActionPreference;
+import org.swisscheese.swisscheese.engine.keyboard.KeyPreferenceIO;
+import org.swisscheese.swisscheese.engine.keyboard.Keys;
+import org.swisscheese.swisscheese.engine.keyboard.keyActions.ExitGame;
 import org.swisscheese.swisscheese.gameSaving.GameSave;
 import org.swisscheese.swisscheese.gameSaving.GameSaveList;
 import org.swisscheese.swisscheese.gameSaving.GameSaveManager;
@@ -42,6 +47,8 @@ public class GameCleanerTest {
 	private static final File SETTINGS = new File("settings/game-settings.json");
 	/** The file location of the {@link GameSaveList} file */
 	private static final File SAVES = new File("settings/user-saves/list.json");
+	/** Keys file location */
+	private static final File KEYS = new File("settings/user/keybind.config");
 
 	/**
 	 * @throws java.lang.Exception
@@ -55,6 +62,10 @@ public class GameCleanerTest {
 		GameSettings settings = new GameSettings();
 		GameSettingsManager.MANAGER.setSettings(settings);
 
+		// adding random action
+		Keys.Z.setAction(new ExitGame());
+		KeyPreferenceIO.writeToFile(KeyActionPreference.makeFromKeys());
+
 		GameCleaner.main(new String[0]);
 	}
 
@@ -62,6 +73,26 @@ public class GameCleanerTest {
 	public void test() {
 		assertTrue(!SETTINGS.exists());
 		assertTrue(!SAVES.exists());
+		assertTrue(!KEYS.exists());
+	}
+
+	/**
+	 * Deletes the files if they were not deleted by {@link GameCleaner}.
+	 */
+	@After
+	public void deleteAll() {
+		if (SETTINGS.exists()) {
+			System.out.println("Deleting not-deleted file SETTINGS");
+			SETTINGS.delete();
+		}
+		if (SAVES.exists()) {
+			System.out.println("Deleting not-deleted file SAVES");
+			SAVES.delete();
+		}
+		if (KEYS.exists()) {
+			System.out.println("Deleting not-deleted file KEYS");
+			KEYS.delete();
+		}
 	}
 
 }

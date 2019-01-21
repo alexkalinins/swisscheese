@@ -28,6 +28,7 @@ import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
 
+import org.swisscheese.swisscheese.SwissCheese;
 import org.swisscheese.swisscheese.annotations.NotThreadSafe;
 import org.swisscheese.swisscheese.engine.camera.Camera;
 import org.swisscheese.swisscheese.engine.camera.Mover;
@@ -141,7 +142,7 @@ public class Window extends JFrame {
 
 		setSize(this.width, this.height);
 		setResizable(false);
-		setTitle("Swiss Cheese - v0.5a");
+		setTitle(SwissCheese.TITLE);
 		addKeyListener(keyboard);
 		addWindowListener(new WindowAdapter() {
 			@Override

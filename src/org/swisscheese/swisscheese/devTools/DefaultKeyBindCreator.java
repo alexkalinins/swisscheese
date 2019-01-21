@@ -33,12 +33,14 @@ import org.swisscheese.swisscheese.engine.keyboard.keyActions.KeyAction;
 import org.swisscheese.swisscheese.engine.keyboard.keyActions.OpenMenu;
 import org.swisscheese.swisscheese.engine.keyboard.keyActions.PanLeft;
 import org.swisscheese.swisscheese.engine.keyboard.keyActions.PanRight;
+import org.swisscheese.swisscheese.engine.keyboard.keyActions.SaveGame;
 import org.swisscheese.swisscheese.engine.keyboard.keyActions.TogglePsychadelic;
 
 import com.google.gson.Gson;
 
 /**
- * Creates a default setting file for KeyActionPreference. Uses GSON
+ * Creates a default setting file for KeyActionPreference. Uses GSON. Uses
+ * reflection...
  * 
  * @author Alex Kalinins
  * @version v1.0
@@ -50,19 +52,36 @@ class DefaultKeyBindCreator {
 
 	private DefaultKeyBindCreator() {
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public void load() {
 		// don't to use 'full' constructor.
 		p = new KeyActionPreference(new GoForward(), new GoLeft(), new GoBackward(), new GoRight(), null, null,
 				new PanLeft(), new PanRight(), new OpenMenu(), null, null, null, null, null, null, null, null, null,
 				null, new ExitGame());
-		
+
 		try {
 			Field field = KeyActionPreference.class.getDeclaredField("pAction");
 			field.setAccessible(true);
 			try {
 				field.set(p, new TogglePsychadelic());
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (NoSuchFieldException | SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+			Field field = KeyActionPreference.class.getDeclaredField("n1Action");
+			field.setAccessible(true);
+			try {
+				field.set(p, new SaveGame());
 			} catch (IllegalAccessException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

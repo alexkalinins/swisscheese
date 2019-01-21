@@ -40,9 +40,11 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu.Separator;
 import javax.swing.JSeparator;
 
+import org.swisscheese.swisscheese.SwissCheese;
 import org.swisscheese.swisscheese.engine.details.UseRenderer;
 import org.swisscheese.swisscheese.engine.display.WindowSize;
 import org.swisscheese.swisscheese.engine.io.images.FileToImageIcon;
+import org.swisscheese.swisscheese.engine.keyboard.KeyPreferenceIO;
 import org.swisscheese.swisscheese.gameSaving.GameSave;
 import org.swisscheese.swisscheese.gameSaving.GameSaveManager;
 import org.swisscheese.swisscheese.map.DifficultyLevel;
@@ -124,7 +126,7 @@ public class StartMenu extends JDialog {
 			}
 		});
 		setSize(300, 400);
-		setTitle("SwissCheese - v0.5a");
+		setTitle(SwissCheese.TITLE);
 		REALITY_HYPER = registerFont(new File("resources/reality-hyper-regular.ttf"));
 		URL wikiUrl = null;
 		try {
@@ -201,6 +203,7 @@ public class StartMenu extends JDialog {
 	}
 
 	private void buildFrame() {
+		KeyPreferenceIO.readFromFile();
 		keysPanel = new KeyBindsPanel(this);
 		mainPanel.add(keysPanel, KEYBINDS);
 
