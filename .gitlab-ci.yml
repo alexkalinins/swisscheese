@@ -11,4 +11,4 @@ build:
     
 test:
     stage: test
-    script: "mvn test -B -Djdk.net.URLClassPath.disableClassPathURLCheck=true"
+    script: "mvn verify"
