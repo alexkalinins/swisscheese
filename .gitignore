@@ -1,2 +1,5 @@
 /bin/
 /target/
+/settings/user-saves/list.json
+/settings/user/keybind.config
+/settings/game-settings.json

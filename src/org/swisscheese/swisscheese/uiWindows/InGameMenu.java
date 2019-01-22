@@ -77,7 +77,7 @@ public final class InGameMenu extends JDialog {
 	private final JButton keyBinds = new JButton("Key Binds");
 	private final JButton settings = new JButton("Settings");
 	private final JButton goBack = new JButton("Return");
-	private final JButton exitGame = new JButton("Exit To Menu");
+	private final JButton exitGame = new JButton("Exit Game");
 
 	private final JButton apply = new JButton("Apply");
 

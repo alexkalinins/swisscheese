@@ -1,5 +1,6 @@
 /**
- * Copyright (C) 2018 Alex Kalinins
+ * Copyright (C) 2018 Alex Kalininsits bad design should be outstandingly
+ * obvious.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -23,12 +24,11 @@ import java.lang.annotation.Target;
 /**
  * An annotation for a type containing temporary implementations, a so called
  * "<i>Hack</i>". Such <i>hacks</i> may have been implemented <b>to satisfy
- * project criteria</b>, and are likely considered bad practice/unstable. These
- * <i>Hack</i> may or may not re-implemented to a better implementation.
+ * project criteria</b>, and are possibly considered bad practice or unstable.
+ * These <i>Hack</i> may or may not re-implemented to a better implementation.
  * <p>
- * If a type is annotated as a "Hack", its bad design should be outstandingly
- * obvious. Class may be considered as a <i>hack</i> if it contains (but not
- * limited to):
+ * If a type is annotated as a "Hack", it contains bad design. Class may be
+ * considered as a <i>hack</i> if it contains (but not limited to):
  * <p>
  * <ul>
  * <li><b>Inheritance</b> using abstract classes if could be replaced by
@@ -42,7 +42,6 @@ import java.lang.annotation.Target;
  * <code>{@code ArrayList<Object> list = new ArrayList();}</code>)</li>
  * <li><b>Not</b> using a <code>try-with-resources</code> OR a
  * <code>try-finally</code> to close resources</li>
- * <li>more god-awful bad practices...</li>
  * </ul>
  * 
  * @author Alex Kalinins

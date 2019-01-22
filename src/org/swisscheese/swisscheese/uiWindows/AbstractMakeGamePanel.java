@@ -16,14 +16,14 @@
  */
 package org.swisscheese.swisscheese.uiWindows;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -42,18 +42,30 @@ import org.swisscheese.swisscheese.game.GameFromSettings;
 public abstract class AbstractMakeGamePanel extends JPanel {
 	private static final long serialVersionUID = 8830656830281914905L;
 	protected JButton start = new JButton("Start Game!");
+	protected GridBagConstraints cst = new GridBagConstraints();
+	{
+		cst.gridy = 0;
+		cst.gridx = 0;
+		cst.gridwidth = 1;
+		cst.gridheight = 1;
+		cst.insets = new Insets(7, 7, 7, 7);
+		cst.fill = GridBagConstraints.BOTH;
+	}
 
 	/**
 	 * Constructor for {@code AbstractMakeGamePanel}.
 	 */
 	protected AbstractMakeGamePanel() {
-		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+		setLayout(new GridBagLayout());
 
 		initComponents();
-		makeSpace();
-		add(start, Component.LEFT_ALIGNMENT);
-		start.setPreferredSize(new Dimension(this.getSize().width, start.getPreferredSize().height));
+		
+		cst.gridwidth = 2;
+		cst.gridy++;
+		cst.gridx = 0;
+		add(Box.createRigidArea(new Dimension(0,250)),cst);
+		cst.gridy++;
+		add(start, cst);
 	}
 
 	/**

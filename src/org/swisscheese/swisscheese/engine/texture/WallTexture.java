@@ -19,6 +19,7 @@ package org.swisscheese.swisscheese.engine.texture;
 import java.io.File;
 
 import org.swisscheese.swisscheese.annotations.Immutable;
+import org.swisscheese.swisscheese.engine.io.images.PixelImage;
 
 /**
  * A WallTexture object for storing a wall texture
@@ -29,24 +30,29 @@ import org.swisscheese.swisscheese.annotations.Immutable;
  * @version v1.0
  */
 @Immutable
-public class WallTexture extends AbstractTexture{
+public class WallTexture{
 	private final int size;
+	protected final PixelImage image;
+	protected final File file;
 	
 	public WallTexture(File file) {
-		super(file);
+		this.file = file;
+		image = new PixelImage(file);
 		size = image.getWidth();
 	}
 	
 	public WallTexture(String fileLocation) {
-		super(fileLocation);
-		size = image.getWidth();
+		this(new File(fileLocation));
 	}
 	
 	public int getSize() {
 		return size;
 	}
 	
-	@Override
+	public final PixelImage getImage() {
+		return image;
+	}
+
 	public void doAction() {
 		return;
 	}

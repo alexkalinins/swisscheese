@@ -16,12 +16,11 @@
  */
 package org.swisscheese.swisscheese.uiWindows;
 
-import java.awt.Dimension;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 
 import org.swisscheese.swisscheese.gameSaving.GameSave;
@@ -54,18 +53,21 @@ final class OpenGamePanel extends AbstractMakeGamePanel {
 	@Override
 	protected void initComponents() {
 		makeSpace();
-		JLabel subtitle = makeBoldLabel(new JLabel("Start Game!"));
-		add(subtitle);
-		makeSpace();
+		JLabel subtitle = makeBoldLabel(new JLabel("Open Saved Game"));
+		add(subtitle, cst);
+		cst.gridy++;
+		cst.gridwidth = 2;
+		cst.gridheight = 2;
 		model = loadModel(new DefaultListModel());
 		gameList = new JList(model);
 		gameList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		add(gameList);
-		makeSpace();
+		add(gameList, cst);
+		cst.gridy += 3;
+		cst.gridheight = 1;
+		cst.gridwidth = 2;
 		delete = new JButton("Delete");
 		delete.addActionListener(e -> deleteSelected());
-		add(delete);
-		delete.setPreferredSize(new Dimension(this.getSize().width, delete.getPreferredSize().height));
+		add(delete, cst);
 	}
 
 	/**
@@ -73,7 +75,21 @@ final class OpenGamePanel extends AbstractMakeGamePanel {
 	 */
 	private void deleteSelected() {
 		int index = gameList.getSelectedIndex();
-		GameSaveManager.getInstance().deleteGame(index);
+		if (GameSaveManager.getInstance().getList().size() == 0) {
+			JOptionPane.showMessageDialog(this, "You do not have any games to delete", "Delete Game-Save",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		if (index == -1) {
+			JOptionPane.showMessageDialog(this, "You must select a game to delete", "Delete Game-Save",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		try {
+			GameSaveManager.getInstance().deleteGame(index);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
 		updateJList();
 
 	}

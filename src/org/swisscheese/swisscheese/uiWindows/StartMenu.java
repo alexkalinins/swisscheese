@@ -36,6 +36,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu.Separator;
 import javax.swing.JSeparator;
@@ -310,6 +311,15 @@ public class StartMenu extends JDialog {
 
 	private void startSavedGame() {
 		newGame = false;
+		if (GameSaveManager.getInstance().getList().size() == 0) {
+			JOptionPane.showMessageDialog(this, "You do not have any games.", "Resume Game", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		if (openGamePanel.getGameSaveIndex() == -1) {
+			JOptionPane.showMessageDialog(this, "You need to select a game save to start.", "Resume Game",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
 		gameSave = GameSaveManager.getInstance().getList().get(openGamePanel.getGameSaveIndex());
 		dispose();
 	}
@@ -323,7 +333,7 @@ public class StartMenu extends JDialog {
 		final boolean fitToScreen = settingsPanel.getFitToScreen();
 		final float FOV = settingsPanel.getFovSelection();
 		final UseRenderer useRenderer = settingsPanel.getUseRenderer();
-		if(useRenderer == null) {
+		if (useRenderer == null) {
 			return;
 		}
 		settings = new GameSettings(size, fitToScreen, FOV, useRenderer, settings);

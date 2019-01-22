@@ -32,12 +32,12 @@ import org.swisscheese.swisscheese.engine.camera.Mover;
  * @version v1.0
  */
 @Immutable
-public class WalkThroughTexture extends WallTexture {
-	public WalkThroughTexture(File file) {
+public class EndWallTexture extends WallTexture {
+	public EndWallTexture(File file) {
 		super(file);
 	}
 
-	public WalkThroughTexture(String fileLoc) {
+	public EndWallTexture(String fileLoc) {
 		super(fileLoc);
 	}
 

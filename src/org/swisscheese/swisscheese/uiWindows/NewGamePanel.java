@@ -17,11 +17,7 @@
 package org.swisscheese.swisscheese.uiWindows;
 
 import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 
-import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
@@ -51,34 +47,26 @@ final class NewGamePanel extends AbstractMakeGamePanel {
 	 */
 	@Override
 	protected void initComponents() {
-		makeSpace();
 		JLabel subtitle = makeBoldLabel(new JLabel("New Game"));
 		subtitle.setAlignmentX(Component.LEFT_ALIGNMENT);
-		add(subtitle);
-		add(new JSeparator(SwingConstants.HORIZONTAL));
-		makeSpace();
-		
-		Container cName = new Container();
-		cName.setLayout(new FlowLayout());
-		cName.add(new JLabel("Save Name: "));
+		add(subtitle, cst);
+		cst.gridy++;
+		cst.gridwidth = 2;
+		add(new JSeparator(SwingConstants.HORIZONTAL),cst);
+		cst.gridy++;
+		cst.gridwidth = 1;
+		add(new JLabel("Save Name: "), cst);
+		cst.gridx=1;
 		name = new JTextField();
-		cName.add(name);
-		Dimension nameSize = new Dimension(220,cName.getPreferredSize().height);
-		name.setPreferredSize(nameSize);
-		add(cName);
-		
-		makeSpace();
+		add(name,cst);
+		cst.gridy++;
+		cst.gridx = 0;
 
-		Container cLevel = new Container();
-		cLevel.setLayout(new FlowLayout());
-		cLevel.add(new JLabel("Difficulty:"));
+		add(new JLabel("Difficulty:"),cst);
+		cst.gridx = 1;
 		diff = new JComboBox<>(DifficultyLevel.values());
 		diff.setSelectedItem(DifficultyLevel.NORMAL);
-		cLevel.add(diff);
-		add(cLevel);
-		
-		add(Box.createRigidArea(new Dimension(0,250)));
-
+		add(diff,cst);
 	}
 
 	/**

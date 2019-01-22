@@ -16,7 +16,10 @@
  */
 package org.swisscheese.swisscheese.engine.camera;
 
+import javax.swing.JOptionPane;
+
 import org.swisscheese.swisscheese.annotations.ThreadSafe;
+import org.swisscheese.swisscheese.engine.display.Window;
 import org.swisscheese.swisscheese.map.Map;
 
 /**
@@ -54,19 +57,28 @@ public class Mover {
 	private boolean moveR;
 	private boolean panL;
 	private boolean panR;
+	/** Boolean determining if the mover is stopped */
 	private static boolean usable = true;
+	/** Map used */
 	private final int[][] map;
+	/** View */
 	private View view;
-	private final float MOVE_SPEED = 0.1f;
-	private final float ROTATION_SPEED = 0.1f;
+	/** Movement speed constant */
+	private static final float MOVE_SPEED = 0.1f;
+	/** Rotation speed constant */
+	private static final float ROTATION_SPEED = 0.1f;
+	/** counts down each frame to death of {@link Mover} */
+	private int deathCounter = 200;
+	/**full stop*/
+	private boolean fullStop = false;
 
 	/**
 	 * Constructor
 	 * 
-	 * @param view a {@link org.swisscheese.swisscheese.engine.camera.View} object containing
-	 *             Vectors of the players location and POV
-	 * @param map  a {@link org.swisscheese.swisscheese.map.Map} object containing the map the
-	 *             player is in.
+	 * @param view a {@link org.swisscheese.swisscheese.engine.camera.View} object
+	 *             containing Vectors of the players location and POV
+	 * @param map  a {@link org.swisscheese.swisscheese.map.Map} object containing
+	 *             the map the player is in.
 	 */
 	public Mover(View view, Map map) {
 		setView(view);
@@ -86,7 +98,9 @@ public class Mover {
 	 * {@code true}.
 	 */
 	public synchronized void update() {
-		if (usable) {
+		if (usable || deathCounter > 0) {
+			if (!usable)
+				deathCounter--;
 			if (moveF) {
 				moveForwardCalc();
 			}
@@ -105,6 +119,9 @@ public class Mover {
 			if (panR) {
 				panRightCalc();
 			}
+		}else if(deathCounter == 0&&!fullStop){
+			fullStop = true;
+			JOptionPane.showMessageDialog(Window.getWindow(), "You completed the game!!!", "Finished Game!", JOptionPane.PLAIN_MESSAGE);
 		}
 	}
 

@@ -53,7 +53,7 @@ public class WallTextureList {
 	public List<WallTexture> getList() {
 		List<WallTexture> list = new ArrayList<>();
 		list.add(new WallTexture(fileList.get(0))); // entry
-		list.add(new WalkThroughTexture(fileList.get(1))); // exit
+		list.add(new EndWallTexture(fileList.get(1))); // exit
 		list.add(new WallTexture(fileList.get(2))); // wall1
 		list.add(new WallTexture(fileList.get(3)));// wall2
 		list.add(new WallTexture(fileList.get(4)));// wall3

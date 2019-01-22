@@ -50,18 +50,34 @@ public final class GameSaveList {
 		list.add(arg);
 	}
 
-	public final GameSave get(int index) {
+	/**
+	 * Retrieves {@link GameSave} at <code>index</code>.
+	 * 
+	 * @param index index of the {@link GameSave}
+	 * @return a game save at index
+	 * @throws IllegalArgumentException - thrown if index is -1
+	 */
+	public final GameSave get(int index) throws IllegalArgumentException {
+		if (index == -1)
+			throw new IllegalArgumentException();
 		return list.get(index);
 	}
-	
-	public final void remove(int index) {
+
+	/**
+	 * Removes the item at the <code>index</code> index.
+	 * @param index the item
+	 * @throws IllegalArgumentException - thrown if index = -1
+	 */
+	public final void remove(int index) throws IllegalArgumentException{
+		if (index == -1)
+			throw new IllegalArgumentException();
 		list.remove(index);
 	}
-	
+
 	public final int size() {
 		return list.size();
 	}
-	
+
 	public final void sort() {
 		Collections.sort(list);
 	}
