@@ -91,6 +91,7 @@ public class KeyPreferenceIO {
 			file.delete();
 		} else {
 			try {
+				file.mkdirs();
 				file.createNewFile();
 			} catch (IOException e) {
 				e.printStackTrace();
