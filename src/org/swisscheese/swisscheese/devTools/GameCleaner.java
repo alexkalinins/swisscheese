@@ -38,7 +38,7 @@ public class GameCleaner {
 	/** The file location of the {@link GameSaveList} file */
 	private static final File SAVES = new File("settings/user-saves/list.json");
 	/** The file location of user created {@link KeyBinding} */
-	private static final File KEYS = new File("settings/user/keybind.config");
+	private static final File KEYS = new File("settings/user/keybind");
 
 	/**
 	 * Checks to see if the files exist, and deletes the if they do not.

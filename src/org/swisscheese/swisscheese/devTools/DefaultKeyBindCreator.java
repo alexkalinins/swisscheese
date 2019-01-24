@@ -107,7 +107,7 @@ class DefaultKeyBindCreator {
 	 * Now using GSON
 	 */
 	public void writeToFile(KeyActionPreference p) {
-		File file = new File("settings/default/keybind.config");
+		File file = new File("settings/default/keybind");
 		if (file.exists()) {
 			file.delete();
 		}

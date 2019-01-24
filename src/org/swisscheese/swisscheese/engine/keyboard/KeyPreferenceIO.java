@@ -65,7 +65,7 @@ public class KeyPreferenceIO {
 	public static void readFromFile() {
 		Gson gson = makeGson();
 		File settings = new File(
-				(checkForSaved()) ? "settings/user/keybind.config" : "settings/default/keybind.config");
+				(checkForSaved()) ? "settings/user/keybind" : "settings/default/keybind");
 		StringBuilder sb = new StringBuilder();
 		String line;
 		try (BufferedReader in = new BufferedReader(new FileReader(settings))) {
@@ -86,12 +86,12 @@ public class KeyPreferenceIO {
 	 */
 	public static void writeToFile(KeyActionPreference p) {
 		Gson gson = makeGson();
-		File file = new File("settings/user/keybind.config");
+		File file = new File("settings/user/keybind");
 		if (file.exists()) {
 			file.delete();
 		} else {
 			try {
-				file.mkdirs();
+				file.getParentFile().mkdirs();
 				file.createNewFile();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -113,7 +113,7 @@ public class KeyPreferenceIO {
 	 * @return true if a preference file is present.
 	 */
 	private static boolean checkForSaved() {
-		return new File("settings/user/keybind.config").exists();
+		return new File("settings/user/keybind").exists();
 
 	}
 }
