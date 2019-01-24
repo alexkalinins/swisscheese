@@ -34,7 +34,7 @@ import org.swisscheese.swisscheese.uiWindows.StartMenu;
 public class SwissCheese {
 	@SuppressWarnings("unused")
 	private final GameFromSettings game;
-	/**The name of the game windows.*/
+	/** The name of the game windows. */
 	public static final String TITLE = "SwissCheese - v1.0";
 
 	/**
@@ -61,13 +61,23 @@ public class SwissCheese {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
+		
+		//using 'metal' look and feel if OS is windows and native otherwise
+		if (!System.getProperty("os.name").startsWith("Windows")) {
+			try {
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+					| UnsupportedLookAndFeelException e) {
+				e.printStackTrace();
+			}
+		}else {
+			try {
+				UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+					| UnsupportedLookAndFeelException e) {
+				e.printStackTrace();
+			}
 		}
-
 		new SwissCheese();
 	}
 
