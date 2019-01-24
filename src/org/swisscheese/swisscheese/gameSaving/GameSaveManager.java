@@ -190,6 +190,7 @@ public final class GameSaveManager {
 	private void writeToFile(GameSaveList list) {
 		if(!FILE.exists()) {
 			try {
+				FILE.getParentFile().mkdirs();
 				FILE.createNewFile();
 			} catch (IOException e) {
 				e.printStackTrace();
