@@ -1,4 +1,4 @@
-# Swiss Cheese
+# SwissCheese
 
 This is a game in which a player has to find a way out of a proceduraly generated maze. 
 The maze is generated through the Randomized Depth First Search algorithm. 
@@ -63,3 +63,7 @@ $mvn exec:java
 ## License
 
 This project is licensed under the Affero GPL v3 (AGPL v3) License - see the [LICENSE.md](https://gitlab.com/poof/swisscheese/LICENSE.md) file for more details
+
+## Criteria (for the teacher):
+
+This project fits all necessary criteria. Please check javadoc of the `Criteria` class for more details about the criteria-meeting.

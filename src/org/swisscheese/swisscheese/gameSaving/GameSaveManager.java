@@ -188,6 +188,13 @@ public final class GameSaveManager {
 	 * @param list a {@link GameSaveList} being serialized.
 	 */
 	private void writeToFile(GameSaveList list) {
+		if(!FILE.exists()) {
+			try {
+				FILE.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		String jsonCode = gson.toJson(list);
 		try (PrintWriter writer = new PrintWriter(FILE)) {
 			writer.print(jsonCode);

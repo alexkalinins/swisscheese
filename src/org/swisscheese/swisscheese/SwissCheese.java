@@ -65,6 +65,7 @@ public class SwissCheese {
 		//using 'metal' look and feel if OS is windows and native otherwise
 		if (!System.getProperty("os.name").startsWith("Windows")) {
 			try {
+				
 				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 					| UnsupportedLookAndFeelException e) {
