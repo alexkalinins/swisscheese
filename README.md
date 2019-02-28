@@ -6,6 +6,8 @@ The graphics are rendered and displayed using a raycasting engine, similar to an
 The maze is generated with Java's SecureRandom, meaning that every maze is truly random and unique.
 The game can be customized by selecting a rendering engine that works best for the system and by creating [texture packs](https://gitlab.com/poof/swisscheese/wikis/Texture-Packs)
 
+![Demo with Retro Texture-Pack](swisscheese-demo.mp4)
+
 ## Getting Started
 
 ##### Maven (in GNU/Linux or Mac OS command-line):
@@ -63,7 +65,3 @@ $mvn exec:java
 ## License
 
 This project is licensed under the Affero GPL v3 (AGPL v3) License - see the [LICENSE.md](https://gitlab.com/poof/swisscheese/LICENSE.md) file for more details
-
-## Criteria (for the teacher):
-
-This project fits all necessary criteria. Please check javadoc of the `Criteria` class for more details about the criteria-meeting.
