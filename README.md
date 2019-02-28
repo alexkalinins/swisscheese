@@ -14,11 +14,11 @@ The game can be customized by selecting a rendering engine that works best for t
 2. cd into new directory.  
 3. To clean, download dependencies, compile and test the game:
 ```
-$mvn clean install
+$ mvn clean install
 ```
 4. To run the game:
 ```
-$mvn exec:java
+$ mvn exec:java
 ```
 
 ##### Eclipse (tested as of Oxygen)
@@ -45,9 +45,9 @@ $mvn exec:java
 
 ## Prerequisites
 
-1. JRE 1.8 (to compile)
+1. JRE 1.8 (to run)
 2. JDK or OpenJDK 8 (to compile)
-3. Eclipse Oxygen (or later) or Netbeans 8.2 (or later) to run from an IDE.
+3. Eclipse Mars (or later) or NetBeans 8.2 (or later) to run from an IDE.
     - (optional) Maven in command line to run without an IDE.
 
 
