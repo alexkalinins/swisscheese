@@ -32,7 +32,7 @@ import org.swisscheese.swisscheese.annotations.Immutable;
 public enum WindowSize {
 	S640X480("640 x 480", new Dimension(640, 480)), S800X600("800 x 600", new Dimension(800, 600)),
 	S960X720("960 x 720", new Dimension(960, 720)), S1280X800("1280 x 800", new Dimension(1280, 800)),
-	S1280X960("1280 x 960", new Dimension(12680, 960));
+	S1280X960("1280 x 960", new Dimension(1280, 960)),S1280X1024("1280 x 1024", new Dimension(1280, 1024));
 
 	private final String name; // string description of the size
 	private final Dimension size; // size
