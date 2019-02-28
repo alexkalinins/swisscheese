@@ -23,9 +23,9 @@ import java.lang.annotation.Target;
 
 /**
  * An annotation for a type containing temporary implementations, a so called
- * "<i>Hack</i>". Such <i>hacks</i> may have been implemented <b>to satisfy
- * project criteria</b>, and are possibly considered bad practice or unstable.
- * These <i>Hack</i> may or may not re-implemented to a better implementation.
+ * "<i>Hack</i>". Such <i>hacks</i> are possibly considered bad practice or
+ * unstable. These <i>Hack</i> may or may not re-implemented to a better
+ * implementation.
  * <p>
  * If a type is annotated as a "Hack", it contains bad design. Class may be
  * considered as a <i>hack</i> if it contains (but not limited to):
