@@ -10,7 +10,7 @@ The game can be customized by selecting a rendering engine that works best for t
 
 ## Getting Started
 
-##### Maven (in GNU/Linux or Mac OS command-line):
+##### Maven (in Linux or Mac OS command-line):
 
 1. Clone this repository into a new directory. 
 2. cd into new directory.  

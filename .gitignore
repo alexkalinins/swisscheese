@@ -3,3 +3,9 @@
 /settings/user-saves/list.json
 /settings/user/keybind.config
 /settings/game-settings.json
+/.idea/
+/.settings/
+.project
+swisscheese.iml
+.classpath
+

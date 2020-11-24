@@ -18,7 +18,6 @@ package org.swisscheese.swisscheese.engine.rendering;
 
 import java.util.concurrent.ExecutionException;
 
-import org.swisscheese.swisscheese.annotations.Hack;
 import org.swisscheese.swisscheese.annotations.ThreadSafe;
 import org.swisscheese.swisscheese.engine.camera.Camera;
 import org.swisscheese.swisscheese.engine.details.MultithreadedRendererDetails;
@@ -42,7 +41,6 @@ import org.swisscheese.swisscheese.texturePacks.TexturePack;
  * @since v0.5
  * @version v1.0
  */
-@Hack(reason="inheritance")
 @ThreadSafe
 public class StripRendererDispatcher extends MultithreadedRendererDispatcher {
 	/** The pixels array to which the screen is being rendered. */

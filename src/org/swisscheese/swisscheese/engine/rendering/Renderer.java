@@ -18,7 +18,6 @@ package org.swisscheese.swisscheese.engine.rendering;
 
 import java.awt.Color;
 
-import org.swisscheese.swisscheese.annotations.Hack;
 import org.swisscheese.swisscheese.engine.camera.Camera;
 import org.swisscheese.swisscheese.engine.camera.Mover;
 import org.swisscheese.swisscheese.engine.camera.View;
@@ -37,7 +36,6 @@ import org.swisscheese.swisscheese.texturePacks.TexturePack;
  * @since v0.5
  * @version v1.0
  */
-@Hack(reason = "inheritance (criteria)")
 public abstract class Renderer {
 	/** The color to which the floor (bottom half of screen) is colored */
 	protected final Color FLOOR = Color.DARK_GRAY;

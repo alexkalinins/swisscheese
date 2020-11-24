@@ -16,7 +16,6 @@
  */
 package org.swisscheese.swisscheese.engine.rendering;
 
-import org.swisscheese.swisscheese.annotations.Hack;
 import org.swisscheese.swisscheese.annotations.ThreadSafe;
 import org.swisscheese.swisscheese.engine.camera.Camera;
 import org.swisscheese.swisscheese.engine.details.RendererDetails;
@@ -56,7 +55,6 @@ import org.swisscheese.swisscheese.texturePacks.TexturePack;
  * @since v0.2
  * @version v1.0
  */
-@Hack(reason = "inheritance")
 @ThreadSafe
 public class SingleThreadedRenderer extends Renderer {
 	private float scanLine;

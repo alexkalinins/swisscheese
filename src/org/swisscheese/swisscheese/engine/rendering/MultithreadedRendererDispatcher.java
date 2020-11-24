@@ -27,7 +27,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.naming.InsufficientResourcesException;
 
-import org.swisscheese.swisscheese.annotations.Hack;
 import org.swisscheese.swisscheese.engine.camera.Camera;
 import org.swisscheese.swisscheese.engine.details.MultithreadedRendererDetails;
 import org.swisscheese.swisscheese.map.Map;
@@ -52,7 +51,6 @@ import org.swisscheese.swisscheese.texturePacks.TexturePack;
  * @since v0.5
  * @version v1.0
  */
-@Hack(reason = "Inheritance")
 public abstract class MultithreadedRendererDispatcher extends Renderer {
 	/** ThreadPoolExecutor that contains threads that carry-out rendering. */
 	protected final ThreadPoolExecutor pool;

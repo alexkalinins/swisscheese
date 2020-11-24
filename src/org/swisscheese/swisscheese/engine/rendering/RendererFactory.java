@@ -16,7 +16,6 @@
  */
 package org.swisscheese.swisscheese.engine.rendering;
 
-import org.swisscheese.swisscheese.annotations.Hack;
 import org.swisscheese.swisscheese.annotations.Immutable;
 import org.swisscheese.swisscheese.engine.camera.Camera;
 import org.swisscheese.swisscheese.engine.details.MultithreadedRendererDetails;
@@ -34,7 +33,6 @@ import org.swisscheese.swisscheese.texturePacks.TexturePack;
  * @since v0.5
  * @version v1.0
  */
-@Hack(reason = "inheritance")
 @Immutable
 public final class RendererFactory {
 
