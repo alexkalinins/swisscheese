@@ -6,7 +6,7 @@ The graphics are rendered and displayed using a raycasting engine, similar to an
 The maze is generated with Java's SecureRandom, meaning that every maze is truly random and unique.
 The game can be customized by selecting a rendering engine that works best for the system and by creating [texture packs](https://gitlab.com/poof/swisscheese/wikis/Texture-Packs)
 
-![Demo with Retro Texture-Pack](swisscheese-demo.mp4)
+![Demo with Retro Texture-Pack](/swisscheese-demo.mp4)
 
 ## Getting Started
 
