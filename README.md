@@ -8,7 +8,6 @@ The game can be customized by selecting a rendering engine that works best for t
 
 ![Demo with Retro Texture-Pack](/swisscheese-demo.mp4)
 
-**This project's primary/upstream repository is on [GitLab](https://gitlab.com/poof/swisscheese).**
 
 ## Getting Started
 
