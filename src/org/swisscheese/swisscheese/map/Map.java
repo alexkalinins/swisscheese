@@ -47,11 +47,13 @@ public final class Map {
 	 *             True size of the maze will be size*2+1).
 	 */
 	public Map(int size) {
-		map = GenerateMaze(size);
+		map = generateMaze(size);
 		entry = Generator.getEntry();
 		exit = Generator.getExit();
 
 		this.size = map.length;
+
+		this.printMap();
 	}
 
 	/**
@@ -63,7 +65,7 @@ public final class Map {
 	 * @return 2D Integer array of the maze.
 	 * @see maze#Generator#generateMaze(size)
 	 */
-	private int[][] GenerateMaze(int size) {
+	private int[][] generateMaze(int size) {
 		int[][] map = Generator.generateMaze(size);
 
 		GeomPoint2D<Integer> entry = Generator.getEntry();
@@ -105,4 +107,28 @@ public final class Map {
 		return exit;
 	}
 
+	/**
+	 * Prints the maze in console
+	 */
+	public void printMap() {
+		System.out.println("MAP: ");
+		System.out.println("(start: s; end: e)");
+
+		for(int i = 0; i < this.size; i++){
+			for(int j = 0; j < this.size; j++){
+				char c = ' ';
+
+				if(this.map[i][j] == 1){
+					c = 's';
+				} else if(this.map[i][j] == 2){
+					c = 'e';
+				} else if(this.map[i][j] != 0){
+					c = '\u2588';
+				}
+
+				System.out.print(c);
+			}
+			System.out.print("\n");
+		}
+	}
 }
